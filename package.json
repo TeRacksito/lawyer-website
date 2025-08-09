@@ -1,37 +1,41 @@
 {
-	"name": "lawyer-test2",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"dev": "next dev --turbopack",
-		"build": "next build",
-		"start": "next start",
-		"lint": "next lint",
-		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
-	},
-	"dependencies": {
-		"@opennextjs/cloudflare": "^1.6.1",
-		"@types/react-simple-maps": "^3.0.6",
-		"framer-motion": "^12.23.11",
-		"jose": "^6.0.12",
-		"next": "15.3.5",
-		"next-auth": "^4.24.11",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
-		"react-icons": "^5.5.0",
-		"react-simple-maps": "^3.0.0"
-	},
-	"devDependencies": {
-		"@tailwindcss/postcss": "^4",
-		"@tailwindcss/typography": "^0.5.16",
-		"@types/node": "^20",
-		"@types/react": "^19",
-		"@types/react-dom": "^19",
-		"daisyui": "^5.0.50",
-		"tailwindcss": "^4",
-		"typescript": "^5",
-		"wrangler": "^4.26.0"
-	}
+  "name": "lawyer-test2",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbopack\"",
+    "build": "tinacms build && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.6.1",
+    "@types/react-simple-maps": "^3.0.6",
+    "framer-motion": "^12.23.11",
+    "jose": "^6.0.12",
+    "next": "15.3.5",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0",
+    "react-simple-maps": "^3.0.0",
+    "react-tinacms": "^0.9.27",
+    "react-tinacms-github": "^0.52.0",
+    "tinacms": "^2.8.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tinacms/cli": "^1.10.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "daisyui": "^5.0.50",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wrangler": "^4.26.0"
+  }
 }
