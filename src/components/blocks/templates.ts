@@ -27,7 +27,7 @@ export const layoutHeaderBlockComponents = layoutHeaderBlocks.reduce(
     acc[block.template.name] = block.component;
     return acc;
   },
-  {} as Record<string, React.ComponentType<{ data: any }>>
+  {} as Record<string, React.ComponentType<{ data: any, dataTinaField?: string }>>
 );
 
 export const layoutChildrenBlockComponents = layoutChildrenBlocks.reduce(

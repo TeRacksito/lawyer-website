@@ -1,41 +1,71 @@
-import { tinaField } from "tinacms/dist/react";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { HiOutlineMenu } from "react-icons/hi";
+import { tinaField } from "tinacms/dist/react";
+import HeaderNavLinks from "./HeaderNavLinks";
 
 interface HeaderBlockProps {
   data: {
     logo?: string | null;
+    logoSubtext?: string | null;
     logoImage?: string | null;
     navigation?: Array<{
       label?: string | null;
       href?: string | null;
       isExternal?: boolean | null;
     }> | null;
-    theme?: string | null;
+    ctaButton?: {
+      text?: string | null;
+      href?: string | null;
+      show?: boolean | null;
+    } | null;
+    isSticky?: boolean | null;
   };
+  dataTinaField?: string;
 }
 
-export default function HeaderBlock({ data }: HeaderBlockProps) {
-  const { logo, logoImage, navigation, theme = "light" } = data;
+export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
+  const { logo, logoSubtext, logoImage, navigation, ctaButton, isSticky = true } = data;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
-  const getThemeClasses = () => {
-    switch (theme) {
-      case "dark":
-        return "bg-gray-900 text-white";
-      case "transparent":
-        return "bg-transparent text-white absolute top-0 left-0 right-0 z-50";
-      default:
-        return "bg-white text-gray-900 shadow-sm";
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
     }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // Function to close menu when navigating
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
   };
 
+  const headerClasses = `w-full z-20 shadow-md bg-base-100 ${
+    isSticky ? 'sticky top-0' : ''
+  }`;
+
   return (
-    <header className={`py-4 px-4 ${getThemeClasses()}`}>
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center" data-tina-field={tinaField(data, "logo")}>
-            <Link href="/" className="flex items-center space-x-2">
+    <header ref={headerRef} className={headerClasses} data-tina-field={dataTinaField}>
+      <div className="relative">
+        <div className="container mx-auto flex items-center justify-between py-4 px-6 md:px-10">
+          {/* Logo and Name */}
+          <div className="flex items-center gap-4" data-tina-field={tinaField(data, "logo")}>
+            <Link href="/" className="flex items-center gap-4" onClick={handleLinkClick}>
               {logoImage && (
                 <div data-tina-field={tinaField(data, "logoImage")}>
                   <Image
@@ -48,51 +78,59 @@ export default function HeaderBlock({ data }: HeaderBlockProps) {
                 </div>
               )}
               {logo && (
-                <span className="text-xl font-bold">{logo}</span>
+                <span className="text-3xl font-serif font-bold">{logo}</span>
               )}
             </Link>
+            {logoSubtext && (
+              <div 
+                className="text-sm font-serif md:hidden lg:block"
+                data-tina-field={tinaField(data, "logoSubtext")}
+              >
+                {logoSubtext}
+              </div>
+            )}
           </div>
 
-          {/* Navigation */}
-          {navigation && navigation.length > 0 && (
-            <nav className="hidden md:flex items-center space-x-6" data-tina-field={tinaField(data, "navigation")}>
-              {navigation.map((item, index) => {
-                if (!item.label || !item.href) return null;
-                
-                if (item.isExternal) {
-                  return (
-                    <a
-                      key={index}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:opacity-75 transition-opacity"
-                    >
-                      {item.label}
-                    </a>
-                  );
-                }
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-6">
+            <HeaderNavLinks 
+              navigation={navigation}
+              ctaButton={ctaButton}
+              layout="horizontal"
+              data={data}
+            />
+          </div>
 
-                return (
-                  <Link
-                    key={index}
-                    href={item.href}
-                    className="hover:opacity-75 transition-opacity"
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          )}
-
-          {/* Mobile menu button */}
-          <button className="md:hidden p-2" aria-label="Menu">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden focus:outline-none"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <HiOutlineMenu className="w-6 h-6" />
           </button>
         </div>
+
+        {/* Mobile Nav */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              className="absolute top-full left-0 w-full md:hidden bg-base-100 shadow-lg border-t border-base-200 overflow-hidden"
+              initial={{ opacity: 0, y: -20, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: "auto" }}
+              exit={{ opacity: 0, y: -20, height: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <HeaderNavLinks 
+                navigation={navigation}
+                ctaButton={ctaButton}
+                layout="vertical" 
+                onLinkClick={handleLinkClick}
+                data={data}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

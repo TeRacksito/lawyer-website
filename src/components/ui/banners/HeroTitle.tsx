@@ -2,7 +2,9 @@ import { motion } from "framer-motion";
 
 export interface IHeroTitleProps {
   title: string;
+  titleDataTinaField?: string;
   subtitle: string;
+  subtitleDataTinaField?: string;
 }
 
 export default function HeroTitle(props: IHeroTitleProps) {
@@ -19,6 +21,7 @@ export default function HeroTitle(props: IHeroTitleProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="text-3xl md:text-5xl font-serif font-bold text-primary text-nowrap"
+        data-tina-field={props.titleDataTinaField}
       >
         {props.title}
       </motion.h1>
@@ -27,6 +30,7 @@ export default function HeroTitle(props: IHeroTitleProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.8 }}
         className="text-base md:text-xl font-light text-muted"
+        data-tina-field={props.subtitleDataTinaField}
       >
         {props.subtitle}
       </motion.p>

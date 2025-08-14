@@ -7,7 +7,14 @@ export const headerBlockTemplate: Template = {
     {
       name: "logo",
       label: "Logo Text",
-      type: "string"
+      type: "string",
+      description: "Main logo text (e.g., CGC)"
+    },
+    {
+      name: "logoSubtext",
+      label: "Logo Subtext",
+      type: "string",
+      description: "Subtext shown next to logo (e.g., Luis Cruz)"
     },
     {
       name: "logoImage",
@@ -43,14 +50,32 @@ export const headerBlockTemplate: Template = {
       ]
     },
     {
-      name: "theme",
-      label: "Header Theme",
-      type: "string",
-      options: [
-        { label: "Light", value: "light" },
-        { label: "Dark", value: "dark" },
-        { label: "Transparent", value: "transparent" }
+      name: "ctaButton",
+      label: "Call to Action Button",
+      type: "object",
+      fields: [
+        {
+          name: "text",
+          label: "Button Text",
+          type: "string"
+        },
+        {
+          name: "href",
+          label: "Button URL",
+          type: "string"
+        },
+        {
+          name: "show",
+          label: "Show Button",
+          type: "boolean"
+        }
       ]
+    },
+    {
+      name: "isSticky",
+      label: "Sticky Header",
+      type: "boolean",
+      description: "Make header stick to top when scrolling"
     }
   ]
 };

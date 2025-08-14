@@ -1,94 +1,134 @@
-import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { tinaField } from "tinacms/dist/react";
-import Image from "next/image";
-import Link from "next/link";
+import { useState, useEffect } from 'react';
+import HeroTitleVariant from "./HeroTitleVariant";
+import LandingPageVariant from "./LandingPageVariant";
 
 interface HeroBlockProps {
   data: {
+    variant?: string | null;
+    backgroundImage?: string | null;
+    fullScreen?: boolean | null;
+    yShift?: number | null;
     title?: string | null;
     subtitle?: string | null;
-    content?: any;
-    backgroundImage?: string | null;
-    cta?: {
+    authorName?: string | null;
+    primaryButton?: {
       text?: string | null;
-      link?: string | null;
-      variant?: string | null;
+      href?: string | null;
+    } | null;
+    secondaryButton?: {
+      text?: string | null;
+      href?: string | null;
+      hiddenText?: string | null;
     } | null;
   };
 }
 
 export default function HeroBlock({ data }: HeroBlockProps) {
-  const { title, subtitle, content, backgroundImage, cta } = data;
+  const { 
+    variant = "heroTitle", 
+    backgroundImage, 
+    fullScreen, 
+    yShift, 
+    title, 
+    subtitle,
+    authorName,
+    primaryButton,
+    secondaryButton
+  } = data;
+  
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const heightClass = fullScreen ? "h-screen" : "h-48 md:h-64";
+  
+  // Clamp yShift between 0% and 100% to prevent image from going out of bounds
+  const clampedYShift = yShift !== undefined && yShift !== null
+    ? Math.max(0, Math.min(100, yShift)) 
+    : 50; // Default to center (50%)
 
-  const getButtonClasses = (variant?: string | null) => {
-    const baseClasses = "inline-flex items-center px-6 py-3 rounded-lg font-semibold transition-colors duration-200";
+  // Load image programmatically after hydration
+  useEffect(() => {
+    if (!backgroundImage) return;
     
-    switch (variant) {
-      case "secondary":
-        return `${baseClasses} bg-gray-600 text-white hover:bg-gray-700`;
-      case "outline":
-        return `${baseClasses} border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white`;
-      default:
-        return `${baseClasses} bg-blue-600 text-white hover:bg-blue-700`;
-    }
-  };
+    setIsImageLoaded(false);
+    setImageSrc(null);
+    
+    const img = new Image();
+    img.onload = () => {
+      console.log("Image loaded successfully");
+      setImageSrc(backgroundImage);
+      // Small delay to ensure the image is rendered before animation
+      setTimeout(() => {
+        setIsImageLoaded(true);
+      }, 100);
+    };
+    img.onerror = () => {
+      console.error("Failed to load image:", backgroundImage);
+      // Still show something even if image fails
+      setImageSrc(backgroundImage);
+      setIsImageLoaded(true);
+    };
+    img.src = backgroundImage;
+  }, [backgroundImage]);
 
   return (
-    <section className="relative bg-gray-900 text-white">
-      {/* Background Image */}
-      {backgroundImage && (
-        <div className="absolute inset-0">
-          <Image
-            src={backgroundImage}
-            alt=""
-            fill
-            className="object-cover opacity-50"
-            priority
-          />
-        </div>
+    <section
+      data-theme="dark"
+      className={`relative w-full ${heightClass} flex items-center justify-center text-center px-4 md:px-6 overflow-hidden`}
+    >
+      {/* Loading state - solid black background */}
+      <div 
+        className={`absolute inset-0 bg-black transition-opacity duration-1000 ease-out ${
+          isImageLoaded ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+      
+      {/* Image element with smooth reveal - only render when src is ready */}
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt="Hero background"
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-out ${
+            isImageLoaded 
+              ? 'opacity-100 scale-100' 
+              : 'opacity-0 scale-105'
+          }`}
+          style={{ 
+            objectPosition: `center ${clampedYShift}%`
+          }}
+          data-tina-field={tinaField(data, "backgroundImage")}
+        />
       )}
       
-      {/* Content */}
-      <div className="relative container mx-auto px-4 py-20 lg:py-32">
-        <div className="max-w-4xl mx-auto text-center">
-          {title && (
-            <h1 
-              className="text-4xl lg:text-6xl font-bold mb-6"
-              data-tina-field={tinaField(data, "title")}
-            >
-              {title}
-            </h1>
-          )}
-          
-          {subtitle && (
-            <p 
-              className="text-xl lg:text-2xl mb-8 text-gray-200"
-              data-tina-field={tinaField(data, "subtitle")}
-            >
-              {subtitle}
-            </p>
-          )}
-          
-          {content && (
-            <div 
-              className="prose prose-lg prose-invert max-w-none mb-8"
-              data-tina-field={tinaField(data, "content")}
-            >
-              <TinaMarkdown content={content} />
-            </div>
-          )}
-          
-          {cta?.text && cta?.link && (
-            <div className="mt-8" data-tina-field={tinaField(data, "cta")}>
-              <Link
-                href={cta.link}
-                className={getButtonClasses(cta.variant)}
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/70" />
+      
+      <div className="relative z-10 px-4 md:px-6 max-w-3xl md:max-w-4xl" data-tina-field={tinaField(data, "variant")}>
+        {variant === "heroTitle" ? (
+          <HeroTitleVariant data={data} />
+        ) : variant === "landingPage" ? (
+          <LandingPageVariant data={data} />
+        ) : (
+          // Fallback - show title and subtitle as simple text
+          <div>
+            {title && (
+              <h1 
+                className="text-4xl lg:text-6xl font-bold mb-6"
+                data-tina-field={tinaField(data, "title")}
               >
-                {cta.text}
-              </Link>
-            </div>
-          )}
-        </div>
+                {title}
+              </h1>
+            )}
+            {subtitle && (
+              <p 
+                className="text-xl lg:text-2xl mb-8 text-gray-200"
+                data-tina-field={tinaField(data, "subtitle")}
+              >
+                {subtitle}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

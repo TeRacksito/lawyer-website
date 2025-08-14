@@ -54,9 +54,7 @@ export default function ClientLayoutWrapper({
       }
 
       return (
-        <div key={index} data-tina-field={tinaField(layoutData, `headerBlocks.${index}`)}>
-          <BlockComponent data={block} />
-        </div>
+          <BlockComponent key={index} data={block} dataTinaField={tinaField(layoutData, `headerBlocks.${index}`)}/>
       );
     };
 

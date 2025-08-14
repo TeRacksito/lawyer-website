@@ -1,10 +1,20 @@
 ---
 title: Root layout
 headerBlocks:
-  - logo: Test
+  - logo: CLG
+    logoSubtext: Luis Cruz
     navigation:
-      - label: Test
-        href: /test
+      - label: Servicios
+        href: /services
+      - label: Quiénes somos
+        href: /about
+      - label: Blog
+        href: /blog
+    ctaButton:
+      text: Consulta Gratuita
+      href: /contact
+      show: true
+    isSticky: true
     _template: header
 childrenBlocks:
   - containerType: full
@@ -13,6 +23,72 @@ childrenBlocks:
     minHeight: screen
     _template: main
 footerBlocks:
-  - _template: footer
+  - dataTheme: dark
+    firmInfo:
+      name: CLG
+      title: Despacho de abogados.
+      address: |-
+        Calle Principal #123
+        Dirección
+      phone: +34 123 45 67 89
+      email: info@consultalegalgratuita.es
+    practiceAreas:
+      title: Áreas de Práctica
+      areas:
+        - name: Derecho Penal
+          href: /services#penal
+        - name: Derecho Civil
+          href: /services#civil
+        - name: Derecho de Familia
+          href: /services#familia
+        - name: Derecho Laboral
+          href: /services#laboral
+        - name: + Ver más
+          href: /services
+    quickLinks:
+      title: Enlaces Rápidos
+      links:
+        - label: Sobre Nosotros
+          href: /about
+        - label: Servicios
+          href: /services
+        - label: Contacto
+          href: /contact
+        - label: Blog Jurídico
+          href: /blog
+        - label: Preguntas Frecuentes
+          href: /faq
+    legalInfo:
+      title: Información Legal
+      college: Colegio de Abogados de Alcala de Henares
+      license: '12345'
+      hours: |-
+        Lunes a Viernes: 8:00 AM - 6:00 PM
+        Sábados: 9:00 AM - 1:00 PM
+      consultationButtonText: Consulta Gratuita
+      consultationButtonHref: /contact
+    legalNotice:
+      title: 'Aviso Legal y Descargo de Responsabilidad:'
+      disclaimers: >
+        La información contenida en este sitio web es de carácter general y no
+        constituye asesoramiento legal específico. La comunicación a través de
+        este sitio web no establece una relación abogado-cliente. Para obtener
+        asesoramiento legal específico sobre su situación particular, debe
+        consultar directamente con un abogado calificado.
+
+
+        Este sitio web puede contener enlaces a sitios web de terceros. No nos
+        hacemos responsables del contenido, políticas de privacidad o prácticas
+        de dichos sitios web externos.
+    legalLinks:
+      - label: Política de Privacidad
+        href: /privacy
+      - label: Términos de Uso
+        href: /terms
+      - label: Política de Cookies
+        href: /cookies
+    copyright:
+      text: Luis Cruz - CLG. Todos los derechos reservados.
+    _template: footer
 ---
 
