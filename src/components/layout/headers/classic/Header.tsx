@@ -40,7 +40,7 @@ export default function Header() {
         <div className="container mx-auto flex items-center justify-between py-4 px-6 md:px-10">
         {/* Logo and Name */}
         <div className="flex items-center gap-4">
-          <Link href="/" className="text-3xl font-serif font-bold" onClick={handleLinkClick}>
+          <Link href="/old" className="text-3xl font-serif font-bold" onClick={handleLinkClick}>
             CGC
           </Link>
           <div className="text-sm font-serif md:hidden lg:block">

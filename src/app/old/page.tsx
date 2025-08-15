@@ -37,13 +37,14 @@ export default function LandingPage(props: ILandingPageProps) {
           className="mt-10 flex flex-row justify-center gap-4"
         >
           <Link
-            href="/contact"
+            href="/old/contact"
             className="btn btn-sm md:btn-md lg:btn-lg xl:btn-xl md:btn-ghost"
           >
-            <span className="hidden md:inline">Reserva una</span><span className="md:underline">Consulta Gratuita</span>
+            <span className="hidden md:inline">Reserva una</span>
+            <span className="md:underline">Consulta Gratuita</span>
           </Link>
           <Link
-            href="/luis-cruz"
+            href="/old/luis-cruz"
             className="btn btn-sm md:btn-md lg:btn-lg xl:btn-xl btn-primary transition"
           >
             Conoce mi historia
@@ -86,9 +87,15 @@ export default function LandingPage(props: ILandingPageProps) {
       </section>
 
       {/* About Section */}
-      <section id="about" data-theme="dark" className="py-16 md:py-20 px-4 md:px-6">
+      <section
+        id="about"
+        data-theme="dark"
+        className="py-16 md:py-20 px-4 md:px-6"
+      >
         <div className="max-w-3xl md:max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">¿Quién es Luis Cruz?</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">
+            ¿Quién es Luis Cruz?
+          </h2>
           <p className="text-base md:text-lg">
             Con más de 15 años de experiencia en tribunales, Luis Cruz se ha
             ganado la confianza de sus clientes gracias a su compromiso ético,

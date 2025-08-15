@@ -105,14 +105,14 @@ export default function AboutLayout({
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              href="/contact"
+              href="/old/contact"
               className="btn btn-sm md:btn-md lg:btn-lg xl:btn-xl md:btn-ghost"
             >
               <span className="hidden md:inline">Reserva una</span>
               <span className="md:underline">Consulta Gratuita</span>
             </Link>
             <Link
-              href="/services"
+              href="/old/services"
               className="btn btn-sm md:btn-md lg:btn-lg xl:btn-xl btn-primary transition"
             >
               Ver Nuestros Servicios
@@ -128,25 +128,25 @@ function NavLinks({ activeTab }: { activeTab: string }) {
   return (
     <>
       <Link
-        href="/about"
+        href="/old/about"
         className={`tab ${activeTab === "about" ? "tab-active" : ""}`}
       >
         Nuestra Historia
       </Link>
       <Link
-        href="/about/career"
+        href="/old/about/career"
         className={`tab ${activeTab === "career" ? "tab-active" : ""}`}
       >
         Nuestra Carrera
       </Link>
       <Link
-        href="/about/values"
+        href="/old/about/values"
         className={`tab ${activeTab === "values" ? "tab-active" : ""}`}
       >
         Nuestros Valores
       </Link>
       <Link
-        href="/about/team"
+        href="/old/about/team"
         className={`tab ${activeTab === "team" ? "tab-active" : ""}`}
       >
         Nuestro Equipo

@@ -148,13 +148,25 @@ export default defineConfig({
         label: "Pages",
         path: "content/pages",
         format: "mdx",
-        match: {
-          include: "**/page",
+        defaultItem: {
+          title: "Nueva Página",
+          blocks: [
+            {
+              _template: "hero",
+              variant: "heroTitle",
+              fullScreen: false,
+              yShift: 50,
+              title: "Título Principal",
+              subtitle:
+                "Subtítulo descriptivo que acompaña al título principal",
+            },
+          ],
         },
         fields: [
           ...createConditionalFields().baseFields,
           ...createConditionalFields().pageFields,
         ],
+
         ui: {
           router: ({ document }) => {
             console.log("Routing document:", {
@@ -185,15 +197,23 @@ export default defineConfig({
       {
         name: "layouts",
         label: "Layouts",
-        path: "content/pages",
+        path: "content/layouts",
         format: "mdx",
-        match: {
-          include: "**/layout",
-        },
+        // @ts-ignore
         fields: [
           ...createConditionalFields().baseFields,
           ...createConditionalFields().layoutFields,
         ],
+        defaultItem: {
+          title: "Nueva Página",
+          blocks: [
+            {
+              _template: "hero",
+              title: "Bienvenido a la Nueva Página",
+              subtitle: "Esta es una descripción de la nueva página.",
+            },
+          ],
+        },
         ui: {
           router: ({ document }) => {
             console.log("Routing layout document:", {

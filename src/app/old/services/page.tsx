@@ -221,7 +221,7 @@ export default function ServicesPage(props: IServicesPageProps) {
             className="flex justify-center"
           >
             <Link
-              href="/contact"
+              href="/old/contact"
               className="btn btn-primary btn-lg transition"
             >
               Solicitar Consulta Gratuita
