@@ -40,21 +40,79 @@ export const heroBlockTemplate: Template = {
       description: "Vertical position of background image (0-100%)",
       ui: {
         parse: (val) => Number(val),
-        component: (props) => {
-          const { field, input, meta } = props;
+        component: (props: any) => {
+          const { input } = props;
+          const min = 0;
+          const max = 100;
+          const step = 1;
+          const value = Number(input?.value ?? 0);
+
+          const setValue = (v: number) => {
+            const clamped = Math.max(min, Math.min(max, Math.round(v)));
+            input.onChange(clamped);
+          };
+
+          const onRangeChange = (e: any) => {
+            setValue(Number(e.target.value));
+          };
+
+          const onNumberChange = (e: any) => {
+            const parsed = Number(e.target.value);
+            if (!Number.isNaN(parsed)) setValue(parsed);
+            else input.onChange("");
+          };
+
           return (
             <div>
-              {/* @ts-ignore */}
-              <input
-                id="yShift"
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                {...input}
-              />
-              <br />
-              Value: {input.value}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setValue(value - step)}
+                  aria-label="Decrease Y position"
+                  className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                >
+                  −
+                </button>
+      
+                <input
+                  id="yShift"
+                  type="range"
+                  min={min}
+                  max={max}
+                  step={step}
+                  value={value}
+                  onChange={onRangeChange}
+                />
+                <button
+                  type="button"
+                  onClick={() => setValue(value + step)}
+                  aria-label="Increase Y position"
+                  className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                >
+                  +
+                </button>
+              </div>
+
+              <div
+                style={{
+                  marginTop: 8,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span>Value: </span>
+                <input
+                  type="number"
+                  min={min}
+                  max={max}
+                  step={step}
+                  value={value}
+                  onChange={onNumberChange}
+                  style={{ width: 64 }}
+                />
+                <span>%</span>
+              </div>
             </div>
           );
         },
@@ -82,13 +140,23 @@ export const heroBlockTemplate: Template = {
         "Highlighted author name (e.g., Luis Cruz) - Landing Page only",
       ui: {
         component: (props) => {
-          const {form} = props;
-          console.log(`Author Name field visibility: ${form.getRegisteredFields()}`);
-          console.log(`Current variant: ${form.getFieldState("blocks.0.variant")?.value}`);
-          console.log(`Current variant is landingPage: ${form.getFieldState("blocks.0.variant")?.value == "landingPage"}`);
-          return form.getFieldState("blocks.0.variant")?.value == "landingPage" ? true : "hidden";
-        }
-      }
+          const { form } = props;
+          console.log(
+            `Author Name field visibility: ${form.getRegisteredFields()}`
+          );
+          console.log(
+            `Current variant: ${form.getFieldState("blocks.0.variant")?.value}`
+          );
+          console.log(
+            `Current variant is landingPage: ${
+              form.getFieldState("blocks.0.variant")?.value == "landingPage"
+            }`
+          );
+          return form.getFieldState("blocks.0.variant")?.value == "landingPage"
+            ? true
+            : "hidden";
+        },
+      },
     },
     {
       type: "object",
