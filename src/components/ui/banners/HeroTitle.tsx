@@ -38,7 +38,7 @@ export default function HeroTitle(props: IHeroTitleProps) {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.8 }}
-        className="w-24 md:w-36 h-0.5 bg-primary"
+        className="w-                                                                                                                                                                 24 md:w-36 h-0.5 bg-primary"
       />
     </div>
   );

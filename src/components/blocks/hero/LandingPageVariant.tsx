@@ -1,6 +1,8 @@
 import { tinaField } from "tinacms/dist/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { formatTitle } from "./FormatTitle";
+import { formatSubtitle } from "./formatSubtitle";
 
 interface LandingPageVariantProps {
   data: {
@@ -22,16 +24,6 @@ interface LandingPageVariantProps {
 export default function LandingPageVariant({ data }: LandingPageVariantProps) {
   const { title, subtitle, authorName, primaryButton, secondaryButton } = data;
 
-  // Helper function to format title with line breaks
-  const formatTitle = (title: string) => {
-    return title.split("\\n").map((line, index, array) => (
-      <span key={index}>
-        {line}
-        {index < array.length - 1 && <br />}
-      </span>
-    ));
-  };
-
   return (
     <div>
       {/* Landing Page Hero Content */}
@@ -52,24 +44,10 @@ export default function LandingPageVariant({ data }: LandingPageVariantProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="text-base md:text-xl max-w-xl mx-auto text-muted"
+          className="text-base md:text-xl max-w-2xl mx-auto text-muted"
           data-tina-field={tinaField(data, "subtitle")}
         >
-          {subtitle
-            .split(authorName || "")
-            .map((part: string, index: number, array: string[]) => (
-              <span key={index}>
-                {part}
-                {index < array.length - 1 && authorName && (
-                  <strong
-                    className="text-primary font-bold"
-                    data-tina-field={tinaField(data, "authorName")}
-                  >
-                    {authorName}
-                  </strong>
-                )}
-              </span>
-            ))}
+          {formatSubtitle(subtitle, authorName, tinaField(data, "subtitle"))}
         </motion.p>
       )}
 

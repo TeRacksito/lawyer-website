@@ -2,6 +2,8 @@ import { tinaField } from "tinacms/dist/react";
 import { useState, useEffect } from "react";
 import HeroTitleVariant from "./HeroTitleVariant";
 import LandingPageVariant from "./LandingPageVariant";
+import { formatTitle } from "./FormatTitle";
+import { formatSubtitle } from "./formatSubtitle";
 
 interface HeroBlockProps {
   data: {
@@ -118,7 +120,7 @@ export default function HeroBlock({ data }: HeroBlockProps) {
                 className="text-4xl lg:text-6xl font-bold mb-6"
                 data-tina-field={tinaField(data, "title")}
               >
-                {title}
+                {formatTitle(title)}
               </h1>
             )}
             {subtitle && (
@@ -126,7 +128,11 @@ export default function HeroBlock({ data }: HeroBlockProps) {
                 className="text-xl lg:text-2xl mb-8 text-gray-200"
                 data-tina-field={tinaField(data, "subtitle")}
               >
-                {subtitle}
+                {formatSubtitle(
+                  subtitle,
+                  authorName,
+                  tinaField(data, "subtitle")
+                )}
               </p>
             )}
           </div>

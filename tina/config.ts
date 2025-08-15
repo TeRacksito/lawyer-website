@@ -1,9 +1,9 @@
 import { defineConfig } from "tinacms";
 import { pageBlockTemplates } from "../src/components/blocks/templates";
-import { 
-  layoutHeaderBlockTemplates, 
-  layoutChildrenBlockTemplates, 
-  layoutFooterBlockTemplates 
+import {
+  layoutHeaderBlockTemplates,
+  layoutChildrenBlockTemplates,
+  layoutFooterBlockTemplates,
 } from "../src/components/blocks/layout-blocks";
 
 // Your hosting provider likely exposes this as an environment variable
@@ -22,12 +22,6 @@ const createConditionalFields = () => {
       label: "Page Title",
       isTitle: true,
       required: true,
-    },
-    {
-      type: "string" as const,
-      name: "description",
-      label: "Meta Description",
-      description: "SEO description for this page",
     },
     {
       type: "object" as const,
@@ -79,7 +73,8 @@ const createConditionalFields = () => {
       type: "object" as const,
       name: "childrenBlocks",
       label: "Main Content Blocks",
-      description: "Main content area - must include exactly one children block",
+      description:
+        "Main content area - must include exactly one children block",
       list: true,
       templates: [...layoutChildrenBlockTemplates, ...pageBlockTemplates],
       ui: {
@@ -87,24 +82,24 @@ const createConditionalFields = () => {
           if (!value || value.length === 0) {
             return "At least one main content block is required";
           }
-          
+
           // Count children blocks (from layoutChildrenBlockTemplates)
-          const childrenBlocks = value.filter((block: any) => 
-            layoutChildrenBlockTemplates.some(template => 
-              template.name === block._template
+          const childrenBlocks = value.filter((block: any) =>
+            layoutChildrenBlockTemplates.some(
+              (template) => template.name === block._template
             )
           );
-          
+
           if (childrenBlocks.length === 0) {
             return "Exactly one children block is required for layouts";
           }
           if (childrenBlocks.length > 1) {
             return "Only one children block is allowed per layout";
           }
-          
+
           return undefined;
-        }
-      }
+        },
+      },
     },
     {
       type: "object" as const,
@@ -168,16 +163,16 @@ export default defineConfig({
               title: document._sys.title,
               breadcrumbs: document._sys.breadcrumbs,
             });
-            
+
             // Get breadcrumbs and remove the last element (which is always "page")
             const breadcrumbs = document._sys.breadcrumbs;
             const routeParts = breadcrumbs.slice(0, -1); // Remove "page" from the end
-            
+
             // Handle root page (breadcrumbs: ["page"])
             if (routeParts.length === 0) {
               return "/";
             }
-            
+
             // Handle nested pages - construct path from breadcrumbs
             return `/${routeParts.join("/")}`;
           },
@@ -207,16 +202,16 @@ export default defineConfig({
               title: document._sys.title,
               breadcrumbs: document._sys.breadcrumbs,
             });
-            
+
             // Get breadcrumbs and remove the last element (which is always "layout")
             const breadcrumbs = document._sys.breadcrumbs;
             const routeParts = breadcrumbs.slice(0, -1); // Remove "layout" from the end
-            
+
             // Handle root layout (breadcrumbs: ["layout"])
             if (routeParts.length === 0) {
               return "/";
             }
-            
+
             // Handle nested layouts - construct path from breadcrumbs
             return `/${routeParts.join("/")}`;
           },

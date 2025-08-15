@@ -73,7 +73,7 @@ export const heroBlockTemplate: Template = {
                 >
                   −
                 </button>
-      
+
                 <input
                   id="yShift"
                   type="range"
@@ -138,25 +138,6 @@ export const heroBlockTemplate: Template = {
       label: "Author Name",
       description:
         "Highlighted author name (e.g., Luis Cruz) - Landing Page only",
-      ui: {
-        component: (props) => {
-          const { form } = props;
-          console.log(
-            `Author Name field visibility: ${form.getRegisteredFields()}`
-          );
-          console.log(
-            `Current variant: ${form.getFieldState("blocks.0.variant")?.value}`
-          );
-          console.log(
-            `Current variant is landingPage: ${
-              form.getFieldState("blocks.0.variant")?.value == "landingPage"
-            }`
-          );
-          return form.getFieldState("blocks.0.variant")?.value == "landingPage"
-            ? true
-            : "hidden";
-        },
-      },
     },
     {
       type: "object",
