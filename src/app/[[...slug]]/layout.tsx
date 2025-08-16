@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import Footer from "@/components/layout/footers/Footer";
 import Header from "@/components/layout/headers/classic/Header";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
+import ExitPreviewBanner from "@/components/ui/banners/ExitPreviewBanner";
 
 export interface IDynamicLayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,9 @@ export interface IDynamicLayoutProps {
 // Generate static params for layout - this ensures the layout data is fetched at build time
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   try {
-    const layouts = await client.queries.layoutsConnection();
+    const layouts = await client.queries.layoutsConnection({
+      filter: { draft: { eq: false } },
+    });
 
     if (!layouts.data.layoutsConnection.edges) {
       return [];
@@ -27,18 +30,18 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       if (!relativePath || !relativePath.endsWith("layout.mdx")) {
         return;
       }
-      
+
       // Extract slug from relativePath: about/layout.mdx -> ["about"]
       let slugParts: string[] = [];
       if (relativePath !== "layout.mdx") {
         const pathParts = relativePath.split("/");
         slugParts = pathParts.slice(0, -1); // Remove 'layout.mdx' from the end
       }
-      
+
       // Add all parent paths to ensure layout inheritance works
       // For example, if we have about/services/layout.mdx, we also need:
       // - [] (root)
-      // - ["about"] 
+      // - ["about"]
       // - ["about", "services"]
       for (let i = 0; i <= slugParts.length; i++) {
         const pathSlice = slugParts.slice(0, i);
@@ -46,11 +49,14 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       }
     });
 
-    const params = Array.from(allPaths).map(pathStr => ({
-      slug: JSON.parse(pathStr) as string[]
+    const params = Array.from(allPaths).map((pathStr) => ({
+      slug: JSON.parse(pathStr) as string[],
     }));
-    
-    console.log(`Generated ${params.length} static params for layouts:`, params);
+
+    console.log(
+      `Generated ${params.length} static params for layouts:`,
+      params
+    );
     return params;
   } catch (error) {
     console.error("Error generating static params for layout:", error);
@@ -62,17 +68,20 @@ async function getLayoutData(slug?: string[]) {
   try {
     // Construct the correct layout path based on the slug
     const slugArray = slug || [];
-    const path = slugArray.length > 0 ? `${slugArray.join("/")}/layout.mdx` : "layout.mdx";
-    
+    const path =
+      slugArray.length > 0 ? `${slugArray.join("/")}/layout.mdx` : "layout.mdx";
+
     console.log(`Relative path for layout: ${path}`);
-    
+
     const layoutData = await client.queries.layouts({
-      relativePath: path
+      relativePath: path,
     });
     return layoutData;
   } catch (error) {
     // If no layout page exists, return null
-    console.log(`No custom layout found for path: ${slug?.join("/") || "root"}`);
+    console.log(
+      `No custom layout found for path: ${slug?.join("/") || "root"}`
+    );
     return null;
   }
 }
@@ -81,34 +90,44 @@ async function getLayoutData(slug?: string[]) {
 async function getAllLayoutsInHierarchy(slug?: string[]): Promise<any[]> {
   const slugArray = slug || [];
   const layouts = [];
-  
+
   // Start from root and go down to the specific route
   for (let i = 0; i <= slugArray.length; i++) {
     const currentSlug = slugArray.slice(0, i);
-    const layoutData = await getLayoutData(currentSlug.length === 0 ? undefined : currentSlug);
-    
+    const layoutData = await getLayoutData(
+      currentSlug.length === 0 ? undefined : currentSlug
+    );
+
     if (layoutData) {
       layouts.push({
         data: layoutData,
-        path: currentSlug.length === 0 ? "root" : currentSlug.join("/")
+        path: currentSlug.length === 0 ? "root" : currentSlug.join("/"),
       });
     }
   }
-  
-  console.log(`Found ${layouts.length} layouts in hierarchy for route: ${slug?.join("/") || "root"}`);
+
+  console.log(
+    `Found ${layouts.length} layouts in hierarchy for route: ${
+      slug?.join("/") || "root"
+    }`
+  );
   return layouts;
 }
 
 // Recursively render nested layouts
-function renderNestedLayouts(layouts: any[], children: React.ReactNode, index = 0): React.ReactNode {
+function renderNestedLayouts(
+  layouts: any[],
+  children: React.ReactNode,
+  index = 0
+): React.ReactNode {
   // Base case: no more layouts, return children
   if (index >= layouts.length) {
     return children;
   }
-  
+
   const currentLayout = layouts[index];
   const nextChildren = renderNestedLayouts(layouts, children, index + 1);
-  
+
   // Render current layout with nested children
   return (
     <ClientLayoutWrapper
@@ -123,7 +142,7 @@ function renderNestedLayouts(layouts: any[], children: React.ReactNode, index = 
 
 export default async function DynamicLayout(props: IDynamicLayoutProps) {
   const { slug } = await props.params;
-  
+
   // Get all layouts in the hierarchy from root to current route
   const layoutsHierarchy = await getAllLayoutsInHierarchy(slug);
 

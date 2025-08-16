@@ -17,6 +17,12 @@ const branch =
 const createConditionalFields = () => {
   const baseFields = [
     {
+      name: "draft",
+      label: "Draft",
+      type: "boolean" as const,
+      description: "If this is checked the post will not be published",
+    },
+    {
       type: "string" as const,
       name: "title",
       label: "Page Title",
@@ -55,7 +61,7 @@ const createConditionalFields = () => {
       type: "object" as const,
       name: "blocks",
       label: "Page Blocks",
-      list: true,
+      list: true as const,
       templates: pageBlockTemplates,
     },
   ];
@@ -66,7 +72,7 @@ const createConditionalFields = () => {
       name: "headerBlocks",
       label: "Header Blocks",
       description: "Optional header components for the layout",
-      list: true,
+      list: true as const,
       templates: layoutHeaderBlockTemplates,
     },
     {
@@ -75,7 +81,7 @@ const createConditionalFields = () => {
       label: "Main Content Blocks",
       description:
         "Main content area - must include exactly one children block",
-      list: true,
+      list: true as const,
       templates: [...layoutChildrenBlockTemplates, ...pageBlockTemplates],
       ui: {
         validate: (value: any[]) => {
@@ -106,7 +112,7 @@ const createConditionalFields = () => {
       name: "footerBlocks",
       label: "Footer Blocks",
       description: "Optional footer components for the layout",
-      list: true,
+      list: true as const,
       templates: layoutFooterBlockTemplates,
     },
   ];
@@ -140,6 +146,22 @@ export default defineConfig({
     indexBatchSize: 100,
     maxSearchIndexFieldLength: 100,
   },
+
+  admin: {
+    // @ts-ignore
+    auth: {
+      onLogin: async ({ token }) => {
+        //  When the user logs in enter preview mode
+        location.href =
+          `/api/draft/enter?token=${token.id_token}&slug=` + location;
+      },
+      onLogout: async () => {
+        // When the user logs out exit preview mode
+        location.href = `/api/draft/exit?slug=` + location;
+      },
+    },
+  },
+
   // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
     collections: [
@@ -150,6 +172,7 @@ export default defineConfig({
         format: "mdx",
         defaultItem: {
           title: "Nueva Página",
+          draft: false,
           blocks: [
             {
               _template: "hero",
@@ -199,7 +222,6 @@ export default defineConfig({
         label: "Layouts",
         path: "content/layouts",
         format: "mdx",
-        // @ts-ignore
         fields: [
           ...createConditionalFields().baseFields,
           ...createConditionalFields().layoutFields,

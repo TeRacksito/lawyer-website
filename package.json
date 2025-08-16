@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.6.5",
+    "@tinacms/auth": "^1.1.0",
     "@types/react-simple-maps": "^3.0.6",
     "framer-motion": "^12.23.12",
     "jose": "^6.0.12",

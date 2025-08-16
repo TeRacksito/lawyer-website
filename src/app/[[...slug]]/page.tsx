@@ -3,6 +3,7 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import ClientPageWrapper from "./ClientPageWrapper";
+import { draftMode } from "next/headers";
 
 interface DynamicPageProps {
   params: Promise<{
@@ -14,7 +15,9 @@ interface DynamicPageProps {
 // Generate static paths for all pages
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   try {
-    const pages = await client.queries.pagesConnection();
+    const pages = await client.queries.pagesConnection({
+      filter: { draft: { eq: false } },
+    });
 
     if (!pages.data.pagesConnection.edges) {
       return [];
@@ -87,8 +90,20 @@ export default async function DynamicPage({
   const path =
     slugArray.length > 0 ? `${slugArray.join("/")}/page.mdx` : "page.mdx";
 
+  const isDraftMode = (await draftMode()).isEnabled;
+
   try {
     const page = await client.queries.pages({ relativePath: path });
+
+    console.log("Page data:", page.data);
+
+    if (!page.data.pages && !isDraftMode) {
+      notFound();
+    }
+
+    if (!isDraftMode && page.data.pages?.draft) {
+      notFound();
+    }
 
     // Always use client-side wrapper for contextual editing support
     return (
