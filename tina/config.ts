@@ -148,8 +148,7 @@ export default defineConfig({
   },
 
   admin: {
-    // @ts-ignore
-    auth: {
+    authHooks: {
       onLogin: async ({ token }) => {
         //  When the user logs in enter preview mode
         location.href =

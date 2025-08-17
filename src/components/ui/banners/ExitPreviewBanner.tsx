@@ -1,10 +1,9 @@
 import { draftMode } from "next/headers";
-import ClientExitPreviewBanner from "./ClientExitPreviewBanner";
+import ClientExitDraftBanner from "./ClientExitDraftBanner";
+import ClientEnterDraftBanner from "./ClientEnterDraftBanner";
 
-export default async function ExitPreviewBanner() {
+export default async function ExitDraftBanner() {
   const { isEnabled: draftIsEnabled } = await draftMode();
 
-  if (!draftIsEnabled) return null;
-
-  return <ClientExitPreviewBanner />;
+  return <ClientEnterDraftBanner draftIsEnabled={draftIsEnabled} />;
 }

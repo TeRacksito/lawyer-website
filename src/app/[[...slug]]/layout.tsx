@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import Footer from "@/components/layout/footers/Footer";
 import Header from "@/components/layout/headers/classic/Header";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
-import ExitPreviewBanner from "@/components/ui/banners/ExitPreviewBanner";
+import ExitDraftBanner from "@/components/ui/banners/ExitPreviewBanner";
 
 export interface IDynamicLayoutProps {
   children: React.ReactNode;
