@@ -15,9 +15,7 @@ export interface IDynamicLayoutProps {
 // Generate static params for layout - this ensures the layout data is fetched at build time
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   try {
-    const layouts = await client.queries.layoutsConnection({
-      filter: { draft: { eq: false } },
-    });
+    const layouts = await client.queries.layoutsConnection();
 
     if (!layouts.data.layoutsConnection.edges) {
       return [];

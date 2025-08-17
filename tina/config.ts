@@ -17,12 +17,6 @@ const branch =
 const createConditionalFields = () => {
   const baseFields = [
     {
-      name: "draft",
-      label: "Draft",
-      type: "boolean" as const,
-      description: "If this is checked the post will not be published",
-    },
-    {
       type: "string" as const,
       name: "title",
       label: "Page Title",
@@ -185,6 +179,12 @@ export default defineConfig({
           ],
         },
         fields: [
+          {
+            name: "draft",
+            label: "Draft",
+            type: "boolean" as const,
+            description: "If this is checked the post will not be published",
+          },
           ...createConditionalFields().baseFields,
           ...createConditionalFields().pageFields,
         ],
