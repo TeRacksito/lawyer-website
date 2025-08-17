@@ -1,7 +1,9 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import DraftToast from "./DraftToast";
+
+const DraftToast = dynamic(() => import("./DraftToast"), { ssr: false });
 
 export default function ClientExitDraftBanner() {
   const pathname = usePathname();
@@ -84,9 +86,9 @@ export default function ClientExitDraftBanner() {
       <DraftToast
         type="exit"
         url={exitUrl}
-        title="Modo de Previsualización Activo"
-        shortTitle="Previsualización"
-        description="Estás viendo páginas en modo borrador. Se muestran contenidos que no están publicados. Sal del modo de previsualización para ver la versión pública."
+        title="Modo de Borrador Activo"
+        shortTitle="Borrador"
+        description="Estás viendo páginas en modo borrador. Se muestran contenidos que no están publicados. Sal del modo de borrador para ver la versión pública."
         buttonText="Salir"
         icon={exitIcon}
       />

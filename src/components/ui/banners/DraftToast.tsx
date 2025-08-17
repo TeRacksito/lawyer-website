@@ -100,7 +100,7 @@ export default function DraftToast({
   });
 
   const [edgeSide, setEdgeSide] = useState<EdgeSide>(() => {
-    // Initialize edge side from localStorage or based on initial position
+    // Only run localStorage logic on client side
     if (typeof window !== "undefined") {
       try {
         // First try to load from localStorage
@@ -121,7 +121,7 @@ export default function DraftToast({
         console.warn("Failed to determine edge side from localStorage:", error);
       }
     }
-    return "left"; // Default to left edge
+    return "left";
   });
 
   const [dragState, setDragState] = useState<DragState>({
@@ -327,10 +327,6 @@ export default function DraftToast({
         y: e.clientY - dragState.dragOffset.y,
       });
 
-      console.log(
-        `Edge: ${edgeSide}, Position: ${JSON.stringify(newPosition)}`
-      );
-
       setPosition(newPosition);
     },
     [dragState.isDragging, dragState.dragOffset, constrainPosition]
@@ -436,7 +432,6 @@ export default function DraftToast({
 
     // If it was a very short drag (click-like), don't snap or prevent the click handler
     if (dragDuration < 200 && dragDistance < 5) {
-      console.log("Short drag detected");
       return;
     }
 
@@ -725,11 +720,11 @@ export default function DraftToast({
 
   const toastClasses = useMemo(() => {
     const baseClasses =
-      "backdrop-blur-sm transition-all duration-500 ease-in-out overflow-hidden shadow-lg hover:shadow-xl";
+      "transition-all duration-500 ease-in-out overflow-hidden shadow-lg hover:shadow-xl";
     const sizeClasses = {
-      minimal: "w-12 h-12 rounded-4xl",
-      expanded: "w-48 h-12 rounded-xl",
-      detailed: "w-64 rounded-xl",
+      minimal: "w-12 h-12 rounded-4xl backdrop-blur-xs opacity-60",
+      expanded: "w-48 h-12 rounded-xl backdrop-blur-sm opacity-100",
+      detailed: "w-64 rounded-xl backdrop-blur-lg opacity-100",
     };
     const bgClasses =
       isHovered || toastState === "detailed" ? color.bgHover : color.bg;

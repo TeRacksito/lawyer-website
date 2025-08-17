@@ -5,5 +5,9 @@ import ClientEnterDraftBanner from "./ClientEnterDraftBanner";
 export default async function ExitDraftBanner() {
   const { isEnabled: draftIsEnabled } = await draftMode();
 
-  return <ClientEnterDraftBanner draftIsEnabled={draftIsEnabled} />;
+  if (draftIsEnabled) {
+    return <ClientExitDraftBanner />;
+  }
+
+  return <ClientEnterDraftBanner />;
 }

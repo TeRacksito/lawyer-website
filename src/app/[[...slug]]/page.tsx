@@ -95,8 +95,6 @@ export default async function DynamicPage({
   try {
     const page = await client.queries.pages({ relativePath: path });
 
-    console.log("Page data:", page.data);
-
     if (!page.data.pages && !isDraftMode) {
       notFound();
     }
