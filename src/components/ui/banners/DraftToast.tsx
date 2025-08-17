@@ -528,6 +528,7 @@ export default function DraftToast({
     enter: {
       bg: "bg-info/20",
       bgHover: "bg-info/40",
+      bgDetailed: "bg-info/70",
       border: "border-info/30",
       borderHover: "border-info/50",
       button: "bg-info/30",
@@ -540,6 +541,7 @@ export default function DraftToast({
     exit: {
       bg: "bg-warning/20",
       bgHover: "bg-warning/40",
+      bgDetailed: "bg-warning/80",
       border: "border-warning/30",
       borderHover: "border-warning/50",
       button: "bg-warning/30",
@@ -612,7 +614,7 @@ export default function DraftToast({
           Math.pow(position.y - dragState.startPosition.y, 2)
       );
 
-      if (dragDuration > 200 && dragDistance > 5) {
+      if (dragDistance > 5) {
         return;
       }
 
@@ -726,8 +728,15 @@ export default function DraftToast({
       expanded: "w-48 h-12 rounded-xl backdrop-blur-sm opacity-100",
       detailed: "w-64 rounded-xl backdrop-blur-lg opacity-100",
     };
-    const bgClasses =
-      isHovered || toastState === "detailed" ? color.bgHover : color.bg;
+    const bgClasses = (() => {
+      if (toastState === "detailed") {
+        return color.bgDetailed;
+      }
+      if (isHovered) {
+        return color.bgHover;
+      }
+      return color.bg;
+    })();
     const borderClasses = `border ${
       isHovered || toastState === "detailed" ? color.borderHover : color.border
     }`;
@@ -901,7 +910,7 @@ export default function DraftToast({
                     checkHoverStateAfterTransition(mouseX, mouseY, "expanded");
                   });
                 }}
-                className="text-white/60 hover:text-white/90 transition-colors p-1 rounded hover:bg-white/10"
+                className="text-white/60 hover:text-white/90 transition-colors p-1 rounded hover:bg-white/10 cursor-pointer"
               >
                 <svg
                   className="w-4 h-4"
@@ -919,13 +928,13 @@ export default function DraftToast({
               </button>
             </div>
 
-            <p className="text-white/70 text-xs leading-relaxed">
+            <p className="text-white text-xs leading-relaxed text-shadow-2xs">
               {description}
             </p>
 
             <button
               onClick={handleButtonClick}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg
+              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg cursor-pointer
                          text-white font-medium text-sm transition-all duration-200 ease-in-out
                          hover:scale-[1.02] active:scale-[0.98] border group"
               style={detailedButtonStyle}

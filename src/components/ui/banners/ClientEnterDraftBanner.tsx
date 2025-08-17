@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useEditState } from "tinacms/dist/react";
+import { HiArrowRight } from "react-icons/hi2";
 
 const DraftToast = dynamic(() => import("./DraftToast"), { ssr: false });
 
@@ -14,21 +15,7 @@ export default function ClientEnterDraftBanner() {
     pathname || ""
   )}`;
 
-  const enterIcon = (
-    <svg
-      className="w-3.5 h-3.5"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M13 7l5 5m0 0l-5 5m5-5H6"
-      />
-    </svg>
-  );
+  const enterIcon = <HiArrowRight className="w-3.5 h-3.5" />;
 
   return (
     <DraftToast
