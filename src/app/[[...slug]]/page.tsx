@@ -1,9 +1,8 @@
-import { client } from "../../../tina/__generated__/client";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import ClientPageWrapper from "./ClientPageWrapper";
 import { draftMode } from "next/headers";
+import { notFound } from "next/navigation";
+import { client } from "../../../tina/__generated__/client";
+import PageWrapper from "./PageWrapper";
 
 interface DynamicPageProps {
   params: Promise<{
@@ -105,7 +104,7 @@ export default async function DynamicPage({
 
     // Always use client-side wrapper for contextual editing support
     return (
-      <ClientPageWrapper
+      <PageWrapper
         query={page.query}
         variables={page.variables}
         data={page.data}
