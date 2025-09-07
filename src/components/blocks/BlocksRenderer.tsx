@@ -44,9 +44,22 @@ export default function BlockRenderer({
       {blocks.map((block: any, index: number) => {
         // Extract template name from __typename (e.g., "PagesBlocksHero" -> "hero")
         // Also handle direct template names
-        const templateName = block.__typename
-          ? block.__typename.replace(/.*Blocks/, "").toLowerCase()
-          : block._template;
+        const templateName = (() => {
+          const tn = block.__typename;
+          if (typeof tn === "string") {
+            let idx = -1;
+            for (let i = tn.length - 1; i >= 0; i--) {
+              if (/[A-Z]/.test(tn[i])) {
+                idx = i;
+                break;
+              }
+            }
+            if (idx !== -1) {
+              return tn.slice(idx).toLowerCase();
+            }
+          }
+          return block._template || "";
+        })();
 
         const BlockComponent = components[templateName];
 
