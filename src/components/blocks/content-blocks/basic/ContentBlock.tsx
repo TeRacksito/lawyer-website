@@ -37,12 +37,12 @@ export default function ContentBlock({ data }: ContentBlockProps) {
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-base-100">
       <div className="container mx-auto px-4">
         {title && (
           <div className="text-center mb-12">
             <h2 
-              className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4"
+              className="text-3xl lg:text-4xl font-bold text-base-content mb-4"
               data-tina-field={tinaField(data, "title")}
             >
               {title}
@@ -53,9 +53,11 @@ export default function ContentBlock({ data }: ContentBlockProps) {
         <div className={getLayoutClasses()}>
           {layout === "sidebar-left" && (
             <div className="lg:col-span-1">
+              
+              
               {/* Sidebar content - you can add sidebar components here */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-4">Quick Links</h3>
+              <div className="bg-base-200 p-6 rounded-lg">
+                <h3 className="font-semibold text-base-content mb-4">Quick Links</h3>
                 {/* Add sidebar navigation or related content */}
               </div>
             </div>
@@ -75,8 +77,8 @@ export default function ContentBlock({ data }: ContentBlockProps) {
           {layout === "sidebar-right" && (
             <div className="lg:col-span-1">
               {/* Sidebar content - you can add sidebar components here */}
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-4">Related Info</h3>
+              <div className="bg-base-200 p-6 rounded-lg">
+                <h3 className="font-semibold text-base-content mb-4">Related Info</h3>
                 {/* Add sidebar navigation or related content */}
               </div>
             </div>

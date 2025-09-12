@@ -200,6 +200,7 @@ export default defineConfig({
 
             // Get breadcrumbs and remove the last element (which is always "page")
             const breadcrumbs = document._sys.breadcrumbs;
+
             const routeParts = breadcrumbs.slice(0, -1); // Remove "page" from the end
 
             // Handle root page (breadcrumbs: ["page"])

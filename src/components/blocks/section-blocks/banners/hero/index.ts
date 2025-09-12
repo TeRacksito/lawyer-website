@@ -1,4 +1,4 @@
-import { BlockDefinition } from "../types";
+import { BlockDefinition } from "../../../types";
 import { heroBlockTemplate } from "./hero.template";
 import HeroBlock from "./HeroBlock";
 

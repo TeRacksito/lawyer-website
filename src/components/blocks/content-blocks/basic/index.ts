@@ -1,4 +1,4 @@
-import { BlockDefinition } from "../types";
+import { BlockDefinition } from "../../types";
 import { contentBlockTemplate } from "./content.template";
 import ContentBlock from "./ContentBlock";
 

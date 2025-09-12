@@ -1,9 +1,9 @@
 // Import all layout block definitions from their respective folders
+import { basicCallToActionBlock } from "../section-blocks/call-to-action";
 import { BlockRegistry } from "../types";
 import { footerBlock } from "./footer";
 import { headerBlock } from "./header";
 import { mainBlock } from "./main";
-import { basicCallToActionBlock } from "../sections";
 
 export const layoutHeaderBlocks: BlockRegistry = [headerBlock];
 
