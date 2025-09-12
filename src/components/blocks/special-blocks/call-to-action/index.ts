@@ -1,4 +1,4 @@
-import { BlockDefinition } from "../../types";
+import { BlockDefinition } from "@/components/blocks/types";
 import { basicCallToActionTemplate } from "./basic-call-to-action.template";
 import BasicCallToActionBlock from "./BasicCallToActionBlock";
 

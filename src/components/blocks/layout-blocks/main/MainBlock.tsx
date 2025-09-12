@@ -16,7 +16,7 @@ export default function MainBlock({ data, children }: MainBlockProps) {
     containerType = "container",
     padding = "medium",
     backgroundColor = "white",
-    minHeight = "auto"
+    minHeight = "auto",
   } = data;
 
   const getContainerClasses = () => {
@@ -68,17 +68,15 @@ export default function MainBlock({ data, children }: MainBlockProps) {
   };
 
   return (
-    <main 
+    <main
       className={`
         ${getBackgroundClasses()} 
         ${getMinHeightClasses()} 
         ${getPaddingClasses()}
       `.trim()}
-      data-tina-field={tinaField(data)}
+      // data-tina-field={tinaField(data)}
     >
-      <div className={getContainerClasses()}>
-        {children}
-      </div>
+      <div className={getContainerClasses()}>{children}</div>
     </main>
   );
 }

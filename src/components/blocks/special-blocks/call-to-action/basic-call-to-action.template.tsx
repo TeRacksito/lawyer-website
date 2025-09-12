@@ -15,7 +15,6 @@ export const basicCallToActionTemplate: Template = {
       secondaryButton: {
         text: "Ver Nuestros Servicios",
         href: "/old/services",
-        hiddenText: "Reserva una",
       },
       darkTheme: false,
     },

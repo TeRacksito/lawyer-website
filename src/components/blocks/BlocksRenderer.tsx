@@ -84,7 +84,7 @@ export default function BlockRenderer({
           : {};
 
         return (
-          <div key={index} {...tinaFieldProps}>
+          <div key={index}>
             <BlockComponent
               data={block}
               dataTinaField={

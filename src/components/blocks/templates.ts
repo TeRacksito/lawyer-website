@@ -10,11 +10,13 @@ import {
 import { servicesListBlock } from "./services-list";
 import { contentBlock } from "./content-blocks/basic";
 import { contentBlocks } from "./content-blocks";
-import { basicCallToActionBlock } from "./section-blocks/call-to-action";
 import { basicSectionBlock } from "./section-blocks/basic-section";
+import { basicCallToActionBlock } from "./special-blocks/call-to-action";
+import { specialBlocks } from "./special-blocks";
 
 // Export array of all available page blocks
 // Add or remove blocks here to enable/disable them in the CMS
+
 export const pageBlocks: BlockRegistry = [
   heroBlock,
   contentBlock,
@@ -61,6 +63,11 @@ export const layoutFooterBlockComponents = layoutFooterBlocks.reduce(
 );
 
 export const contentBlockComponents = contentBlocks.reduce((acc, block) => {
+  acc[block.template.name] = block.component;
+  return acc;
+}, {} as Record<string, React.ComponentType<{ data: any }>>);
+
+export const specialBlockComponents = specialBlocks.reduce((acc, block) => {
   acc[block.template.name] = block.component;
   return acc;
 }, {} as Record<string, React.ComponentType<{ data: any }>>);

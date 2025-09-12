@@ -1,5 +1,4 @@
 // Import all layout block definitions from their respective folders
-import { basicCallToActionBlock } from "../section-blocks/call-to-action";
 import { BlockRegistry } from "../types";
 import { footerBlock } from "./footer";
 import { headerBlock } from "./header";
@@ -9,10 +8,7 @@ export const layoutHeaderBlocks: BlockRegistry = [headerBlock];
 
 export const layoutChildrenBlocks: BlockRegistry = [mainBlock];
 
-export const layoutFooterBlocks: BlockRegistry = [
-  footerBlock,
-  basicCallToActionBlock,
-];
+export const layoutFooterBlocks: BlockRegistry = [footerBlock];
 
 // Export just the templates for Tina CMS configuration
 export const layoutHeaderBlockTemplates = layoutHeaderBlocks.map(

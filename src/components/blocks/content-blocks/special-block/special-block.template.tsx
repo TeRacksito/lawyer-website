@@ -1,13 +1,15 @@
+import React from "react";
 import { LuMoon, LuSun, LuSunMoon } from "react-icons/lu";
 import { Template } from "tinacms";
-import { contentBlockTemplates } from "../../content-blocks";
-import React from "react";
+import { specialBlocksTemplates } from "../../special-blocks";
 
 React;
 
-export const basicSectionTemplate: Template = {
-  name: "basic_section",
-  label: "Sección Básica",
+console.log(specialBlocksTemplates);
+
+export const specialBlockTemplate: Template = {
+  name: "special_block",
+  label: "Bloque Especial",
   ui: {
     defaultItem: {
       theme: "parent",
@@ -41,10 +43,10 @@ export const basicSectionTemplate: Template = {
     },
     {
       type: "object",
-      name: "content_blocks",
-      label: "Bloques de contenido",
+      name: "special_blocks",
+      label: "Bloques Especiales",
       list: true,
-      templates: contentBlockTemplates,
+      templates: specialBlocksTemplates,
     },
   ],
 };
