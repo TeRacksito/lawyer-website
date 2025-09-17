@@ -1,8 +1,17 @@
 import { BlockRegistry } from "../types";
 import { contentBlock } from "./basic";
+import { paragraphBlock } from "./paragraph";
 import { specialBlock } from "./special-block";
+import { titleBlock } from "./title";
 
-export const contentBlocks: BlockRegistry = [contentBlock, specialBlock];
+export const contentBlocks: BlockRegistry = [
+  contentBlock,
+  titleBlock,
+  paragraphBlock,
+
+  // special
+  specialBlock,
+];
 
 export const contentBlockTemplates = contentBlocks.map(
   (block) => block.template

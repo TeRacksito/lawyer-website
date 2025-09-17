@@ -1,5 +1,6 @@
 "use client";
 
+import { getThemeProps } from "@/components/utils/ThemeAttribute";
 import BlockRenderer from "../../BlocksRenderer";
 import { contentBlockComponents } from "../../templates";
 
@@ -18,17 +19,18 @@ export default function BasicSectionBlock({
   data,
   dataTinaField,
 }: BasicSectionBlockProps) {
-  const { theme = "parent", content_blocks } = data;
+  const { theme, content_blocks } = data;
 
   console.log(content_blocks, content_blocks);
 
   return (
     <section
-      {...(theme !== "parent" ? { "data-theme": theme } : {})}
+      {...getThemeProps(theme)}
       // data-tina-field={dataTinaField}
       {...(content_blocks === null
         ? { "data-tina-field": dataTinaField, className: "p-5" }
         : {})}
+      className="px-6 py-16"
     >
       {/* <div className="container mx-auto px-6"> */}
       <BlockRenderer

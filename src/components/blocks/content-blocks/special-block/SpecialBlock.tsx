@@ -1,5 +1,6 @@
 "use client";
 
+import { getThemeProps } from "@/components/utils/ThemeAttribute";
 import BlockRenderer from "../../BlocksRenderer";
 import { specialBlockComponents } from "../../templates";
 
@@ -18,11 +19,11 @@ export default function SpecialBlock({
   data,
   dataTinaField,
 }: SpecialBlockProps) {
-  const { theme = "parent", special_blocks } = data;
+  const { theme, special_blocks } = data;
 
   return (
     <div
-      {...(theme !== "parent" ? { "data-theme": theme } : {})}
+      {...getThemeProps(theme)}
       // data-tina-field={dataTinaField}
       {...(special_blocks === null
         ? { "data-tina-field": dataTinaField, className: "p-5" }

@@ -41,7 +41,7 @@ export default function ContentBlock({ data }: ContentBlockProps) {
       <div className="container mx-auto px-4">
         {title && (
           <div className="text-center mb-12">
-            <h2 
+            <h2
               className="text-3xl lg:text-4xl font-bold text-base-content mb-4"
               data-tina-field={tinaField(data, "title")}
             >
@@ -49,23 +49,23 @@ export default function ContentBlock({ data }: ContentBlockProps) {
             </h2>
           </div>
         )}
-        
+
         <div className={getLayoutClasses()}>
           {layout === "sidebar-left" && (
             <div className="lg:col-span-1">
-              
-              
               {/* Sidebar content - you can add sidebar components here */}
               <div className="bg-base-200 p-6 rounded-lg">
-                <h3 className="font-semibold text-base-content mb-4">Quick Links</h3>
+                <h3 className="font-semibold text-base-content mb-4">
+                  Quick Links
+                </h3>
                 {/* Add sidebar navigation or related content */}
               </div>
             </div>
           )}
-          
+
           <div className={getContentClasses()}>
             {content && (
-              <div 
+              <div
                 className="prose prose-lg max-w-none"
                 data-tina-field={tinaField(data, "content")}
               >
@@ -73,12 +73,14 @@ export default function ContentBlock({ data }: ContentBlockProps) {
               </div>
             )}
           </div>
-          
+
           {layout === "sidebar-right" && (
             <div className="lg:col-span-1">
               {/* Sidebar content - you can add sidebar components here */}
               <div className="bg-base-200 p-6 rounded-lg">
-                <h3 className="font-semibold text-base-content mb-4">Related Info</h3>
+                <h3 className="font-semibold text-base-content mb-4">
+                  Related Info
+                </h3>
                 {/* Add sidebar navigation or related content */}
               </div>
             </div>
