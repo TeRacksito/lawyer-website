@@ -7,6 +7,7 @@ interface ContentBlockProps {
     content?: any;
     layout?: string | null;
   };
+  
 }
 
 export default function ContentBlock({ data }: ContentBlockProps) {

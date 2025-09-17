@@ -1,9 +1,12 @@
+import { motion } from "framer-motion";
+
 interface TitleBlockProps {
   data: {
     title?: string | null;
     level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | null;
   };
   dataTinaField?: string;
+  motionDelay?: number;
 }
 
 const levelClasses: Record<
@@ -18,16 +21,36 @@ const levelClasses: Record<
   h6: "text-base md:text-lg font-normal mb-2 md:mb-3",
 };
 
-export default function TitleBlock({ data, dataTinaField }: TitleBlockProps) {
+const motionHeadings = {
+  h1: motion.h1,
+  h2: motion.h2,
+  h3: motion.h3,
+  h4: motion.h4,
+  h5: motion.h5,
+  h6: motion.h6,
+};
+
+export default function TitleBlock({
+  data,
+  dataTinaField,
+  motionDelay,
+}: TitleBlockProps) {
+  console.log("Title: Motion delay:", motionDelay);
+
   const { title, level } = data;
 
-  const HeadingTag = level || "h1";
-5
+  const HeadingTag =
+    level && motionHeadings[level] ? motionHeadings[level] : motion.h2;
+
   return (
     <div className="max-w-4xl mx-auto text-center">
       {title && (
         <HeadingTag
-          className={levelClasses[HeadingTag]}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: motionDelay, duration: 0.8 }}
+          className={levelClasses[level || "h2"]}
           data-tina-field={dataTinaField}
         >
           {title}

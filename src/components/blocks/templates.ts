@@ -7,7 +7,7 @@ import {
   layoutFooterBlocks,
   layoutHeaderBlocks,
 } from "./layout-blocks";
-import { servicesListBlock } from "./services-list";
+import { servicesListBlock } from "./special-blocks/services-list";
 import { contentBlock } from "./content-blocks/basic";
 import { contentBlocks } from "./content-blocks";
 import { basicSectionBlock } from "./section-blocks/basic-section";
@@ -19,11 +19,7 @@ import { specialBlocks } from "./special-blocks";
 
 export const pageBlocks: BlockRegistry = [
   heroBlock,
-  contentBlock,
-  textBlock,
-  callToActionBlock,
   basicSectionBlock,
-  servicesListBlock,
 ];
 
 // Export just the templates for Tina CMS configuration

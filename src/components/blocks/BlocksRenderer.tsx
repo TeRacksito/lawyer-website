@@ -6,12 +6,17 @@ interface BlockRendererProps {
   blocks?: any[];
   components: Record<
     string,
-    React.ComponentType<{ data: any; dataTinaField?: string }>
+    React.ComponentType<{
+      data: any;
+      dataTinaField?: string;
+      motionDelay?: number;
+    }>
   >;
   parentData?: any;
   blocksFieldName?: string;
   className?: string;
   children?: React.ReactNode;
+  previousDelay?: number;
 }
 
 /**
@@ -33,17 +38,20 @@ export default function BlockRenderer({
   blocksFieldName = "blocks",
   className,
   children,
+  previousDelay = 0,
 }: BlockRendererProps) {
-  // If no blocks are provided, render children or nothing
   if (!blocks || blocks.length === 0) {
     return children ? <div className={className}>{children}</div> : null;
   }
 
+  const startDelay = 0.1 + previousDelay;
+  const maxDelay = 0.5;
+  const delayIncrement =
+    blocks.length > 1 ? (maxDelay - startDelay) / (blocks.length - 1) : 0;
+
   return (
     <div className={className}>
       {blocks.map((block: any, index: number) => {
-        // Extract template name from __typename (e.g., "PagesBlocksHero" -> "hero")
-        // Also handle direct template names
         const templateName = (() => {
           const tn = block.__typename;
           if (typeof tn === "string") {
@@ -73,7 +81,6 @@ export default function BlockRenderer({
           return null;
         }
 
-        // Create Tina field binding if parent data is provided
         const tinaFieldProps = parentData
           ? {
               "data-tina-field": tinaField(
@@ -92,6 +99,7 @@ export default function BlockRenderer({
                   ? tinaField(parentData, `${blocksFieldName}.${index}`)
                   : undefined
               }
+              motionDelay={startDelay + index * delayIncrement}
             />
           </div>
         );

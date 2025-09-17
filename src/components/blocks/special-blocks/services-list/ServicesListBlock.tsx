@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { tinaField } from "tinacms/dist/react";
-import BlocksRenderer from "../BlocksRenderer";
-import { layoutHeaderBlockComponents } from "../templates";
+import BlocksRenderer from "../../BlocksRenderer";
+import { layoutHeaderBlockComponents } from "../../templates";
 
 export interface IServiceItem {
   title?: string;
@@ -23,7 +23,6 @@ export interface IServicesListBlockData {
   searchPlaceholder?: string;
   noResultsMessage?: string;
   services: IServiceItem[];
-  test_blocks?: any[];
   [key: string]: any;
 }
 
@@ -94,8 +93,6 @@ export default function ServicesListBlock({
     : services;
 
   const perItemDelay = Math.min(0.1, 0.6 / services.length);
-
-  console.log("test blocks: ", test_blocks);
 
   return (
     <section className="px-6 py-24" data-tina-field={dataTinaField}>
@@ -225,16 +222,6 @@ export default function ServicesListBlock({
               {noResultsMessage}
             </p>
           </motion.div>
-        )}
-        {/* Test Blocks - Example of recursive block rendering */}
-        {test_blocks && test_blocks.length > 0 && (
-          <BlocksRenderer
-            blocks={test_blocks}
-            components={layoutHeaderBlockComponents}
-            parentData={data}
-            blocksFieldName="test_blocks"
-            className="space-y-8"
-          />
         )}
       </div>
     </section>

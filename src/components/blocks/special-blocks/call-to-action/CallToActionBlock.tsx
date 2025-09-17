@@ -15,12 +15,16 @@ interface CallToActionBlockProps {
     } | null;
   };
   dataTinaField?: string;
+  motionDelay?: number;
 }
 
 export default function CallToActionBlock({
   data,
   dataTinaField,
+  motionDelay,
 }: CallToActionBlockProps) {
+  console.log("CallToAction: motionDelay", motionDelay);
+
   const { primaryButton, secondaryButton } = data;
 
   return (
@@ -29,7 +33,7 @@ export default function CallToActionBlock({
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.4, duration: 0.8 }}
+        transition={{ delay: motionDelay, duration: 0.8 }}
         className="flex flex-col sm:flex-row gap-4 justify-center"
       >
         {secondaryButton?.href && secondaryButton?.text && (

@@ -1,8 +1,6 @@
 import React from "react";
-import { LuMoon, LuSun, LuSunMoon } from "react-icons/lu";
 import { Template } from "tinacms";
 import { specialBlocksTemplates } from "../../special-blocks";
-import { themeField } from "@/components/utils/theme.field";
 
 React;
 
@@ -15,7 +13,7 @@ export const specialBlockTemplate: Template = {
     },
   },
   fields: [
-    themeField,
+    // themeField,
     {
       type: "object",
       name: "special_blocks",

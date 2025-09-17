@@ -1,5 +1,5 @@
 import { Template } from "tinacms";
-import { layoutHeaderBlockTemplates } from "../layout-blocks";
+import { layoutHeaderBlockTemplates } from "../../layout-blocks";
 
 export const servicesListTemplate: Template = {
   name: "services_list",
@@ -95,13 +95,6 @@ export const servicesListTemplate: Template = {
           description: "Optional image for the service card",
         },
       ],
-    },
-    {
-      type: "object",
-      name: "test_blocks",
-      label: "Bloques especiales",
-      list: true,
-      templates: layoutHeaderBlockTemplates,
     },
   ],
 };

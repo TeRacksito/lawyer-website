@@ -1,7 +1,11 @@
 import { BlockRegistry } from "../types";
 import { callToActionBlock } from "./call-to-action";
+import { servicesListBlock } from "./services-list";
 
-export const specialBlocks: BlockRegistry = [callToActionBlock];
+export const specialBlocks: BlockRegistry = [
+  callToActionBlock,
+  servicesListBlock,
+];
 
 export const specialBlocksTemplates = specialBlocks.map(
   (block) => block.template

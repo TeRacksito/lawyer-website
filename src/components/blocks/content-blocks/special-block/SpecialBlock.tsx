@@ -13,11 +13,13 @@ export interface SpecialBlockData {
 export interface SpecialBlockProps {
   data: SpecialBlockData;
   dataTinaField?: string;
+  motionDelay?: number;
 }
 
 export default function SpecialBlock({
   data,
   dataTinaField,
+  motionDelay,
 }: SpecialBlockProps) {
   const { theme, special_blocks } = data;
 
@@ -34,6 +36,7 @@ export default function SpecialBlock({
         components={specialBlockComponents}
         parentData={data}
         blocksFieldName="special_blocks"
+        previousDelay={motionDelay || 0}
       />
     </div>
   );
