@@ -11,7 +11,7 @@ import { servicesListBlock } from "./services-list";
 import { contentBlock } from "./content-blocks/basic";
 import { contentBlocks } from "./content-blocks";
 import { basicSectionBlock } from "./section-blocks/basic-section";
-import { basicCallToActionBlock } from "./special-blocks/call-to-action";
+import { callToActionBlock } from "./special-blocks/call-to-action";
 import { specialBlocks } from "./special-blocks";
 
 // Export array of all available page blocks
@@ -21,7 +21,7 @@ export const pageBlocks: BlockRegistry = [
   heroBlock,
   contentBlock,
   textBlock,
-  basicCallToActionBlock,
+  callToActionBlock,
   basicSectionBlock,
   servicesListBlock,
 ];

@@ -1,13 +1,10 @@
 import { Template } from "tinacms";
 
-export const basicCallToActionTemplate: Template = {
-  name: "basic_call_to_action",
-  label: "Basic Call to Action",
+export const callToActionTemplate: Template = {
+  name: "call_to_action",
+  label: "Botón de acción",
   ui: {
     defaultItem: {
-      title: "Consulta gratuita",
-      description:
-        "Ofrecemos una consulta gratuita para evaluar tu caso y ofrecerte soluciones personalizadas.",
       primaryButton: {
         text: "Solicitar Consulta Gratuita",
         href: "/old/contact",
@@ -16,25 +13,9 @@ export const basicCallToActionTemplate: Template = {
         text: "Ver Nuestros Servicios",
         href: "/old/services",
       },
-      darkTheme: false,
     },
   },
   fields: [
-    {
-      type: "string",
-      name: "title",
-      label: "Title",
-      description: "Main title for the call to action section",
-    },
-    {
-      type: "string",
-      name: "description",
-      label: "Description",
-      description: "Description text below the title",
-      ui: {
-        component: "textarea",
-      },
-    },
     {
       type: "object",
       name: "primaryButton",
@@ -75,12 +56,6 @@ export const basicCallToActionTemplate: Template = {
           description: "Text shown only on desktop before main text",
         },
       ],
-    },
-    {
-      type: "boolean",
-      name: "darkTheme",
-      label: "Dark Theme",
-      description: "Enable dark theme for the section",
     },
   ],
 };

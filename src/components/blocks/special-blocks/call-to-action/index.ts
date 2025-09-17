@@ -1,8 +1,8 @@
 import { BlockDefinition } from "@/components/blocks/types";
-import { basicCallToActionTemplate } from "./basic-call-to-action.template";
-import BasicCallToActionBlock from "./BasicCallToActionBlock";
+import { callToActionTemplate } from "./call-to-action.template";
+import CallToActionBlock from "./CallToActionBlock";
 
-export const basicCallToActionBlock: BlockDefinition = {
-  template: basicCallToActionTemplate,
-  component: BasicCallToActionBlock,
+export const callToActionBlock: BlockDefinition = {
+  template: callToActionTemplate,
+  component: CallToActionBlock,
 };
