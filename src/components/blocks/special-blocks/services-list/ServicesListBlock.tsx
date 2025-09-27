@@ -17,8 +17,6 @@ export interface IServiceItem {
 }
 
 export interface IServicesListBlockData {
-  title?: string;
-  subtitle?: string;
   searchEnabled?: boolean;
   searchPlaceholder?: string;
   noResultsMessage?: string;
@@ -75,13 +73,10 @@ export default function ServicesListBlock({
   const [searchQuery, setSearchQuery] = useState("");
 
   const {
-    title,
-    subtitle,
     searchEnabled = true,
     searchPlaceholder,
     noResultsMessage,
     services,
-    test_blocks,
   } = data;
 
   const filteredServices = searchEnabled
@@ -97,34 +92,6 @@ export default function ServicesListBlock({
   return (
     <section className="px-6 py-24" data-tina-field={dataTinaField}>
       <div className="max-w-6xl mx-auto">
-        {/* Title and Subtitle */}
-        {(title || subtitle) && (
-          <div className="text-center mb-12">
-            {title && (
-              <motion.h2
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-3xl font-semibold mb-4"
-                data-tina-field={tinaField(data, "title")}
-              >
-                {title}
-              </motion.h2>
-            )}
-            {subtitle && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-lg text-gray-600 max-w-3xl mx-auto"
-                data-tina-field={tinaField(data, "subtitle")}
-              >
-                {subtitle}
-              </motion.p>
-            )}
-          </div>
-        )}
-        {/* Search Box */}
         {searchEnabled && (
           <motion.div
             initial={{ opacity: 0 }}

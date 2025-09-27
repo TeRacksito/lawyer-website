@@ -3,12 +3,9 @@ import { layoutHeaderBlockTemplates } from "../../layout-blocks";
 
 export const servicesListTemplate: Template = {
   name: "services_list",
-  label: "Services List",
+  label: "Lista de Servicios",
   ui: {
     defaultItem: {
-      title: "Nuestros Servicios",
-      subtitle:
-        "Descubre cómo podemos ayudarte con soluciones personalizadas y efectivas.",
       searchEnabled: true,
       searchPlaceholder: "Buscar servicios...",
       noResultsMessage:
@@ -19,58 +16,43 @@ export const servicesListTemplate: Template = {
   },
   fields: [
     {
-      type: "string",
-      name: "title",
-      label: "Section Title",
-      description: "Main title for the services section",
-    },
-    {
-      type: "string",
-      name: "subtitle",
-      label: "Section Subtitle",
-      description: "Subtitle or description for the services section",
-      ui: {
-        component: "textarea",
-      },
-    },
-    {
       type: "boolean",
       name: "searchEnabled",
-      label: "Enable Search",
-      description: "Allow users to search through services",
+      label: "Habilitar Búsqueda",
+      description: "Permitir a los usuarios buscar entre los servicios",
     },
     {
       type: "string",
       name: "searchPlaceholder",
-      label: "Search Placeholder",
-      description: "Placeholder text for the search input",
+      label: "Marcador de Posición de Búsqueda",
+      description: "Texto marcador de posición para el campo de búsqueda",
     },
     {
       type: "string",
       name: "noResultsMessage",
-      label: "No Results Message",
-      description: "Message shown when search returns no results",
+      label: "Mensaje de Sin Resultados",
+      description: "Mensaje mostrado cuando la búsqueda no devuelve resultados",
     },
     {
       type: "object",
       name: "services",
-      label: "Services",
+      label: "Servicios",
       list: true,
       ui: {
         itemProps: (item) => {
-          return { label: item?.title || "New Service" };
+          return { label: item?.title || "Nuevo Servicio" };
         },
       },
       fields: [
         {
           type: "string",
           name: "title",
-          label: "Service Title",
+          label: "Título del Servicio",
         },
         {
           type: "string",
           name: "description",
-          label: "Service Description",
+          label: "Descripción del Servicio",
           ui: {
             component: "textarea",
           },
@@ -78,21 +60,22 @@ export const servicesListTemplate: Template = {
         {
           type: "string",
           name: "link",
-          label: "Service Link",
+          label: "Enlace del Servicio",
           description:
-            "URL path to the service detail page (e.g., /services/derecho-penal)",
+            "Ruta URL a la página de detalle del servicio (ej. /services/derecho-penal)",
         },
         {
           type: "string",
           name: "linkText",
-          label: "Link Text",
-          description: "Text for the 'more info' links on each service card",
+          label: "Texto del Enlace",
+          description:
+            "Texto para los enlaces de 'más info' en cada tarjeta de servicio",
         },
         {
           type: "image",
           name: "image",
-          label: "Service Image",
-          description: "Optional image for the service card",
+          label: "Imagen del Servicio",
+          description: "Imagen opcional para la tarjeta de servicio",
         },
       ],
     },

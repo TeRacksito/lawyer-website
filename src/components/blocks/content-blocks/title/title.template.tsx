@@ -1,11 +1,20 @@
+import { truncateText } from "@/components/utils/truncate";
 import { Template } from "tinacms";
 
 export const titleTemplate: Template = {
   name: "title",
   label: "Título",
   ui: {
+    itemProps: (item) => {
+      const titleStr = String(item?.title ?? "");
+      const truncated = truncateText(titleStr, 10);
+      return {
+        label: `${titleTemplate.label}${titleStr ? ` (${truncated})` : ""}`,
+      };
+    },
     defaultItem: {
-      level: "h1",
+      title: "Un Título Atractivo",
+      level: "h2",
     },
   },
   fields: [
