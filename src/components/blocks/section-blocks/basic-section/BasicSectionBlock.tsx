@@ -21,8 +21,6 @@ export default function BasicSectionBlock({
 }: BasicSectionBlockProps) {
   const { theme, content_blocks } = data;
 
-  console.log(content_blocks, content_blocks);
-
   return (
     <section
       {...getThemeProps(theme)}

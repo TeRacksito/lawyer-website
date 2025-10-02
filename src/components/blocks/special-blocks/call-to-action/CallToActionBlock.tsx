@@ -23,8 +23,6 @@ export default function CallToActionBlock({
   dataTinaField,
   motionDelay,
 }: CallToActionBlockProps) {
-  console.log("CallToAction: motionDelay", motionDelay);
-
   const { primaryButton, secondaryButton } = data;
 
   return (

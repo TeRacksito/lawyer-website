@@ -1,0 +1,82 @@
+---
+childrenBlocks:
+  - _template: main
+title: Nueva Página
+headerBlocks:
+  - variant: heroTitle
+    backgroundImage: /images/bookshelf.webp
+    fullScreen: false
+    yShift: 50
+    title: Nuestra Historia
+    subtitle: 'Conoce quiénes somos, qué nos motiva y cómo hemos llegado hasta aquí.'
+    authorName: quiénes somos
+    _template: hero
+  - theme: parent
+    name: Nav superior
+    content_blocks:
+      - special_blocks:
+          - flexDirection: row
+            links:
+              - label: Nuestra Historia
+                url: /about
+              - label: Nuestra Carrera
+                url: /about/career
+              - label: Nuestros Valores
+                url: /about/values
+              - label: Nuestro Equipo
+                url: /about/team
+            _template: local_navigation
+        _template: special_block
+    _template: basic_section
+main:
+  containerType: full
+  padding: none
+  backgroundColor: ''
+  minHeight: auto
+footerBlocks:
+  - theme: dark
+    name: Nav Inferior
+    content_blocks:
+      - special_blocks:
+          - flexDirection: row
+            links:
+              - label: Nuestra Historia
+                url: /about
+              - label: Nuestra Carrera
+                url: /about/career
+              - label: Nuestros Valores
+                url: /about/values
+              - label: Nuestro Equipo
+                url: /about/team
+            _template: local_navigation
+        _template: special_block
+      - text: |
+          Explora más contenido cambiando de sección
+        textAlign: text-center
+        proseSize: prose
+        _template: paragraph
+    _template: basic_section
+  - theme: parent
+    name: Llamada a la acción
+    content_blocks:
+      - title: ¿Listo para trabajar juntos?
+        level: h3
+        _template: title
+      - text: |
+          Contacta con nosotros para una consulta personalizada sobre tu caso.
+        textAlign: text-center
+        proseSize: prose-lg
+        _template: paragraph
+      - special_blocks:
+          - primaryButton:
+              text: Ver Nuestros Servicios
+              href: /services
+            secondaryButton:
+              text: Consulta Gratuita
+              href: /contact
+              hiddenText: Reserva Una
+            _template: call_to_action
+        _template: special_block
+    _template: basic_section
+---
+

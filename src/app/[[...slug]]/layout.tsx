@@ -1,9 +1,7 @@
-import { client } from "../../../tina/__generated__/client";
-import { ReactNode } from "react";
 import Footer from "@/components/layout/footers/Footer";
 import Header from "@/components/layout/headers/classic/Header";
+import { client } from "../../../tina/__generated__/client";
 import ClientLayoutWrapper from "./ClientLayoutWrapper";
-import ExitDraftBanner from "@/components/ui/banners/ExitPreviewBanner";
 
 export interface IDynamicLayoutProps {
   children: React.ReactNode;
@@ -51,10 +49,6 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       slug: JSON.parse(pathStr) as string[],
     }));
 
-    console.log(
-      `Generated ${params.length} static params for layouts:`,
-      params
-    );
     return params;
   } catch (error) {
     console.error("Error generating static params for layout:", error);
@@ -68,8 +62,6 @@ async function getLayoutData(slug?: string[]) {
     const slugArray = slug || [];
     const path =
       slugArray.length > 0 ? `${slugArray.join("/")}/layout.mdx` : "layout.mdx";
-
-    console.log(`Relative path for layout: ${path}`);
 
     const layoutData = await client.queries.layouts({
       relativePath: path,
@@ -104,11 +96,6 @@ async function getAllLayoutsInHierarchy(slug?: string[]): Promise<any[]> {
     }
   }
 
-  console.log(
-    `Found ${layouts.length} layouts in hierarchy for route: ${
-      slug?.join("/") || "root"
-    }`
-  );
   return layouts;
 }
 

@@ -58,7 +58,6 @@ export default function HeroBlock({ data }: HeroBlockProps) {
 
     const img = new Image();
     img.onload = () => {
-      console.log("Image loaded successfully");
       setImageSrc(backgroundImage);
       // Small delay to ensure the image is rendered before animation
       setTimeout(() => {

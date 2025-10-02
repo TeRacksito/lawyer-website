@@ -35,8 +35,6 @@ export default function TitleBlock({
   dataTinaField,
   motionDelay,
 }: TitleBlockProps) {
-  console.log("Title: Motion delay:", motionDelay);
-
   const { title, level } = data;
 
   const HeadingTag =

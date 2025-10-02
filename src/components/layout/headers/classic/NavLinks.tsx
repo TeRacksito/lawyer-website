@@ -11,7 +11,7 @@ export default function NavLinks({
   showButton = true,
   onLinkClick,
 }: INavLinksProps) {
-  const baseStyle = "text-base transition";
+  const baseStyle = "text-base transition hover:opacity-75";
   const linkContainerClass =
     layout === "horizontal"
       ? "flex items-center gap-6"

@@ -1,26 +1,15 @@
 // Import all block definitions from their respective folders
-import { heroBlock } from "./section-blocks/banners/hero";
-import { textBlock } from "./text";
-import { BlockRegistry } from "./types";
-import {
-  layoutChildrenBlocks,
-  layoutFooterBlocks,
-  layoutHeaderBlocks,
-} from "./layout-blocks";
-import { servicesListBlock } from "./special-blocks/services-list";
-import { contentBlock } from "./content-blocks/basic";
 import { contentBlocks } from "./content-blocks";
+import { layoutFooterBlocks, layoutHeaderBlocks } from "./layout-blocks";
+import { heroBlock } from "./section-blocks/banners/hero";
 import { basicSectionBlock } from "./section-blocks/basic-section";
-import { callToActionBlock } from "./special-blocks/call-to-action";
 import { specialBlocks } from "./special-blocks";
+import { BlockRegistry } from "./types";
 
 // Export array of all available page blocks
 // Add or remove blocks here to enable/disable them in the CMS
 
-export const pageBlocks: BlockRegistry = [
-  heroBlock,
-  basicSectionBlock,
-];
+export const pageBlocks: BlockRegistry = [heroBlock, basicSectionBlock];
 
 // Export just the templates for Tina CMS configuration
 export const pageBlockTemplates = pageBlocks.map((block) => block.template);
@@ -40,14 +29,6 @@ export const layoutHeaderBlockComponents = layoutHeaderBlocks.reduce(
     string,
     React.ComponentType<{ data: any; dataTinaField?: string }>
   >
-);
-
-export const layoutChildrenBlockComponents = layoutChildrenBlocks.reduce(
-  (acc, block) => {
-    acc[block.template.name] = block.component;
-    return acc;
-  },
-  {} as Record<string, React.ComponentType<{ data: any }>>
 );
 
 export const layoutFooterBlockComponents = layoutFooterBlocks.reduce(

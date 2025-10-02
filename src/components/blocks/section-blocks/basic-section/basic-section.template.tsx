@@ -2,8 +2,8 @@ import { LuMoon, LuSun, LuSunMoon } from "react-icons/lu";
 import { Template } from "tinacms";
 import { contentBlockTemplates } from "../../content-blocks";
 import React from "react";
-import { themeField } from "@/components/utils/theme.field";
 import { truncateText } from "@/components/utils/truncate";
+import { themeField } from "@/components/utils/template-fields/theme.field";
 
 React;
 

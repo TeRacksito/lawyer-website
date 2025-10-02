@@ -5,9 +5,9 @@ import { tinaField } from "tinacms/dist/react";
 import {
   pageBlockComponents,
   layoutHeaderBlockComponents,
-  layoutChildrenBlockComponents,
   layoutFooterBlockComponents,
 } from "../../components/blocks/templates";
+import MainBlock from "../../components/blocks/layout-blocks/main/MainBlock";
 import { ReactNode } from "react";
 
 interface ClientLayoutWrapperProps {
@@ -41,14 +41,17 @@ export default function ClientLayoutWrapper({
 
     // Handle layout structure with separate block arrays
     const headerBlocks = layoutData.headerBlocks || [];
-    const childrenBlocks = layoutData.childrenBlocks || [];
     const footerBlocks = layoutData.footerBlocks || [];
 
     const renderHeaderBlock = (block: any, index: number) => {
       const templateName =
         block._template ||
         block.__typename?.replace("LayoutsHeaderBlocks", "").toLowerCase();
-      const BlockComponent = layoutHeaderBlockComponents[templateName];
+
+      // Try layout header components first, then page components
+      const BlockComponent =
+        layoutHeaderBlockComponents[templateName] ||
+        pageBlockComponents[templateName];
 
       if (!BlockComponent) {
         console.warn(
@@ -66,57 +69,26 @@ export default function ClientLayoutWrapper({
       );
     };
 
-    const renderChildrenBlock = (block: any, index: number) => {
-      const templateName =
-        block._template ||
-        block.__typename?.replace("LayoutsChildrenBlocks", "").toLowerCase();
+    const renderMainBlock = () => {
+      const mainData = layoutData.main;
 
-      // Check if it's a children block (layout component) or page block
-      let BlockComponent =
-        layoutChildrenBlockComponents[templateName] ||
-        pageBlockComponents[templateName];
-
-      if (!BlockComponent) {
-        console.warn(
-          `No children component found for block type: ${templateName}`
-        );
-        return null;
+      if (!mainData) {
+        // Fallback if no main block is configured
+        return <main className="flex-1">{children}</main>;
       }
 
-      // If it's a children/main block, pass the children prop
-      const isChildrenBlock = layoutChildrenBlockComponents[templateName];
-
-      if (isChildrenBlock) {
-        const ChildrenComponent = BlockComponent as React.ComponentType<{
-          data: any;
-          children: ReactNode;
-        }>;
-        return (
-          <div
-            key={index}
-            // data-tina-field={tinaField(layoutData, `childrenBlocks.${index}`)}
-          >
-            <ChildrenComponent data={block}>{children}</ChildrenComponent>
-          </div>
-        );
-      } else {
-        // Regular page block in the children area
-        return (
-          <div
-            key={index}
-            // data-tina-field={tinaField(layoutData, `childrenBlocks.${index}`)}
-          >
-            <BlockComponent data={block} />
-          </div>
-        );
-      }
+      return <MainBlock data={mainData}>{children}</MainBlock>;
     };
 
     const renderFooterBlock = (block: any, index: number) => {
       const templateName =
         block._template ||
         block.__typename?.replace("LayoutsFooterBlocks", "").toLowerCase();
-      const BlockComponent = layoutFooterBlockComponents[templateName];
+
+      // Try layout footer components first, then page components
+      const BlockComponent =
+        layoutFooterBlockComponents[templateName] ||
+        pageBlockComponents[templateName];
 
       if (!BlockComponent) {
         console.warn(
@@ -142,15 +114,8 @@ export default function ClientLayoutWrapper({
           renderHeaderBlock(block, index)
         )}
 
-        {/* Render children blocks - must include exactly one children/main block */}
-        {childrenBlocks.length > 0 ? (
-          childrenBlocks.map((block: any, index: number) =>
-            renderChildrenBlock(block, index)
-          )
-        ) : (
-          // Fallback if no children blocks configured
-          <main className="flex-1">{children}</main>
-        )}
+        {/* Render main block */}
+        {renderMainBlock()}
 
         {/* Render footer blocks */}
         {footerBlocks.map((block: any, index: number) =>
