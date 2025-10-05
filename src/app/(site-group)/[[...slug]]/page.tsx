@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import { client } from "../../../tina/__generated__/client";
+import { client } from "../../../../tina/__generated__/client";
 import PageWrapper from "./PageWrapper";
 
 interface DynamicPageProps {

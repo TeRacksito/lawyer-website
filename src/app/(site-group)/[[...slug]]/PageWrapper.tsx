@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { tinaField, useTina } from "tinacms/dist/react";
-import { pageBlockComponents } from "../../components/blocks/templates";
+import { pageBlockComponents } from "../../../components/blocks/templates";
 import BlocksRenderer from "@/components/blocks/BlocksRenderer";
 
 interface PageWrapperProps {

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTina } from "tinacms/dist/react";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { tinaField } from "tinacms/dist/react";
-import { pageBlockComponents } from "../../components/blocks/templates";
+import { pageBlockComponents } from "../../../components/blocks/templates";
 
 interface ClientPageWrapperProps {
   query?: string;
