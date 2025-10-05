@@ -1,4 +1,4 @@
-import { themeField } from "@/components/utils/theme.field";
+import { themeField } from "@/components/utils/template-fields/theme.field";
 import { Template } from "tinacms";
 
 export const textArticleTemplate: Template = {
