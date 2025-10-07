@@ -44,3 +44,6 @@ next-env.d.ts
 
 node_modules
 .env
+
+# Avoid empty directories in TinaCMS's content folder
+content/**/.gitkeep.mdx
