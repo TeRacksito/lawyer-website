@@ -1,5 +1,5 @@
 import React from "react";
-import { LuAlignLeft, LuAlignCenter } from "react-icons/lu";
+import { LuSquareSplitHorizontal, LuSquareSplitVertical } from "react-icons/lu";
 import { Template } from "tinacms";
 
 React;
@@ -20,8 +20,16 @@ export const localNavigationTemplate: Template = {
       name: "flexDirection",
       label: "Dirección de los enlaces",
       options: [
-        { value: "row", label: "Fila", icon: () => <LuAlignLeft /> },
-        { value: "column", label: "Columna", icon: () => <LuAlignCenter /> },
+        {
+          value: "row",
+          label: "Fila",
+          icon: () => <LuSquareSplitHorizontal />,
+        },
+        {
+          value: "column",
+          label: "Columna",
+          icon: () => <LuSquareSplitVertical />,
+        },
       ],
     },
     {
