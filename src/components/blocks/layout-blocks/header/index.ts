@@ -4,5 +4,5 @@ import HeaderBlock from "./HeaderBlock";
 
 export const headerBlock: BlockDefinition = {
   template: headerBlockTemplate,
-  component: HeaderBlock
+  component: HeaderBlock,
 };

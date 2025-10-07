@@ -8,8 +8,6 @@ export const contentBlocks: BlockRegistry = [
   contentBlock,
   titleBlock,
   paragraphBlock,
-
-  // special
   specialBlock,
 ];
 

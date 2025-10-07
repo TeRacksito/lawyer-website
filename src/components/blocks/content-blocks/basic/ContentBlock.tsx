@@ -7,7 +7,6 @@ interface ContentBlockProps {
     content?: any;
     layout?: string | null;
   };
-  
 }
 
 export default function ContentBlock({ data }: ContentBlockProps) {
@@ -54,12 +53,10 @@ export default function ContentBlock({ data }: ContentBlockProps) {
         <div className={getLayoutClasses()}>
           {layout === "sidebar-left" && (
             <div className="lg:col-span-1">
-              {/* Sidebar content - you can add sidebar components here */}
               <div className="bg-base-200 p-6 rounded-lg">
                 <h3 className="font-semibold text-base-content mb-4">
                   Quick Links
                 </h3>
-                {/* Add sidebar navigation or related content */}
               </div>
             </div>
           )}
@@ -77,12 +74,10 @@ export default function ContentBlock({ data }: ContentBlockProps) {
 
           {layout === "sidebar-right" && (
             <div className="lg:col-span-1">
-              {/* Sidebar content - you can add sidebar components here */}
               <div className="bg-base-200 p-6 rounded-lg">
                 <h3 className="font-semibold text-base-content mb-4">
                   Related Info
                 </h3>
-                {/* Add sidebar navigation or related content */}
               </div>
             </div>
           )}

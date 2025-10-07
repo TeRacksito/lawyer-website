@@ -18,7 +18,6 @@ export default function PageWrapper({
   data,
   children,
 }: PageWrapperProps) {
-  // If we have Tina data, use contextual editing
   if (query && variables && data) {
     const { data: tinaData } = useTina({
       query,
@@ -41,7 +40,6 @@ export default function PageWrapper({
           parentData={pageData}
           blocksFieldName="blocks"
         >
-          {/* Fallback content when no blocks are present */}
           <div className="prose max-w-none p-8">
             <h1 data-tina-field={tinaField(pageData, "title")}>
               {pageData.title}
@@ -61,6 +59,5 @@ export default function PageWrapper({
     );
   }
 
-  // If no Tina data, render children or nothing
   return children || null;
 }

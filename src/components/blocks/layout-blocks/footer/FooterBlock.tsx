@@ -65,10 +65,8 @@ export default function FooterBlock({ data }: FooterBlockProps) {
       className="bg-base-200 border-t border-base-300"
       {...(dataTheme ? { "data-theme": dataTheme } : {})}
     >
-      {/* Main Footer Content */}
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Firm Information */}
           <div
             className="space-y-4"
             data-tina-field={tinaField(data, "firmInfo")}
@@ -136,7 +134,6 @@ export default function FooterBlock({ data }: FooterBlockProps) {
             </div>
           </div>
 
-          {/* Practice Areas */}
           <div
             className="space-y-4"
             data-tina-field={tinaField(data, "practiceAreas")}
@@ -176,7 +173,6 @@ export default function FooterBlock({ data }: FooterBlockProps) {
             )}
           </div>
 
-          {/* Quick Links */}
           <div
             className="space-y-4"
             data-tina-field={tinaField(data, "quickLinks")}
@@ -216,7 +212,6 @@ export default function FooterBlock({ data }: FooterBlockProps) {
             )}
           </div>
 
-          {/* Legal Information */}
           <div
             className="space-y-4"
             data-tina-field={tinaField(data, "legalInfo")}
@@ -284,12 +279,10 @@ export default function FooterBlock({ data }: FooterBlockProps) {
         </div>
       </div>
 
-      {/* Legal Notice Section */}
       {legalNotice && (legalNotice.title || legalNotice.disclaimers) && (
         <div className="border-t border-base-300 bg-base-300">
           <div className="container mx-auto px-6 py-6">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 text-xs text-base-content/70">
-              {/* Legal Disclaimers */}
               <div
                 className="space-y-2 max-w-3xl"
                 data-tina-field={tinaField(data, "legalNotice")}
@@ -312,7 +305,6 @@ export default function FooterBlock({ data }: FooterBlockProps) {
                 )}
               </div>
 
-              {/* Legal Links */}
               {legalLinks && legalLinks.length > 0 && (
                 <div className="flex flex-col lg:flex-row gap-4 text-xs whitespace-nowrap">
                   {legalLinks.map(
@@ -335,8 +327,6 @@ export default function FooterBlock({ data }: FooterBlockProps) {
           </div>
         </div>
       )}
-
-      {/* Copyright Section */}
 
       <div className="border-t border-base-300 bg-base-100">
         <div className="container mx-auto px-6 py-4">

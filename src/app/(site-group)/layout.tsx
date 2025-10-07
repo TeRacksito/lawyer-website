@@ -5,7 +5,11 @@ export interface IDynamicLayoutProps {
   children: React.ReactNode;
 }
 
-// Get all available layouts and prepare them for client-side routing
+/**
+ * Similar to generateStaticParams for pages, this function fetches all available layouts
+ * from TinaCMS and prepares their data for use in the ClientLayoutWrapper.
+ * @returns Array of layout data including path, query, variables, and data.
+ */
 async function getAllAvailableLayouts() {
   try {
     const layouts = await client.queries.layoutsConnection();
@@ -21,7 +25,6 @@ async function getAllAvailableLayouts() {
           return null;
         }
 
-        // Extract path from relativePath: about/layout.mdx -> "about"
         let path = "";
         if (relativePath !== "layout.mdx") {
           const pathParts = relativePath.split("/");
@@ -55,10 +58,8 @@ async function getAllAvailableLayouts() {
 }
 
 export default async function DynamicLayout(props: IDynamicLayoutProps) {
-  // Get all available layouts at build time
   const availableLayouts = await getAllAvailableLayouts();
 
-  // Pass all layout data to client component for pathname-based routing
   return (
     <ClientLayoutWrapper availableLayouts={availableLayouts}>
       {props.children}

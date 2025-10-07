@@ -1,5 +1,4 @@
 import { Template } from "tinacms";
-import { layoutHeaderBlockTemplates } from "../../layout-blocks";
 
 export const servicesListTemplate: Template = {
   name: "services_list",

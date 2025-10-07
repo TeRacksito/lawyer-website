@@ -29,7 +29,6 @@ export const specialBlockTemplate: Template = {
     },
   },
   fields: [
-    // themeField,
     {
       type: "object",
       name: "special_blocks",

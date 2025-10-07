@@ -131,7 +131,6 @@ export const heroBlockTemplate: Template = {
       description:
         "Subtitle for Hero Title variant or description for Landing Page variant",
     },
-    // Landing Page variant fields
     {
       type: "string",
       name: "authorName",

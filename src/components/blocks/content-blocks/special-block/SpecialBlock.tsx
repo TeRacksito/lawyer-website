@@ -26,7 +26,6 @@ export default function SpecialBlock({
   return (
     <div
       {...getThemeProps(theme)}
-      // data-tina-field={dataTinaField}
       {...(special_blocks === null
         ? { "data-tina-field": dataTinaField, className: "p-5" }
         : {})}

@@ -2,5 +2,12 @@
   "files.associations": {
     "wrangler.json": "jsonc"
   },
-  "cSpell.words": ["esnext", "jose", "opennextjs", "tinacms", "turbopack"]
+  "cSpell.words": [
+    "esnext",
+    "jose",
+    "Krasimirov",
+    "opennextjs",
+    "tinacms",
+    "turbopack"
+  ]
 }

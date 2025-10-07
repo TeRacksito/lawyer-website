@@ -20,7 +20,6 @@ interface CallToActionBlockProps {
 
 export default function CallToActionBlock({
   data,
-  dataTinaField,
   motionDelay,
 }: CallToActionBlockProps) {
   const { primaryButton, secondaryButton } = data;

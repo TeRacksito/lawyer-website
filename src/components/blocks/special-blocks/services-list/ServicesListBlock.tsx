@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useState } from "react";
 import { tinaField } from "tinacms/dist/react";
-import BlocksRenderer from "../../BlocksRenderer";
-import { layoutHeaderBlockComponents } from "../../templates";
 
 export interface IServiceItem {
   title?: string;
@@ -118,7 +116,6 @@ export default function ServicesListBlock({
             )}
           </motion.div>
         )}
-        {/* Services Grid */}
         {filteredServices.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-sm sm:max-w-5xl mx-auto">
             {filteredServices.map((service, index) => (

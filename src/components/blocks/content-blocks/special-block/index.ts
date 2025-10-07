@@ -1,4 +1,4 @@
-import { BlockDefinition, BlockRegistry } from "../../types";
+import { BlockDefinition } from "../../types";
 
 import { specialBlockTemplate } from "./special-block.template";
 import SpecialBlock from "./SpecialBlock";

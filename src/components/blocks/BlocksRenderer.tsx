@@ -81,15 +81,6 @@ export default function BlockRenderer({
           return null;
         }
 
-        const tinaFieldProps = parentData
-          ? {
-              "data-tina-field": tinaField(
-                parentData,
-                `${blocksFieldName}.${index}`
-              ),
-            }
-          : {};
-
         return (
           <div key={index}>
             <BlockComponent

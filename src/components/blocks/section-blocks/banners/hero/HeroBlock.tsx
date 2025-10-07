@@ -35,21 +35,17 @@ export default function HeroBlock({ data }: HeroBlockProps) {
     title,
     subtitle,
     authorName,
-    primaryButton,
-    secondaryButton,
   } = data;
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const heightClass = fullScreen ? "h-screen" : "h-48 md:h-64";
 
-  // Clamp yShift between 0% and 100% to prevent image from going out of bounds
   const clampedYShift =
     yShift !== undefined && yShift !== null
       ? Math.max(0, Math.min(100, yShift))
-      : 50; // Default to center (50%)
+      : 50;
 
-  // Load image programmatically after hydration
   useEffect(() => {
     if (!backgroundImage) return;
 
@@ -59,14 +55,12 @@ export default function HeroBlock({ data }: HeroBlockProps) {
     const img = new Image();
     img.onload = () => {
       setImageSrc(backgroundImage);
-      // Small delay to ensure the image is rendered before animation
       setTimeout(() => {
         setIsImageLoaded(true);
       }, 100);
     };
     img.onerror = () => {
       console.error("Failed to load image:", backgroundImage);
-      // Still show something even if image fails
       setImageSrc(backgroundImage);
       setIsImageLoaded(true);
     };
@@ -78,14 +72,12 @@ export default function HeroBlock({ data }: HeroBlockProps) {
       data-theme="dark"
       className={`relative w-full ${heightClass} flex items-center justify-center text-center px-4 md:px-6 overflow-hidden`}
     >
-      {/* Loading state - solid black background */}
       <div
         className={`absolute inset-0 bg-black transition-opacity duration-1000 ease-out ${
           isImageLoaded ? "opacity-0" : "opacity-100"
         }`}
       />
 
-      {/* Image element with smooth reveal - only render when src is ready */}
       {imageSrc && (
         <img
           src={imageSrc}
@@ -100,7 +92,6 @@ export default function HeroBlock({ data }: HeroBlockProps) {
         />
       )}
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black/70" />
 
       <div
@@ -112,7 +103,6 @@ export default function HeroBlock({ data }: HeroBlockProps) {
         ) : variant === "landingPage" ? (
           <LandingPageVariant data={data} />
         ) : (
-          // Fallback - show title and subtitle as simple text
           <div>
             {title && (
               <h1

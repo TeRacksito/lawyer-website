@@ -11,7 +11,6 @@ interface DynamicPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-// Generate static paths for all pages
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   try {
     const pages = await client.queries.pagesConnection({
@@ -27,14 +26,12 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
         const relativePath = page?.node?._sys.relativePath;
         if (!relativePath) return null;
 
-        // Extract slug from relativePath: about/page.mdx -> ["about"]
-        // For root page: page.mdx -> []
         if (relativePath === "page.mdx") {
-          return { slug: [] }; // Root page
+          return { slug: [] };
         }
 
         const pathParts = relativePath.split("/");
-        const slugParts = pathParts.slice(0, -1); // Remove 'page.mdx' from the end
+        const slugParts = pathParts.slice(0, -1);
 
         return {
           slug: slugParts,
@@ -49,7 +46,6 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   }
 }
 
-// Generate metadata for SEO
 export async function generateMetadata({
   params,
 }: DynamicPageProps): Promise<Metadata> {
@@ -79,12 +75,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function DynamicPage({
-  params,
-  searchParams,
-}: DynamicPageProps) {
+export default async function DynamicPage({ params }: DynamicPageProps) {
   const { slug } = await params;
-  const searchParamsData = await searchParams;
   const slugArray = slug || [];
   const path =
     slugArray.length > 0 ? `${slugArray.join("/")}/page.mdx` : "page.mdx";
@@ -102,7 +94,6 @@ export default async function DynamicPage({
       notFound();
     }
 
-    // Always use client-side wrapper for contextual editing support
     return (
       <PageWrapper
         query={page.query}

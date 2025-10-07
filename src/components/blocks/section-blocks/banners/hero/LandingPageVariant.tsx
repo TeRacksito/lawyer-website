@@ -1,6 +1,6 @@
-import { tinaField } from "tinacms/dist/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { tinaField } from "tinacms/dist/react";
 import { formatTitle } from "./FormatTitle";
 import { formatSubtitle } from "./formatSubtitle";
 
@@ -26,7 +26,6 @@ export default function LandingPageVariant({ data }: LandingPageVariantProps) {
 
   return (
     <div>
-      {/* Landing Page Hero Content */}
       {title && (
         <motion.h1
           initial={{ opacity: 0, y: 30 }}

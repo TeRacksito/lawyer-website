@@ -1,15 +1,14 @@
 "use client";
 
-import { useTina } from "tinacms/dist/react";
-import { tinaField } from "tinacms/dist/react";
-import {
-  pageBlockComponents,
-  layoutHeaderBlockComponents,
-  layoutFooterBlockComponents,
-} from "../../components/blocks/templates";
-import MainBlock from "../../components/blocks/layout-blocks/main/MainBlock";
-import { ReactNode, useMemo } from "react";
 import { usePathname } from "next/navigation";
+import { ReactNode, useMemo } from "react";
+import { tinaField, useTina } from "tinacms/dist/react";
+import MainBlock from "../../components/blocks/layout-blocks/main/MainBlock";
+import {
+  layoutFooterBlockComponents,
+  layoutHeaderBlockComponents,
+  pageBlockComponents,
+} from "../../components/blocks/templates";
 
 interface LayoutData {
   path: string;
@@ -29,21 +28,18 @@ export default function ClientLayoutWrapper({
 }: ClientLayoutWrapperProps) {
   const pathname = usePathname();
 
-  // Determine which layouts apply to the current pathname
   const applicableLayouts = useMemo(() => {
-    // Remove leading slash and split into segments
+    // remove leading slash and split into segments
     const pathSegments = pathname.replace(/^\//, "").split("/").filter(Boolean);
 
-    // Find all layouts that match the current path hierarchy
     const layouts: LayoutData[] = [];
 
-    // Check for root layout
     const rootLayout = availableLayouts.find((layout) => layout.path === "");
     if (rootLayout) {
       layouts.push(rootLayout);
     }
 
-    // Check for nested layouts matching path segments
+    // check for nested layouts matching path segments
     for (let i = 1; i <= pathSegments.length; i++) {
       const currentPath = pathSegments.slice(0, i).join("/");
       const matchingLayout = availableLayouts.find(
@@ -57,7 +53,7 @@ export default function ClientLayoutWrapper({
     return layouts;
   }, [pathname, availableLayouts]);
 
-  // If no layouts apply, show fallback
+  // fallback
   if (applicableLayouts.length === 0) {
     return (
       <div>
@@ -68,13 +64,11 @@ export default function ClientLayoutWrapper({
     );
   }
 
-  // Recursively render nested layouts
   const renderNestedLayouts = (
     layouts: LayoutData[],
     content: ReactNode,
     index = 0
   ): ReactNode => {
-    // Base case: no more layouts, return content
     if (index >= layouts.length) {
       return content;
     }
@@ -90,7 +84,6 @@ export default function ClientLayoutWrapper({
   return <>{renderNestedLayouts(applicableLayouts, children)}</>;
 }
 
-// Separate component to handle individual layout rendering with Tina
 function LayoutRenderer({
   layout,
   children,
@@ -104,7 +97,6 @@ function LayoutRenderer({
     data: layout.data,
   });
 
-  // This wrapper only handles layouts collection
   const layoutData = tinaData.layouts;
 
   if (!layoutData) {
@@ -112,7 +104,6 @@ function LayoutRenderer({
     return <div>{children}</div>;
   }
 
-  // Handle layout structure with separate block arrays
   const headerBlocks = layoutData.headerBlocks || [];
   const footerBlocks = layoutData.footerBlocks || [];
 
@@ -121,7 +112,6 @@ function LayoutRenderer({
       block._template ||
       block.__typename?.replace("LayoutsHeaderBlocks", "").toLowerCase();
 
-    // Try layout header components first, then page components
     const BlockComponent =
       layoutHeaderBlockComponents[templateName] ||
       pageBlockComponents[templateName];
@@ -144,7 +134,6 @@ function LayoutRenderer({
     const mainData = layoutData.main;
 
     if (!mainData) {
-      // Fallback if no main block is configured
       return <main className="flex-1">{children}</main>;
     }
 
@@ -156,7 +145,6 @@ function LayoutRenderer({
       block._template ||
       block.__typename?.replace("LayoutsFooterBlocks", "").toLowerCase();
 
-    // Try layout footer components first, then page components
     const BlockComponent =
       layoutFooterBlockComponents[templateName] ||
       pageBlockComponents[templateName];
@@ -178,15 +166,12 @@ function LayoutRenderer({
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Render header blocks */}
       {headerBlocks.map((block: any, index: number) =>
         renderHeaderBlock(block, index)
       )}
 
-      {/* Render main block */}
       {renderMainBlock()}
 
-      {/* Render footer blocks */}
       {footerBlocks.map((block: any, index: number) =>
         renderFooterBlock(block, index)
       )}

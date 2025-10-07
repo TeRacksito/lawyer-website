@@ -74,7 +74,6 @@ export default function MainBlock({ data, children }: MainBlockProps) {
         ${getMinHeightClasses()} 
         ${getPaddingClasses()}
       `.trim()}
-      // data-tina-field={tinaField(data)}
     >
       <div className={getContainerClasses()}>{children}</div>
     </main>

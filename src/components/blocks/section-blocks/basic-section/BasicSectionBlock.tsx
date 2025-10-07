@@ -24,20 +24,17 @@ export default function BasicSectionBlock({
   return (
     <section
       {...getThemeProps(theme)}
-      // data-tina-field={dataTinaField}
       {...(content_blocks === null
         ? { "data-tina-field": dataTinaField, className: "p-5" }
         : {})}
       className="px-6 py-16"
     >
-      {/* <div className="container mx-auto px-6"> */}
       <BlockRenderer
         blocks={content_blocks}
         components={contentBlockComponents}
         parentData={data}
         blocksFieldName="content_blocks"
       />
-      {/* </div> */}
     </section>
   );
 }
