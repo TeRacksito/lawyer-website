@@ -6,45 +6,47 @@ import {
 } from "../src/components/blocks/layout-blocks";
 import { pageBlockTemplates } from "../src/components/blocks/templates";
 
-// Your hosting provider likely exposes this as an environment variable
 const branch =
   process.env.GITHUB_BRANCH ||
   process.env.VERCEL_GIT_COMMIT_REF ||
   process.env.HEAD ||
   "main";
 
-// Helper function to create fields based on filename
 const createConditionalFields = () => {
   const baseFields: Template["fields"] = [
     {
       type: "string",
       name: "title",
-      label: "Page Title",
+      label: "Título de la Página",
       isTitle: true,
       required: true,
     },
     {
       type: "object",
       name: "seo",
-      label: "SEO Settings",
+      label: "Configuración SEO",
+      description: "SEO (Optimización para Motores de Búsqueda)",
       fields: [
         {
           type: "string",
           name: "metaTitle",
-          label: "Meta Title",
-          description: "Override the page title for SEO",
+          label: "Meta Título",
+          description:
+            "Sobrescribe el título original para usar uno enfocado en SEO",
         },
         {
           type: "string",
           name: "metaDescription",
-          label: "Meta Description",
-          description: "SEO meta description",
+          label: "Meta Descripción",
+          description:
+            "Sobrescribe la descripción original para usar una enfocada en SEO",
         },
         {
           type: "string",
           name: "canonicalUrl",
-          label: "Canonical URL",
-          description: "Canonical URL for this page",
+          label: "URL Canónica",
+          description:
+            "Establece la URL canónica para evitar contenido duplicado",
         },
       ],
     },
@@ -54,7 +56,7 @@ const createConditionalFields = () => {
     {
       type: "object",
       name: "blocks",
-      label: "Page Blocks",
+      label: "Secciones principales de la Página",
       list: true,
       templates: pageBlockTemplates,
     },
@@ -64,8 +66,8 @@ const createConditionalFields = () => {
     {
       type: "object",
       name: "headerBlocks",
-      label: "Header Blocks",
-      description: "Optional header components for the layout",
+      label: "Bloques de Encabezado",
+      description: "Componentes opcionales de encabezado para el diseño",
       list: true,
       templates: [...layoutHeaderBlockTemplates, ...pageBlockTemplates],
     },
@@ -73,8 +75,8 @@ const createConditionalFields = () => {
     {
       type: "object",
       name: "footerBlocks",
-      label: "Footer Blocks",
-      description: "Optional footer components for the layout",
+      label: "Bloques de Pie de Página",
+      description: "Componentes opcionales de pie de página para el diseño",
       list: true,
       templates: [...layoutFooterBlockTemplates, ...pageBlockTemplates],
     },
@@ -86,9 +88,7 @@ const createConditionalFields = () => {
 export default defineConfig({
   branch,
 
-  // Get this from tina.io
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,
-  // Get this from tina.io
   token: process.env.TINA_TOKEN,
 
   build: {
@@ -113,12 +113,10 @@ export default defineConfig({
   admin: {
     authHooks: {
       onLogin: async ({ token }) => {
-        //  When the user logs in enter preview mode
         location.href =
           `/api/draft/enter?token=${token.id_token}&slug=` + location;
       },
       onLogout: async () => {
-        // When the user logs out exit preview mode
         location.href = `/api/draft/exit?slug=` + location;
       },
     },
@@ -129,7 +127,7 @@ export default defineConfig({
     collections: [
       {
         name: "pages",
-        label: "Pages",
+        label: "Páginas",
         path: "content/pages",
         format: "mdx",
         defaultItem: {
@@ -150,9 +148,10 @@ export default defineConfig({
         fields: [
           {
             name: "draft",
-            label: "Draft",
+            label: "Borrador",
             type: "boolean",
-            description: "If this is checked the post will not be published",
+            description:
+              "Si está marcado, la publicación permanecerá invisible públicamente",
           },
           ...createConditionalFields().baseFields,
           ...createConditionalFields().pageFields,
@@ -160,61 +159,39 @@ export default defineConfig({
 
         ui: {
           router: ({ document }) => {
-
-            // Get breadcrumbs and remove the last element (which is always "page")
             const breadcrumbs = document._sys.breadcrumbs;
 
-            const routeParts = breadcrumbs.slice(0, -1); // Remove "page" from the end
+            const routeParts = breadcrumbs.slice(0, -1);
 
-            // Handle root page (breadcrumbs: ["page"])
             if (routeParts.length === 0) {
               return "/";
             }
 
-            // Handle nested pages - construct path from breadcrumbs
             return `/${routeParts.join("/")}`;
           },
           filename: {
-            // Force filename to be "page" for all pages
             slugify: () => "page",
           },
         },
       },
       {
         name: "layouts",
-        label: "Layouts",
+        label: "Estructuras de Página",
         path: "content/layouts",
         format: "mdx",
-        fields: [
-          ...createConditionalFields().baseFields,
-          ...createConditionalFields().layoutFields,
-        ],
-        defaultItem: {
-          title: "Nueva Página",
-          blocks: [
-            {
-              _template: "hero",
-              title: "Bienvenido a la Nueva Página",
-              subtitle: "Esta es una descripción de la nueva página.",
-            },
-          ],
-        },
+        fields: [...createConditionalFields().layoutFields],
         ui: {
           router: ({ document }) => {
-            // Get breadcrumbs and remove the last element (which is always "layout")
             const breadcrumbs = document._sys.breadcrumbs;
-            const routeParts = breadcrumbs.slice(0, -1); // Remove "layout" from the end
+            const routeParts = breadcrumbs.slice(0, -1);
 
-            // Handle root layout (breadcrumbs: ["layout"])
             if (routeParts.length === 0) {
               return "/";
             }
 
-            // Handle nested layouts - construct path from breadcrumbs
             return `/${routeParts.join("/")}`;
           },
           filename: {
-            // Force filename to be "layout" for all layouts
             slugify: () => "layout",
           },
         },
