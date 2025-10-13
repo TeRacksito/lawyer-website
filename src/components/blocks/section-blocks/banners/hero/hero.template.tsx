@@ -3,7 +3,7 @@ import React from "react";
 
 export const heroBlockTemplate: Template = {
   name: "hero",
-  label: "Hero Section",
+  label: "Sección tipo Hero",
   ui: {
     defaultItem: {
       variant: "heroTitle",
@@ -17,27 +17,27 @@ export const heroBlockTemplate: Template = {
     {
       type: "string",
       name: "variant",
-      label: "Hero Variant",
+      label: "Variante Hero",
       options: [
-        { value: "heroTitle", label: "Hero Title (Default)" },
-        { value: "landingPage", label: "Landing Page" },
+        { value: "heroTitle", label: "Título Hero (Predeterminado)" },
+        { value: "landingPage", label: "Página de Aterrizaje" },
       ],
     },
     {
       type: "image",
       name: "backgroundImage",
-      label: "Background Image",
+      label: "Imagen de Fondo",
     },
     {
       type: "boolean",
       name: "fullScreen",
-      label: "Full Screen Height",
+      label: "Altura de Pantalla Completa",
     },
     {
       type: "number",
       name: "yShift",
-      label: "Background Y Position (%)",
-      description: "Vertical position of background image (0-100%)",
+      label: "Posición Y del Fondo (%)",
+      description: "Posición vertical de la imagen de fondo (0-100%)",
       ui: {
         parse: (val) => Number(val),
         component: (props: any) => {
@@ -68,7 +68,7 @@ export const heroBlockTemplate: Template = {
                 <button
                   type="button"
                   onClick={() => setValue(value - step)}
-                  aria-label="Decrease Y position"
+                  aria-label="Disminuir posición Y"
                   className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                 >
                   −
@@ -86,7 +86,7 @@ export const heroBlockTemplate: Template = {
                 <button
                   type="button"
                   onClick={() => setValue(value + step)}
-                  aria-label="Increase Y position"
+                  aria-label="Aumentar posición Y"
                   className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                 >
                   +
@@ -101,7 +101,7 @@ export const heroBlockTemplate: Template = {
                   gap: 8,
                 }}
               >
-                <span>Value: </span>
+                <span>Valor: </span>
                 <input
                   type="number"
                   min={min}
@@ -121,60 +121,62 @@ export const heroBlockTemplate: Template = {
     {
       type: "string",
       name: "title",
-      label: "Title",
-      description: "Main title for both Hero Title and Landing Page variants",
+      label: "Título",
+      description:
+        "Título principal para ambas variantes Título Hero y Página de Aterrizaje",
     },
     {
       type: "string",
       name: "subtitle",
-      label: "Subtitle/Description",
+      label: "Subtítulo/Descripción",
       description:
-        "Subtitle for Hero Title variant or description for Landing Page variant",
+        "Subtítulo para variante Título Hero o descripción para variante Página de Aterrizaje",
     },
     {
       type: "string",
       name: "authorName",
-      label: "Author Name",
+      label: "Nombre del Autor",
       description:
-        "Highlighted author name (e.g., Luis Cruz) - Landing Page only",
+        "Nombre del autor destacado (ej. Luis Cruz) - Solo Página de Aterrizaje",
     },
     {
       type: "object",
       name: "primaryButton",
-      label: "Primary Button",
+      label: "Botón Primario",
       fields: [
         {
           type: "string",
           name: "text",
-          label: "Button Text",
+          label: "Texto del Botón",
         },
         {
           type: "string",
           name: "href",
-          label: "Button Link",
+          label: "Enlace del Botón",
         },
       ],
     },
     {
       type: "object",
       name: "secondaryButton",
-      label: "Secondary Button",
+      label: "Botón Secundario",
       fields: [
         {
           type: "string",
           name: "text",
-          label: "Button Text",
+          label: "Texto del Botón",
         },
         {
           type: "string",
           name: "href",
-          label: "Button Link",
+          label: "Enlace del Botón",
         },
         {
           type: "string",
           name: "hiddenText",
-          label: "Hidden Text (mobile)",
-          description: "Text shown only on desktop before main text",
+          label: "Texto Oculto (móvil)",
+          description:
+            "Texto mostrado solo en escritorio antes del texto principal",
         },
       ],
     },

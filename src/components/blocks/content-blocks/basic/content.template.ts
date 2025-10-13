@@ -2,23 +2,28 @@ import { Template } from "tinacms";
 
 export const contentBlockTemplate: Template = {
   name: "content",
-  label: "Content Block",
+  label: "Bloque de Contenido",
   fields: [
     {
       type: "string",
       name: "title",
-      label: "Section Title",
+      label: "Título de la Sección",
     },
     {
       type: "rich-text",
       name: "content",
-      label: "Content",
+      label: "Contenido",
     },
     {
       type: "string",
       name: "layout",
       label: "Layout",
-      options: ["single-column", "two-column", "sidebar-left", "sidebar-right"],
+      options: [
+        { label: "Columna Única", value: "single-column" },
+        { label: "Dos Columnas", value: "two-column" },
+        { label: "Barra Lateral Izquierda", value: "sidebar-left" },
+        { label: "Barra Lateral Derecha", value: "sidebar-right" },
+      ],
     },
   ],
 };

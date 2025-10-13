@@ -19,41 +19,42 @@ export const callToActionTemplate: Template = {
     {
       type: "object",
       name: "primaryButton",
-      label: "Primary Button",
+      label: "Botón Primario",
       fields: [
         {
           type: "string",
           name: "text",
-          label: "Button Text",
+          label: "Texto del Botón",
         },
         {
           type: "string",
           name: "href",
-          label: "Button Link",
+          label: "Enlace del Botón",
         },
       ],
     },
     {
       type: "object",
       name: "secondaryButton",
-      label: "Secondary Button",
-      description: "Optional secondary button like in about layout",
+      label: "Botón Secundario",
+      description: "Botón secundario opcional",
       fields: [
         {
           type: "string",
           name: "text",
-          label: "Button Text",
+          label: "Texto del Botón",
         },
         {
           type: "string",
           name: "href",
-          label: "Button Link",
+          label: "Enlace del Botón",
         },
         {
           type: "string",
           name: "hiddenText",
-          label: "Hidden Text (mobile)",
-          description: "Text shown only on desktop before main text",
+          label: "Texto Oculto (móvil)",
+          description:
+            "Texto mostrado solo en escritorio antes del texto principal",
         },
       ],
     },

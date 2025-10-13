@@ -2,80 +2,80 @@ import { Template } from "tinacms";
 
 export const headerBlockTemplate: Template = {
   name: "header",
-  label: "Header Block",
+  label: "Encabezado",
   fields: [
     {
       name: "logo",
-      label: "Logo Text",
+      label: "Logo (texto)",
       type: "string",
-      description: "Main logo text (e.g., CGC)"
+      description: "Texto principal del logo (ej. CGC)",
     },
     {
       name: "logoSubtext",
-      label: "Logo Subtext",
+      label: "Subtexto del Logo",
       type: "string",
-      description: "Subtext shown next to logo (e.g., Luis Cruz)"
+      description: "Subtexto mostrado junto al logo (ej. Luis Cruz)",
     },
     {
       name: "logoImage",
-      label: "Logo Image",
-      type: "image"
+      label: "Imagen del Logo",
+      type: "image",
     },
     {
       name: "navigation",
-      label: "Navigation Links",
+      label: "Enlaces de Navegación",
       type: "object",
       list: true,
       ui: {
         itemProps: (item) => ({
-          label: item?.label
-        })
+          label: item?.label,
+        }),
       },
       fields: [
         {
           name: "label",
-          label: "Link Label",
-          type: "string"
+          label: "Etiqueta del Enlace",
+          type: "string",
         },
         {
           name: "href",
-          label: "Link URL",
-          type: "string"
+          label: "URL del Enlace",
+          type: "string",
         },
         {
           name: "isExternal",
-          label: "Is External Link",
-          type: "boolean"
-        }
-      ]
+          label: "Es Enlace Externo",
+          type: "boolean",
+        },
+      ],
     },
     {
       name: "ctaButton",
-      label: "Call to Action Button",
+      label: "Botón de Llamado a la Acción",
       type: "object",
       fields: [
         {
           name: "text",
-          label: "Button Text",
-          type: "string"
+          label: "Texto del Botón",
+          type: "string",
         },
         {
           name: "href",
-          label: "Button URL",
-          type: "string"
+          label: "URL del Botón",
+          type: "string",
         },
         {
           name: "show",
-          label: "Show Button",
-          type: "boolean"
-        }
-      ]
+          label: "Mostrar Botón",
+          type: "boolean",
+        },
+      ],
     },
     {
       name: "isSticky",
-      label: "Sticky Header",
+      label: "Encabezado Fijo",
       type: "boolean",
-      description: "Make header stick to top when scrolling"
-    }
-  ]
+      description: "Hacer que el encabezado se pegue arriba al hacer scroll",
+    },
+  ],
 };

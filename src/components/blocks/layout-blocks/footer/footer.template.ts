@@ -2,210 +2,210 @@ import { Template } from "tinacms";
 
 export const footerBlockTemplate: Template = {
   name: "footer",
-  label: "Footer Block",
+  label: "Pie de Página",
   fields: [
     {
       name: "dataTheme",
-      label: "Data Theme",
+      label: "Tema",
       type: "string",
-      description: "Theme for the footer component"
+      description: "Tema para el componente de pie de página",
     },
     {
       name: "firmInfo",
-      label: "Firm Information",
+      label: "Información del despacho",
       type: "object",
       fields: [
         {
           name: "name",
-          label: "Firm Name",
-          type: "string"
+          label: "Nombre del despacho",
+          type: "string",
         },
         {
           name: "title",
-          label: "Professional Title",
-          type: "string"
+          label: "Título Profesional",
+          type: "string",
         },
         {
           name: "address",
-          label: "Address",
+          label: "Dirección",
           type: "string",
           ui: {
-            component: "textarea"
-          }
+            component: "textarea",
+          },
         },
         {
           name: "phone",
-          label: "Phone Number",
-          type: "string"
+          label: "Número de Teléfono",
+          type: "string",
         },
         {
           name: "email",
-          label: "Email",
-          type: "string"
-        }
-      ]
+          label: "Correo Electrónico",
+          type: "string",
+        },
+      ],
     },
     {
       name: "practiceAreas",
-      label: "Practice Areas",
+      label: "Áreas de Práctica",
       type: "object",
       fields: [
         {
           name: "title",
-          label: "Section Title",
-          type: "string"
+          label: "Título de la Sección",
+          type: "string",
         },
         {
           name: "areas",
-          label: "Practice Areas",
+          label: "Áreas de Práctica",
           type: "object",
           list: true,
           ui: {
             itemProps: (item: any) => ({
-              label: item?.name
-            })
+              label: item?.name,
+            }),
           },
           fields: [
             {
               name: "name",
-              label: "Practice Area Name",
-              type: "string"
+              label: "Nombre del Área de Práctica",
+              type: "string",
             },
             {
               name: "href",
-              label: "Link URL",
-              type: "string"
-            }
-          ]
-        }
-      ]
+              label: "URL del Enlace",
+              type: "string",
+            },
+          ],
+        },
+      ],
     },
     {
       name: "quickLinks",
-      label: "Quick Links",
+      label: "Enlaces Rápidos",
       type: "object",
       fields: [
         {
           name: "title",
-          label: "Section Title",
-          type: "string"
+          label: "Título de la Sección",
+          type: "string",
         },
         {
           name: "links",
-          label: "Quick Links",
+          label: "Enlaces Rápidos",
           type: "object",
           list: true,
           ui: {
             itemProps: (item: any) => ({
-              label: item?.label
-            })
+              label: item?.label,
+            }),
           },
           fields: [
             {
               name: "label",
-              label: "Link Label",
-              type: "string"
+              label: "Etiqueta del Enlace",
+              type: "string",
             },
             {
               name: "href",
-              label: "Link URL",
-              type: "string"
-            }
-          ]
-        }
-      ]
+              label: "URL del Enlace",
+              type: "string",
+            },
+          ],
+        },
+      ],
     },
     {
       name: "legalInfo",
-      label: "Legal Information",
+      label: "Información Legal",
       type: "object",
       fields: [
         {
           name: "title",
-          label: "Section Title",
-          type: "string"
+          label: "Título de la Sección",
+          type: "string",
         },
         {
           name: "college",
-          label: "Bar Association",
-          type: "string"
+          label: "Colegio de Abogados",
+          type: "string",
         },
         {
           name: "license",
-          label: "License Number",
-          type: "string"
+          label: "Número de Licencia",
+          type: "string",
         },
         {
           name: "hours",
-          label: "Office Hours",
+          label: "Horario de Oficina",
           type: "string",
           ui: {
-            component: "textarea"
-          }
+            component: "textarea",
+          },
         },
         {
           name: "consultationButtonText",
-          label: "Consultation Button Text",
-          type: "string"
+          label: "Texto del Botón de Consulta",
+          type: "string",
         },
         {
           name: "consultationButtonHref",
-          label: "Consultation Button Link",
-          type: "string"
-        }
-      ]
+          label: "Enlace del Botón de Consulta",
+          type: "string",
+        },
+      ],
     },
     {
       name: "legalNotice",
-      label: "Legal Notice",
+      label: "Aviso Legal",
       type: "object",
       fields: [
         {
           name: "title",
-          label: "Legal Notice Title",
-          type: "string"
+          label: "Título del Aviso Legal",
+          type: "string",
         },
         {
           name: "disclaimers",
-          label: "Legal Disclaimers",
-          type: "rich-text"
-        }
-      ]
+          label: "Descargos Legales",
+          type: "rich-text",
+        },
+      ],
     },
     {
       name: "legalLinks",
-      label: "Legal Links",
+      label: "Enlaces Legales",
       type: "object",
       list: true,
       ui: {
         itemProps: (item: any) => ({
-          label: item?.label
-        })
+          label: item?.label,
+        }),
       },
       fields: [
         {
           name: "label",
-          label: "Link Label",
-          type: "string"
+          label: "Etiqueta del Enlace",
+          type: "string",
         },
         {
           name: "href",
-          label: "Link URL",
-          type: "string"
-        }
-      ]
+          label: "URL del Enlace",
+          type: "string",
+        },
+      ],
     },
     {
       name: "copyright",
-      label: "Copyright Information",
+      label: "Información de Copyright",
       type: "object",
       fields: [
         {
           name: "text",
-          label: "Copyright Text",
-          type: "string"
-        }
-      ]
-    }
-  ]
+          label: "Texto de Copyright",
+          type: "string",
+        },
+      ],
+    },
+  ],
 };

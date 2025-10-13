@@ -2,49 +2,49 @@ import { Template } from "tinacms";
 
 export const mainBlockTemplate: Template = {
   name: "main",
-  label: "Main Content Block",
+  label: "Bloque de Contenido Principal",
   fields: [
     {
       name: "containerType",
-      label: "Container Type",
+      label: "Tipo de Contenedor",
       type: "string",
       options: [
-        { label: "Full Width", value: "full" },
-        { label: "Container", value: "container" },
-        { label: "Narrow", value: "narrow" }
-      ]
+        { label: "Ancho Completo", value: "full" },
+        { label: "Contenedor", value: "container" },
+        { label: "Estrecho", value: "narrow" },
+      ],
     },
     {
       name: "padding",
-      label: "Padding",
+      label: "Relleno",
       type: "string",
       options: [
-        { label: "None", value: "none" },
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" }
-      ]
+        { label: "Ninguno", value: "none" },
+        { label: "Pequeño", value: "small" },
+        { label: "Mediano", value: "medium" },
+        { label: "Grande", value: "large" },
+      ],
     },
     {
       name: "backgroundColor",
-      label: "Background Color",
+      label: "Color de Fondo",
       type: "string",
       options: [
-        { label: "White", value: "white" },
-        { label: "Gray Light", value: "gray-light" },
-        { label: "Gray", value: "gray" },
-        { label: "Transparent", value: "transparent" }
-      ]
+        { label: "Blanco", value: "white" },
+        { label: "Gris Claro", value: "gray-light" },
+        { label: "Gris", value: "gray" },
+        { label: "Transparente", value: "transparent" },
+      ],
     },
     {
       name: "minHeight",
-      label: "Minimum Height",
+      label: "Altura Mínima",
       type: "string",
       options: [
-        { label: "Auto", value: "auto" },
-        { label: "Screen Height", value: "screen" },
-        { label: "Half Screen", value: "half-screen" }
-      ]
-    }
-  ]
+        { label: "Automático", value: "auto" },
+        { label: "Altura de Pantalla", value: "screen" },
+        { label: "Media Pantalla", value: "half-screen" },
+      ],
+    },
+  ],
 };
