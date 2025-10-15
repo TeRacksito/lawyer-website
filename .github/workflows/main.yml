@@ -55,3 +55,4 @@ jobs:
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
           TINA_SEARCH_TOKEN: ${{ secrets.TINA_SEARCH_TOKEN }}
           TINA_PUBLIC_IS_LOCAL: ${{ vars.TINA_PUBLIC_IS_LOCAL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
