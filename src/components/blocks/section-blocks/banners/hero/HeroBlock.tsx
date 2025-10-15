@@ -1,5 +1,6 @@
 import { tinaField } from "tinacms/dist/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Image from "next/image";
 import HeroTitleVariant from "./HeroTitleVariant";
 import LandingPageVariant from "./LandingPageVariant";
 import { formatTitle } from "./FormatTitle";
@@ -38,34 +39,12 @@ export default function HeroBlock({ data }: HeroBlockProps) {
   } = data;
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const heightClass = fullScreen ? "h-screen" : "h-48 md:h-64";
 
   const clampedYShift =
     yShift !== undefined && yShift !== null
       ? Math.max(0, Math.min(100, yShift))
       : 50;
-
-  useEffect(() => {
-    if (!backgroundImage) return;
-
-    setIsImageLoaded(false);
-    setImageSrc(null);
-
-    const img = new Image();
-    img.onload = () => {
-      setImageSrc(backgroundImage);
-      setTimeout(() => {
-        setIsImageLoaded(true);
-      }, 100);
-    };
-    img.onerror = () => {
-      console.error("Failed to load image:", backgroundImage);
-      setImageSrc(backgroundImage);
-      setIsImageLoaded(true);
-    };
-    img.src = backgroundImage;
-  }, [backgroundImage]);
 
   return (
     <section
@@ -78,19 +57,21 @@ export default function HeroBlock({ data }: HeroBlockProps) {
         }`}
       />
 
-      {imageSrc && (
-        <img
-          src={imageSrc}
-          alt="Hero background"
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-out ${
-            isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
-          }`}
-          style={{
-            objectPosition: `center ${clampedYShift}%`,
-          }}
-          data-tina-field={tinaField(data, "backgroundImage")}
-        />
-      )}
+      <Image
+        src={backgroundImage || ""}
+        alt="Hero background"
+        fill={true}
+        priority={true}
+        quality={90}
+        className={`object-cover transition-all duration-500 ease-out ${
+          isImageLoaded ? "opacity-100 scale-100" : "opacity-1 scale-105"
+        }`}
+        style={{
+          objectPosition: `center ${clampedYShift}%`,
+        }}
+        onLoad={() => setIsImageLoaded(true)}
+        data-tina-field={tinaField(data, "backgroundImage")}
+      />
 
       <div className="absolute inset-0 bg-black/70" />
 

@@ -51,22 +51,62 @@ export async function generateMetadata({
 }: DynamicPageProps): Promise<Metadata> {
   const { slug } = await params;
   const slugArray = slug || [];
+
   const path =
     slugArray.length > 0 ? `${slugArray.join("/")}/page.mdx` : "page.mdx";
 
   try {
     const page = await client.queries.pages({ relativePath: path });
     const pageData = page.data.pages;
+    const seo = pageData.seo;
 
-    return {
-      title: pageData.seo?.metaTitle || pageData.title,
-      description: pageData.seo?.metaDescription,
-      ...(pageData.seo?.canonicalUrl && {
+    const filteredKeywords = seo?.keywords?.filter(
+      (keyword): keyword is string => keyword !== null
+    );
+
+    const metadata: Metadata = {
+      title: seo?.metaTitle || pageData.title,
+      description: seo?.metaDescription ?? undefined,
+      ...(filteredKeywords &&
+        filteredKeywords.length > 0 && {
+          keywords: filteredKeywords,
+        }),
+      ...(seo?.advanced?.canonicalUrl && {
         alternates: {
-          canonical: pageData.seo.canonicalUrl,
+          canonical: seo.advanced.canonicalUrl,
         },
       }),
+      ...(seo?.advanced?.robots && {
+        robots: seo.advanced.robots,
+      }),
+      openGraph: {
+        title: seo?.metaTitle || pageData.title,
+        description: seo?.metaDescription ?? undefined,
+        ...(seo?.social?.ogType && { type: seo.social.ogType as any }),
+        ...(seo?.social?.ogImage && {
+          images: [
+            {
+              url: seo.social.ogImage,
+              alt: seo?.metaTitle || pageData.title,
+            },
+          ],
+        }),
+      },
+      twitter: {
+        card: (seo?.social?.twitterCard as any) || "summary_large_image",
+        title: seo?.metaTitle || pageData.title,
+        description: seo?.metaDescription ?? undefined,
+        ...(seo?.social?.twitterSite && { site: seo.social.twitterSite }),
+        ...(seo?.social?.twitterCreator && {
+          creator: seo.social.twitterCreator,
+        }),
+        ...(seo?.social?.ogImage && {
+          images: [seo.social.ogImage],
+        }),
+      },
     };
+
+    return metadata;
   } catch (error) {
     return {
       title: "Page Not Found",
@@ -78,6 +118,7 @@ export async function generateMetadata({
 export default async function DynamicPage({ params }: DynamicPageProps) {
   const { slug } = await params;
   const slugArray = slug || [];
+
   const path =
     slugArray.length > 0 ? `${slugArray.join("/")}/page.mdx` : "page.mdx";
 

@@ -1,5 +1,6 @@
 import { Template } from "tinacms";
 import React from "react";
+import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
 
 export const heroBlockTemplate: Template = {
   name: "hero",
@@ -14,6 +15,18 @@ export const heroBlockTemplate: Template = {
     },
   },
   fields: [
+    getTemplateDescriptionField(
+      "Sección tipo Hero",
+      "Una sección pensada para encabezar una página.",
+      "Perfecta para el ==inicio de una página== o páginas de aterrizaje.\n\n" +
+        "Esta sección **no permite** embeber bloques de contenido adicionales, " +
+        "por ende, se *entiende mejor* como un encabezado o título grande.\n\n" +
+        "==Permite dos variantes:==\n" +
+        "• una más simple con título y subtítulo.\n" +
+        "• y otra más completa para páginas de aterrizaje con descripción " +
+        "y dos botones de llamada a la acción.\n\n" +
+        "Permite además una ==imagen== de fondo y un ==texto a destacar== en el subtítulo."
+    ),
     {
       type: "string",
       name: "variant",
@@ -41,7 +54,7 @@ export const heroBlockTemplate: Template = {
       ui: {
         parse: (val) => Number(val),
         component: (props: any) => {
-          const { input } = props;
+          const { input, field } = props;
           const min = 0;
           const max = 100;
           const step = 1;
@@ -63,13 +76,78 @@ export const heroBlockTemplate: Template = {
           };
 
           return (
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ marginBottom: 16 }}>
+              {field.label && (
+                <label
+                  htmlFor="yShift"
+                  style={{
+                    display: "block",
+                    marginBottom: 4,
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: "#374151",
+                  }}
+                >
+                  {field.label}
+                </label>
+              )}
+
+              {field.description && (
+                <p
+                  style={{
+                    marginBottom: 12,
+                    fontSize: 13,
+                    color: "#6B7280",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {field.description}
+                </p>
+              )}
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  marginBottom: 12,
+                }}
+              >
                 <button
                   type="button"
                   onClick={() => setValue(value - step)}
                   aria-label="Disminuir posición Y"
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#F9FAFB",
+                    color: "#374151",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: 6,
+                    fontSize: 18,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#F3F4F6";
+                    e.currentTarget.style.borderColor = "#D1D5DB";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.borderColor = "#E5E7EB";
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.outline = "2px solid #3B82F6";
+                    e.currentTarget.style.outlineOffset = "2px";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.outline = "none";
+                  }}
                 >
                   −
                 </button>
@@ -82,12 +160,48 @@ export const heroBlockTemplate: Template = {
                   step={step}
                   value={value}
                   onChange={onRangeChange}
+                  style={{
+                    flex: 1,
+                    height: 6,
+                    cursor: "pointer",
+                  }}
                 />
+
                 <button
                   type="button"
                   onClick={() => setValue(value + step)}
                   aria-label="Aumentar posición Y"
-                  className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 32,
+                    height: 32,
+                    backgroundColor: "#F9FAFB",
+                    color: "#374151",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: 6,
+                    fontSize: 18,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                    boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#F3F4F6";
+                    e.currentTarget.style.borderColor = "#D1D5DB";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.borderColor = "#E5E7EB";
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.outline = "2px solid #3B82F6";
+                    e.currentTarget.style.outlineOffset = "2px";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.outline = "none";
+                  }}
                 >
                   +
                 </button>
@@ -95,13 +209,20 @@ export const heroBlockTemplate: Template = {
 
               <div
                 style={{
-                  marginTop: 8,
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
                 }}
               >
-                <span>Valor: </span>
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: "#6B7280",
+                    fontWeight: 500,
+                  }}
+                >
+                  Valor:
+                </span>
                 <input
                   type="number"
                   min={min}
@@ -109,9 +230,23 @@ export const heroBlockTemplate: Template = {
                   step={step}
                   value={value}
                   onChange={onNumberChange}
-                  style={{ width: 64 }}
+                  style={{
+                    width: 70,
+                    padding: "6px 8px",
+                    fontSize: 14,
+                    border: "1px solid #E5E7EB",
+                    borderRadius: 6,
+                    textAlign: "center",
+                  }}
                 />
-                <span>%</span>
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: "#6B7280",
+                  }}
+                >
+                  %
+                </span>
               </div>
             </div>
           );
@@ -135,9 +270,8 @@ export const heroBlockTemplate: Template = {
     {
       type: "string",
       name: "authorName",
-      label: "Nombre del Autor",
-      description:
-        "Nombre del autor destacado (ej. Luis Cruz) - Solo Página de Aterrizaje",
+      label: "Texto a destacar",
+      description: "Texto a destacar en el subtítulo.",
     },
     {
       type: "object",
