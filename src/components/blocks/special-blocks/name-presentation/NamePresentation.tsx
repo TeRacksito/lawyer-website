@@ -39,6 +39,7 @@ export default function NamePresentation({
   const [animationPhase, setAnimationPhase] = useState(0);
   const [showDescriptionSection, setShowDescriptionSection] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isRepeatedVisit, setIsRepeatedVisit] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -52,11 +53,38 @@ export default function NamePresentation({
   }, []);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setAnimationPhase(1), 500);
-    const timer2 = setTimeout(() => setAnimationPhase(2), 1000);
-    const timer3 = setTimeout(() => setAnimationPhase(3), 2000);
-    const timer4 = setTimeout(() => setAnimationPhase(4), 2600);
-    const timer5 = setTimeout(() => setShowDescriptionSection(true), 3700);
+    const STORAGE_KEY = "namePresentationLastView";
+    const lastView = localStorage.getItem(STORAGE_KEY);
+
+    const now = Date.now();
+    const isRecent = lastView && now - parseInt(lastView) < 24 * 60 * 60 * 1000;
+    setIsRepeatedVisit(!!isRecent);
+  }, []);
+
+  useEffect(() => {
+    const speedMultiplier = isRepeatedVisit ? 0.5 : 1;
+
+    const timer1 = setTimeout(
+      () => setAnimationPhase(1),
+      500 * speedMultiplier
+    );
+    const timer2 = setTimeout(
+      () => setAnimationPhase(2),
+      1000 * speedMultiplier
+    );
+    const timer3 = setTimeout(
+      () => setAnimationPhase(3),
+      2000 * speedMultiplier
+    );
+    const timer4 = setTimeout(
+      () => setAnimationPhase(4),
+      2600 * speedMultiplier
+    );
+    const timer5 = setTimeout(() => {
+      setShowDescriptionSection(true);
+      const STORAGE_KEY = "namePresentationLastView";
+      localStorage.setItem(STORAGE_KEY, Date.now().toString());
+    }, 3700 * speedMultiplier);
 
     return () => {
       clearTimeout(timer1);
@@ -65,14 +93,17 @@ export default function NamePresentation({
       clearTimeout(timer4);
       clearTimeout(timer5);
     };
-  }, []);
+  }, [isRepeatedVisit]);
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, staggerChildren: 0.1 },
+      transition: {
+        duration: 0.8 * (isRepeatedVisit ? 0.5 : 1),
+        staggerChildren: 0.1 * (isRepeatedVisit ? 0.5 : 1),
+      },
     },
   };
 
@@ -107,7 +138,10 @@ export default function NamePresentation({
                 opacity: animationPhase >= 4 ? 1 : 0,
                 y: animationPhase >= 4 ? 0 : 20,
               }}
-              transition={{ duration: 1, delay: 1.5 }}
+              transition={{
+                duration: 1 * (isRepeatedVisit ? 0.5 : 1),
+                delay: 1.5 * (isRepeatedVisit ? 0.5 : 1),
+              }}
             >
               <h1
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-primary mb-3"
@@ -189,8 +223,14 @@ export default function NamePresentation({
                       x: position.finalX,
                     }}
                     transition={{
-                      duration: animationPhase === 1 ? 0.8 : 1.2,
-                      delay: animationPhase === 1 ? index * 0.2 : 0,
+                      duration:
+                        animationPhase === 1
+                          ? 0.8 * (isRepeatedVisit ? 0.5 : 1)
+                          : 1.2 * (isRepeatedVisit ? 0.5 : 1),
+                      delay:
+                        animationPhase === 1
+                          ? index * 0.2 * (isRepeatedVisit ? 0.5 : 1)
+                          : 0,
                       ease: "easeInOut",
                     }}
                   >
@@ -202,7 +242,10 @@ export default function NamePresentation({
                       animate={{
                         scale: animationPhase >= 4 ? 0.8 : 1,
                       }}
-                      transition={{ duration: 1, ease: "easeInOut" }}
+                      transition={{
+                        duration: 1 * (isRepeatedVisit ? 0.5 : 1),
+                        ease: "easeInOut",
+                      }}
                       data-tina-field={`${dataTinaField}.acronymWords.${index}.letter`}
                     >
                       {item.letter}
@@ -224,7 +267,10 @@ export default function NamePresentation({
                         opacity: animationPhase >= 3 ? 1 : 0,
                         y: animationPhase >= 3 ? 0 : -10,
                       }}
-                      transition={{ duration: 0.8, delay: index * 0.2 }}
+                      transition={{
+                        duration: 0.8 * (isRepeatedVisit ? 0.5 : 1),
+                        delay: index * 0.2 * (isRepeatedVisit ? 0.5 : 1),
+                      }}
                     >
                       <div
                         className="text-sm sm:text-base md:text-xl lg:text-2xl font-semibold text-base-content"
@@ -259,7 +305,10 @@ export default function NamePresentation({
                 opacity: animationPhase >= 4 ? 0.15 : 0,
                 scale: animationPhase >= 4 ? 1 : 1.1,
               }}
-              transition={{ duration: 2, ease: "easeOut" }}
+              transition={{
+                duration: 2 * (isRepeatedVisit ? 0.5 : 1),
+                ease: "easeOut",
+              }}
             >
               <div
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-serif font-light text-primary text-center leading-tight tracking-wider select-none"
@@ -289,7 +338,10 @@ export default function NamePresentation({
                 animate={{
                   scale: animationPhase >= 4 ? (isSmallScreen ? 0.7 : 1) : 0,
                 }}
-                transition={{ duration: 1.5, delay: 1 }}
+                transition={{
+                  duration: 1.5 * (isRepeatedVisit ? 0.5 : 1),
+                  delay: 1 * (isRepeatedVisit ? 0.5 : 1),
+                }}
               >
                 <svg
                   width={isSmallScreen ? "60" : "80"}
@@ -344,7 +396,10 @@ export default function NamePresentation({
                 animate={{
                   scale: animationPhase >= 4 ? (isSmallScreen ? 0.7 : 1) : 0,
                 }}
-                transition={{ duration: 1.5, delay: 1.2 }}
+                transition={{
+                  duration: 1.5 * (isRepeatedVisit ? 0.5 : 1),
+                  delay: 1.2 * (isRepeatedVisit ? 0.5 : 1),
+                }}
               >
                 <svg
                   width={isSmallScreen ? "60" : "80"}
@@ -404,7 +459,7 @@ export default function NamePresentation({
               animate={{
                 opacity: animationPhase >= 4 ? (isSmallScreen ? 0.3 : 0.4) : 0,
               }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 1 * (isRepeatedVisit ? 0.5 : 1) }}
             >
               <motion.path
                 d={
@@ -418,7 +473,10 @@ export default function NamePresentation({
                 className="text-primary"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: animationPhase >= 4 ? 1 : 0 }}
-                transition={{ duration: 1.2, delay: 0.5 }}
+                transition={{
+                  duration: 1.2 * (isRepeatedVisit ? 0.5 : 1),
+                  delay: 0.5 * (isRepeatedVisit ? 0.5 : 1),
+                }}
               />
 
               <motion.path
@@ -433,7 +491,10 @@ export default function NamePresentation({
                 className="text-primary"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: animationPhase >= 4 ? 1 : 0 }}
-                transition={{ duration: 1.2, delay: 0.7 }}
+                transition={{
+                  duration: 1.2 * (isRepeatedVisit ? 0.5 : 1),
+                  delay: 0.7 * (isRepeatedVisit ? 0.5 : 1),
+                }}
               />
             </motion.svg>
 
@@ -441,7 +502,10 @@ export default function NamePresentation({
               className="flex justify-center items-center relative text-center md:pt-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: animationPhase >= 4 ? 1 : 0 }}
-              transition={{ duration: 1, delay: 2 }}
+              transition={{
+                duration: 1 * (isRepeatedVisit ? 0.5 : 1),
+                delay: 2 * (isRepeatedVisit ? 0.5 : 1),
+              }}
             >
               <p
                 className="text-sm sm:text-base md:text-lg text-base-content/80 font-medium tracking-wide max-w-xs sm:max-w-sm md:max-w-md px-2 sm:px-4"
