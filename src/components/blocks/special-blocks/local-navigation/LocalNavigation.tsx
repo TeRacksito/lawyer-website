@@ -59,7 +59,7 @@ export default function LocalNavigation({
                   active
                     ? "!text-primary-content"
                     : "text-base-content/70 hover:text-base-content hover:bg-base-300/30"
-                } tab relative ${tabBaseClass} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 z-30`}
+                } tab relative ${tabBaseClass} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1`}
                 data-tina-field={id}
                 aria-current={active ? "page" : undefined}
               >
