@@ -24,9 +24,8 @@ const generateSEOContent = async (
   blocks: any[],
   pageUri: string
 ): Promise<GeneratedSEO> => {
-  const token = (() => {
+  const token: string | undefined = (() => {
     try {
-      if (typeof window === "undefined") return undefined;
       const raw = localStorage.getItem("tinacms-auth");
       if (!raw) return undefined;
       const parsed = JSON.parse(raw);
@@ -36,17 +35,15 @@ const generateSEOContent = async (
     }
   })();
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
+  const apiUrl = token
+    ? `/api/generate-seo?token=${encodeURIComponent(token)}`
+    : "/api/generate-seo";
 
-  if (token && process.env.NODE_ENV !== "development") {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const response = await fetch("/api/generate-seo", {
+  const response = await fetch(apiUrl, {
     method: "POST",
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       pageTitle,
       blocks,

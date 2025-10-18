@@ -21,11 +21,12 @@ export async function POST(request: NextRequest) {
   let pageUri = "unknown";
 
   try {
-    const authHeader = request.headers.get("authorization");
+    const { searchParams } = new URL(request.url);
+    const tokenParam = searchParams.get("token");
     const clientID = process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
 
     if (process.env.NODE_ENV !== "development") {
-      if (!authHeader || !clientID) {
+      if (!tokenParam || !clientID) {
         return NextResponse.json(
           { error: "Unauthorized - Missing authentication" },
           { status: 401 }
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
       }
 
       const isAuthorized = await isUserAuthorized({
-        token: authHeader,
+        token: `Bearer ${tokenParam}`,
         clientID: clientID,
       });
 
