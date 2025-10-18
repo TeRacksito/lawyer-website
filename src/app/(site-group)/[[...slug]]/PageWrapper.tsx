@@ -50,8 +50,8 @@ export default function PageWrapper({
               </p>
             )}
             <p>
-              This page has no content blocks configured. Please add some blocks
-              using the Tina CMS.
+              Esta página no tiene bloques de contenido configurados. Por favor, agrega algunos bloques
+              usando Tina CMS.
             </p>
           </div>
         </BlocksRenderer>
