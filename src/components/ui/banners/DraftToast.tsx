@@ -35,7 +35,7 @@ interface DragState {
 type EdgeSide = "left" | "right";
 
 // Default position for toast (snapped to left edge)
-const DEFAULT_POSITION = { x: 8, y: 16 };
+const DEFAULT_POSITION = { x: 8, y: 72 };
 
 // Storage keys for persistence (unified for both enter and exit)
 const STORAGE_KEYS = {
@@ -62,16 +62,18 @@ export default function DraftToast({
         const saved = localStorage.getItem(STORAGE_KEYS.position);
         if (saved) {
           const parsedPosition = JSON.parse(saved) as Position;
+          const margin = 8;
+          const topMargin = 72;
+
           // Validate saved position is within bounds
           const isValid =
             parsedPosition.x >= 0 &&
-            parsedPosition.y >= 0 &&
+            parsedPosition.y >= topMargin &&
             parsedPosition.x <= window.innerWidth - 48 &&
             parsedPosition.y <= window.innerHeight - 48;
 
           if (isValid) {
             // Ensure saved position is snapped to an edge
-            const margin = 8;
             const isNearLeftEdge = parsedPosition.x <= margin + 50; // Within 50px of left edge
             const isNearRightEdge =
               parsedPosition.x >= window.innerWidth - 48 - margin - 50; // Within 50px of right edge
@@ -84,7 +86,7 @@ export default function DraftToast({
               const snapToLeft = centerX < window.innerWidth / 2;
               return {
                 x: snapToLeft ? margin : window.innerWidth - 48 - margin,
-                y: parsedPosition.y,
+                y: Math.max(topMargin, parsedPosition.y),
               };
             }
           }
@@ -96,7 +98,7 @@ export default function DraftToast({
       // Return default position snapped to left edge
       return DEFAULT_POSITION;
     }
-    return { x: 8, y: 16 };
+    return DEFAULT_POSITION;
   });
 
   const [edgeSide, setEdgeSide] = useState<EdgeSide>(() => {
@@ -131,6 +133,7 @@ export default function DraftToast({
   });
 
   const toastRef = useRef<HTMLDivElement>(null);
+  const dragHandleRef = useRef<HTMLDivElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const expandTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dragStartTimeRef = useRef<number>(0);
@@ -159,13 +162,14 @@ export default function DraftToast({
 
       const dimensions = getDimensions(targetState);
       const margin = 8; // 8px margin from edges
+      const topMargin = 72; // Larger top margin to prevent toast from going too high
 
       const maxX = window.innerWidth - dimensions.width - margin;
       const maxY = window.innerHeight - dimensions.height - margin;
 
       return {
         x: Math.max(margin, Math.min(pos.x, maxX)),
-        y: Math.max(margin, Math.min(pos.y, maxY)),
+        y: Math.max(topMargin, Math.min(pos.y, maxY)),
       };
     },
     [getDimensions]
@@ -228,6 +232,7 @@ export default function DraftToast({
             // Determine which edge the toast was on before resize
             const dimensions = getDimensions();
             const margin = 8;
+            const topMargin = 72;
             const wasOnLeft = edgeSide === "left";
 
             // Snap to the same edge after resize
@@ -237,7 +242,7 @@ export default function DraftToast({
               //     : window.innerWidth - dimensions.width - margin,
               x: margin,
               y: Math.max(
-                margin,
+                topMargin,
                 Math.min(
                   current.y,
                   window.innerHeight - dimensions.height - margin
@@ -277,16 +282,8 @@ export default function DraftToast({
   }, [handleResize]);
 
   // Drag handlers (optimized for performance)
-  const handleMouseDown = useCallback(
+  const handleDragHandleMouseDown = useCallback(
     (e: React.MouseEvent) => {
-      // Only allow dragging when clicking the toast itself, not buttons
-      if (
-        e.target !== e.currentTarget &&
-        !e.currentTarget.contains(e.target as Node)
-      ) {
-        return;
-      }
-
       e.preventDefault();
       e.stopPropagation();
 
@@ -306,13 +303,46 @@ export default function DraftToast({
         startPosition: { ...position },
       });
 
-      // Clear any hover timeouts during drag
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
     },
-    [position]
+    [position, edgeSide]
   );
+
+  const handleDragHandleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      e.stopPropagation();
+
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const rect = toastRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      dragStartTimeRef.current = Date.now();
+      setDragState({
+        isDragging: true,
+        dragOffset: {
+          x:
+            edgeSide === "left"
+              ? touch.clientX - rect.left
+              : rect.width - (touch.clientX - rect.left),
+          y: touch.clientY - rect.top,
+        },
+        startPosition: { ...position },
+      });
+
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    },
+    [position, edgeSide]
+  );
+
+  const handleDragHandleClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+  }, []);
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -329,7 +359,28 @@ export default function DraftToast({
 
       setPosition(newPosition);
     },
-    [dragState.isDragging, dragState.dragOffset, constrainPosition]
+    [dragState.isDragging, dragState.dragOffset, constrainPosition, edgeSide]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (!dragState.isDragging) return;
+
+      e.preventDefault();
+      const touch = e.touches[0];
+      if (!touch) return;
+
+      const newPosition = constrainPosition({
+        x:
+          edgeSide === "left"
+            ? touch.clientX - dragState.dragOffset.x
+            : window.innerWidth - touch.clientX - dragState.dragOffset.x,
+        y: touch.clientY - dragState.dragOffset.y,
+      });
+
+      setPosition(newPosition);
+    },
+    [dragState.isDragging, dragState.dragOffset, constrainPosition, edgeSide]
   );
 
   // Auto-snap to nearest edge after drag
@@ -339,6 +390,7 @@ export default function DraftToast({
 
       const dimensions = getDimensions();
       const margin = 8;
+      const topMargin = 72;
       const centerX = currentPos.x + dimensions.width / 2;
       const screenCenter = window.innerWidth / 2;
 
@@ -357,7 +409,7 @@ export default function DraftToast({
         // x: snapToLeft ? margin : window.innerWidth - dimensions.width - margin,
         x: margin,
         y: Math.max(
-          margin,
+          topMargin,
           Math.min(
             currentPos.y,
             window.innerHeight - dimensions.height - margin
@@ -422,7 +474,6 @@ export default function DraftToast({
   const mouseUpLogic = () => {
     if (!dragState.isDragging) return;
 
-    const dragDuration = Date.now() - dragStartTimeRef.current;
     const dragDistance = Math.sqrt(
       Math.pow(position.x - dragState.startPosition.x, 2) +
         Math.pow(position.y - dragState.startPosition.y, 2)
@@ -430,20 +481,18 @@ export default function DraftToast({
 
     setDragState((prev) => ({ ...prev, isDragging: false }));
 
-    // If it was a very short drag (click-like), don't snap or prevent the click handler
-    if (dragDuration < 200 && dragDistance < 5) {
-      return;
-    }
+    // If there was actual movement, snap to edge
+    if (dragDistance > 5) {
+      const snappedPosition = snapToNearestEdge(position);
 
-    // Snap to nearest edge after drag
-    const snappedPosition = snapToNearestEdge(position);
-
-    // Only animate if we're actually moving to a different position
-    if (snappedPosition.x !== position.x || snappedPosition.y !== position.y) {
-      animateToPosition(snappedPosition);
-    } else {
-      // Save position even if not snapping
-      savePositionDebounced(position);
+      if (
+        snappedPosition.x !== position.x ||
+        snappedPosition.y !== position.y
+      ) {
+        animateToPosition(snappedPosition);
+      } else {
+        savePositionDebounced(position);
+      }
     }
   };
 
@@ -464,22 +513,53 @@ export default function DraftToast({
     ]
   );
 
+  const handleTouchEnd = useCallback(
+    (e: TouchEvent) => {
+      if (!dragState.isDragging) {
+        setDragState((prev) => ({ ...prev, isDragging: false }));
+        return;
+      }
+
+      mouseUpLogic();
+    },
+    [
+      dragState.isDragging,
+      dragState.startPosition,
+      position,
+      snapToNearestEdge,
+      animateToPosition,
+      savePositionDebounced,
+    ]
+  );
+
   // Global mouse event listeners for dragging and hover state management
   useEffect(() => {
     if (dragState.isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove, {
+        passive: false,
+      });
+      document.addEventListener("touchend", handleTouchEnd, { passive: false });
       document.body.style.userSelect = "none";
       document.body.style.cursor = "grabbing";
 
       return () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
         document.body.style.userSelect = "";
         document.body.style.cursor = "";
       };
     }
-  }, [dragState.isDragging, handleMouseMove, handleMouseUp]);
+  }, [
+    dragState.isDragging,
+    handleMouseMove,
+    handleMouseUp,
+    handleTouchMove,
+    handleTouchEnd,
+  ]);
 
   // Global mouse move listener to track position for hover validation
   useEffect(() => {
@@ -558,7 +638,7 @@ export default function DraftToast({
   // Handle mouse enter with immediate expansion (optimized)
   const handleMouseEnter = useCallback(
     (e: React.MouseEvent) => {
-      if (dragState.isDragging) return; // Don't expand while dragging
+      if (dragState.isDragging) return;
 
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
@@ -566,7 +646,6 @@ export default function DraftToast({
       setIsHovered(true);
       if (toastState === "minimal") {
         setToastState("expanded");
-        // Adjust position if expansion would go outside viewport
         requestAnimationFrame(() => {
           //   adjustPositionForState("expanded");
         });
@@ -575,14 +654,28 @@ export default function DraftToast({
     [dragState.isDragging, toastState, adjustPositionForState]
   );
 
+  const handleTouchStartExpand = useCallback(
+    (e: React.TouchEvent) => {
+      if (dragState.isDragging) return;
+
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setIsHovered(true);
+      if (toastState === "minimal") {
+        setToastState("expanded");
+      }
+    },
+    [dragState.isDragging, toastState]
+  );
+
   // Handle mouse leave with delay (optimized)
   const handleMouseLeave = useCallback(
     (e: React.MouseEvent) => {
-      if (dragState.isDragging) return; // Don't collapse while dragging
+      if (dragState.isDragging) return;
 
       setIsHovered(false);
       hoverTimeoutRef.current = setTimeout(() => {
-        // Double-check if we're still not hovering before collapsing
         if (!toastRef.current) return;
 
         const rect = toastRef.current.getBoundingClientRect();
@@ -594,88 +687,127 @@ export default function DraftToast({
 
         if (!isStillHovering && toastState === "expanded") {
           setToastState("minimal");
-          // Adjust position if collapsing changes viewport constraints
           requestAnimationFrame(() => {
             adjustPositionForState("minimal");
           });
         }
-      }, 800); // 800ms delay before collapsing
+      }, 800);
     },
     [dragState.isDragging, toastState, adjustPositionForState]
   );
 
   // Handle click to toggle detailed state (optimized)
   const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      // Don't handle clicks if we just finished dragging
-      const dragDuration = Date.now() - dragStartTimeRef.current;
-      const dragDistance = Math.sqrt(
-        Math.pow(position.x - dragState.startPosition.x, 2) +
-          Math.pow(position.y - dragState.startPosition.y, 2)
-      );
-
-      if (dragDistance > 5) {
+    (e: React.MouseEvent | React.TouchEvent) => {
+      // Ignore clicks on the drag handle
+      if (
+        dragHandleRef.current &&
+        dragHandleRef.current.contains(e.target as Node)
+      ) {
         return;
       }
 
       e.preventDefault();
       e.stopPropagation();
 
-      if (toastState === "detailed") {
+      const clientX =
+        "clientX" in e
+          ? e.clientX
+          : "changedTouches" in e && e.changedTouches[0]
+          ? e.changedTouches[0].clientX
+          : 0;
+      const clientY =
+        "clientY" in e
+          ? e.clientY
+          : "changedTouches" in e && e.changedTouches[0]
+          ? e.changedTouches[0].clientY
+          : 0;
+
+      const isTouchEvent = "touches" in e || "changedTouches" in e;
+
+      if (toastState === "minimal") {
+        setIsHovered(true);
         setToastState("expanded");
-        // Adjust position if collapsing changes size
-        requestAnimationFrame(() => {
-          adjustPositionForState("expanded");
-          // Re-evaluate hover state after transition to smaller size
-          checkHoverStateAfterTransition(e.clientX, e.clientY, "expanded");
-        });
-      } else {
-        setToastState("detailed");
-        // Adjust position if expansion would go outside viewport
-        requestAnimationFrame(() => {
-          adjustPositionForState("detailed");
-        });
-        // Clear any pending collapse timeout
+
         if (hoverTimeoutRef.current) {
           clearTimeout(hoverTimeoutRef.current);
         }
-      }
-    },
-    [position, dragState.startPosition, toastState, adjustPositionForState]
-  );
 
-  // Check if mouse is still over the element after state transition
-  const checkHoverStateAfterTransition = useCallback(
-    (mouseX: number, mouseY: number, newState: ToastState) => {
-      if (!toastRef.current) return;
+        if (isTouchEvent) {
+          hoverTimeoutRef.current = setTimeout(() => {
+            setToastState("minimal");
+            setIsHovered(false);
+            requestAnimationFrame(() => {
+              adjustPositionForState("minimal");
+            });
+          }, 4000);
+        }
+      } else if (toastState === "detailed") {
+        setToastState("expanded");
 
-      // Small delay to ensure DOM has updated
-      setTimeout(() => {
-        if (!toastRef.current) return;
+        requestAnimationFrame(() => {
+          adjustPositionForState("expanded");
+        });
 
-        const rect = toastRef.current.getBoundingClientRect();
-        const isMouseOver =
-          mouseX >= rect.left &&
-          mouseX <= rect.right &&
-          mouseY >= rect.top &&
-          mouseY <= rect.bottom;
+        // Wait for the transition to complete, then check hover state
+        setTimeout(() => {
+          if (!toastRef.current) return;
 
-        if (!isMouseOver) {
-          // Mouse is no longer over the element, clear hover state
-          setIsHovered(false);
-          // If we're in expanded state and not hovering, start collapse timer
-          if (newState === "expanded") {
-            hoverTimeoutRef.current = setTimeout(() => {
-              if (toastState === "expanded") {
+          const rect = toastRef.current.getBoundingClientRect();
+          const isStillOver =
+            clientX >= rect.left &&
+            clientX <= rect.right &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom;
+
+          if (isTouchEvent) {
+            // Mobile: immediately collapse if touch was outside new bounds
+            if (!isStillOver) {
+              setToastState("minimal");
+              setIsHovered(false);
+              requestAnimationFrame(() => {
+                adjustPositionForState("minimal");
+              });
+            } else {
+              // Touch was inside, set 4 second timer
+              if (hoverTimeoutRef.current) {
+                clearTimeout(hoverTimeoutRef.current);
+              }
+              hoverTimeoutRef.current = setTimeout(() => {
+                setToastState("minimal");
+                setIsHovered(false);
+                requestAnimationFrame(() => {
+                  adjustPositionForState("minimal");
+                });
+              }, 4000);
+            }
+          } else {
+            // Desktop: update hover state and start collapse timer if needed
+            if (!isStillOver) {
+              setIsHovered(false);
+              if (hoverTimeoutRef.current) {
+                clearTimeout(hoverTimeoutRef.current);
+              }
+              hoverTimeoutRef.current = setTimeout(() => {
                 setToastState("minimal");
                 requestAnimationFrame(() => {
                   adjustPositionForState("minimal");
                 });
-              }
-            }, 800);
+              }, 800);
+            } else {
+              setIsHovered(true);
+            }
           }
+        }, 550); // Wait for CSS transition (500ms) + small buffer
+      } else {
+        if (hoverTimeoutRef.current) {
+          clearTimeout(hoverTimeoutRef.current);
         }
-      }, 100); // 100ms delay to ensure transition is complete
+        setToastState("detailed");
+        requestAnimationFrame(() => {
+          adjustPositionForState("detailed");
+        });
+      }
     },
     [toastState, adjustPositionForState]
   );
@@ -683,7 +815,7 @@ export default function DraftToast({
   // Handle button click (memoized)
   const handleButtonClick = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation(); // Prevent triggering the container click
+      e.stopPropagation();
       window.location.href = url;
     },
     [url]
@@ -706,12 +838,12 @@ export default function DraftToast({
     const baseStyle: React.CSSProperties = {
       top: `${position.y}px`,
       transform: dragState.isDragging ? "scale(1.05)" : "scale(1)",
+      touchAction: "none",
     };
 
     if (edgeSide === "left") {
       baseStyle.left = `${position.x}px`;
     } else {
-      // When using right positioning, we need to calculate the distance from the right edge
       const dimensions = getDimensions();
       const distanceFromRight = position.x;
       baseStyle.right = `${distanceFromRight}px`;
@@ -725,7 +857,7 @@ export default function DraftToast({
       "transition-all duration-500 ease-in-out overflow-hidden shadow-lg hover:shadow-xl";
     const sizeClasses = {
       minimal: "w-12 h-12 rounded-4xl backdrop-blur-xs opacity-60",
-      expanded: "w-48 h-12 rounded-xl backdrop-blur-sm opacity-100",
+      expanded: "w-48 h-15 rounded-xl backdrop-blur-sm opacity-100",
       detailed: "w-64 rounded-xl backdrop-blur-lg opacity-100",
     };
     const bgClasses = (() => {
@@ -814,12 +946,9 @@ export default function DraftToast({
     <div
       ref={toastRef}
       className={`fixed z-50 duration-500 ease-out select-none ${
-        dragState.isDragging
-          ? "cursor-grabbing transition-none"
-          : "cursor-grab transition-all"
+        dragState.isDragging ? "transition-none" : "transition-all"
       }`}
       style={containerStyle}
-      onMouseDown={handleMouseDown}
     >
       <div
         className={toastClasses}
@@ -830,8 +959,14 @@ export default function DraftToast({
       >
         {/* Drag indicator */}
         {(toastState === "expanded" || toastState === "detailed") && (
-          <div className="absolute top-1 left-1/2 transform -translate-x-1/2">
-            <div className="w-6 h-1 bg-white/20 rounded-full" />
+          <div
+            ref={dragHandleRef}
+            className="flex justify-center cursor-grab active:cursor-grabbing px-8 py-2 touch-none"
+            onMouseDown={handleDragHandleMouseDown}
+            onTouchStart={handleDragHandleTouchStart}
+            onClick={handleDragHandleClick}
+          >
+            <div className="w-8 h-1 bg-white/30 hover:bg-white/50 rounded-full transition-colors" />
           </div>
         )}
 
@@ -847,9 +982,11 @@ export default function DraftToast({
         {/* Expanded State - Title and button */}
         {(toastState === "minimal" || toastState === "expanded") && (
           <div
-            className={`flex items-center h-full transition-all ${
-              toastState === "expanded" ? "justify-between px-4 pt-1" : ""
-            } ${toastState === "minimal" ? "w-full justify-center" : ""}`}
+            className={`flex items-center transition-all ${
+              toastState === "expanded" ? "justify-between px-4 pb-2" : ""
+            } ${
+              toastState === "minimal" ? "w-full justify-center h-full" : ""
+            }`}
           >
             <div className="flex items-center space-x-2">
               <div
@@ -860,7 +997,7 @@ export default function DraftToast({
                 }`}
               />
               {toastState === "expanded" && (
-                <span className="text-white/90 font-medium text-sm whitespace-nowrap">
+                <span className="text-white/90 font-medium text-sm whitespace-nowrap px-1">
                   {shortTitle}
                 </span>
               )}
@@ -904,11 +1041,37 @@ export default function DraftToast({
                   const mouseX = e.clientX;
                   const mouseY = e.clientY;
                   setToastState("expanded");
+
                   requestAnimationFrame(() => {
                     adjustPositionForState("expanded");
-                    // Re-evaluate hover state after closing detailed view
-                    checkHoverStateAfterTransition(mouseX, mouseY, "expanded");
                   });
+
+                  // Wait for transition, then check hover state
+                  setTimeout(() => {
+                    if (!toastRef.current) return;
+
+                    const rect = toastRef.current.getBoundingClientRect();
+                    const isStillOver =
+                      mouseX >= rect.left &&
+                      mouseX <= rect.right &&
+                      mouseY >= rect.top &&
+                      mouseY <= rect.bottom;
+
+                    if (!isStillOver) {
+                      setIsHovered(false);
+                      if (hoverTimeoutRef.current) {
+                        clearTimeout(hoverTimeoutRef.current);
+                      }
+                      hoverTimeoutRef.current = setTimeout(() => {
+                        setToastState("minimal");
+                        requestAnimationFrame(() => {
+                          adjustPositionForState("minimal");
+                        });
+                      }, 800);
+                    } else {
+                      setIsHovered(true);
+                    }
+                  }, 550);
                 }}
                 className="text-white/60 hover:text-white/90 transition-colors p-1 rounded hover:bg-white/10 cursor-pointer"
               >
