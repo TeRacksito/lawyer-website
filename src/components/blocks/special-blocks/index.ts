@@ -14,3 +14,8 @@ export const specialBlocks: BlockRegistry = [
 export const specialBlocksTemplates = specialBlocks.map(
   (block) => block.template
 );
+
+export const specialBlockComponents = specialBlocks.reduce((acc, block) => {
+  acc[block.template.name] = block.component;
+  return acc;
+}, {} as Record<string, React.ComponentType<{ data: any }>>);

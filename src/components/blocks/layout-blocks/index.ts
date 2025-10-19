@@ -12,3 +12,22 @@ export const layoutHeaderBlockTemplates = layoutHeaderBlocks.map(
 export const layoutFooterBlockTemplates = layoutFooterBlocks.map(
   (block) => block.template
 );
+
+export const layoutHeaderBlockComponents = layoutHeaderBlocks.reduce(
+  (acc, block) => {
+    acc[block.template.name] = block.component;
+    return acc;
+  },
+  {} as Record<
+    string,
+    React.ComponentType<{ data: any; dataTinaField?: string }>
+  >
+);
+
+export const layoutFooterBlockComponents = layoutFooterBlocks.reduce(
+  (acc, block) => {
+    acc[block.template.name] = block.component;
+    return acc;
+  },
+  {} as Record<string, React.ComponentType<{ data: any }>>
+);

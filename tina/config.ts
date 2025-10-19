@@ -1,13 +1,13 @@
 import { mainBlockTemplate } from "@/components/blocks/layout-blocks/main/main.template";
+import { sectionBlockTemplates } from "@/components/blocks/section-blocks";
+import { getSEOGeneratorField } from "@/components/utils/template-fields/seo-generator.field";
+import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
+import { getTemplateWarningField } from "@/components/utils/template-fields/template-warning";
 import { defineConfig, Template } from "tinacms";
 import {
   layoutFooterBlockTemplates,
   layoutHeaderBlockTemplates,
 } from "../src/components/blocks/layout-blocks";
-import { pageBlockTemplates } from "../src/components/blocks/templates";
-import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
-import { getTemplateWarningField } from "@/components/utils/template-fields/template-warning";
-import { getSEOGeneratorField } from "@/components/utils/template-fields/seo-generator.field";
 
 const branch =
   process.env.GITHUB_BRANCH ||
@@ -218,7 +218,7 @@ const createConditionalFields = () => {
       name: "blocks",
       label: "Secciones principales de la Página",
       list: true,
-      templates: pageBlockTemplates,
+      templates: sectionBlockTemplates,
     },
   ];
 
@@ -229,7 +229,7 @@ const createConditionalFields = () => {
       label: "Bloques de Encabezado",
       description: "Componentes opcionales de encabezado para el diseño",
       list: true,
-      templates: [...layoutHeaderBlockTemplates, ...pageBlockTemplates],
+      templates: [...layoutHeaderBlockTemplates, ...sectionBlockTemplates],
     },
     { type: "object", ...mainBlockTemplate },
     {
@@ -238,7 +238,7 @@ const createConditionalFields = () => {
       label: "Bloques de Pie de Página",
       description: "Componentes opcionales de pie de página para el diseño",
       list: true,
-      templates: [...layoutFooterBlockTemplates, ...pageBlockTemplates],
+      templates: [...layoutFooterBlockTemplates, ...sectionBlockTemplates],
     },
   ];
 

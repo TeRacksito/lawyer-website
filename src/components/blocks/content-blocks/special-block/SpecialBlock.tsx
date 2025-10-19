@@ -2,7 +2,7 @@
 
 import { getThemeProps } from "@/components/utils/ThemeAttribute";
 import BlockRenderer from "../../BlocksRenderer";
-import { specialBlockComponents } from "../../templates";
+import { specialBlockComponents } from "../../special-blocks";
 
 export interface SpecialBlockData {
   theme?: "parent" | "dark" | "light";

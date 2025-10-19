@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { tinaField, useTina } from "tinacms/dist/react";
-import { pageBlockComponents } from "../../../components/blocks/templates";
 import BlocksRenderer from "@/components/blocks/BlocksRenderer";
+import { sectionBlockComponents } from "@/components/blocks/section-blocks";
 
 interface PageWrapperProps {
   query?: string;
@@ -36,7 +36,7 @@ export default function PageWrapper({
       >
         <BlocksRenderer
           blocks={pageData.blocks}
-          components={pageBlockComponents}
+          components={sectionBlockComponents}
           parentData={pageData}
           blocksFieldName="blocks"
         >
@@ -50,8 +50,8 @@ export default function PageWrapper({
               </p>
             )}
             <p>
-              Esta página no tiene bloques de contenido configurados. Por favor, agrega algunos bloques
-              usando Tina CMS.
+              Esta página no tiene bloques de contenido configurados. Por favor,
+              agrega algunos bloques usando Tina CMS.
             </p>
           </div>
         </BlocksRenderer>

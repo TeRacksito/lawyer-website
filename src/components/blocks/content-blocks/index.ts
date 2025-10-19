@@ -14,3 +14,8 @@ export const contentBlocks: BlockRegistry = [
 export const contentBlockTemplates = contentBlocks.map(
   (block) => block.template
 );
+
+export const contentBlockComponents = contentBlocks.reduce((acc, block) => {
+  acc[block.template.name] = block.component;
+  return acc;
+}, {} as Record<string, React.ComponentType<{ data: any }>>);

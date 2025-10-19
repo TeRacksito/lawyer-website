@@ -2,7 +2,7 @@
 
 import { getThemeProps } from "@/components/utils/ThemeAttribute";
 import BlockRenderer from "../../BlocksRenderer";
-import { contentBlockComponents } from "../../templates";
+import { contentBlockComponents } from "../../content-blocks";
 
 export interface BasicSectionBlockData {
   theme?: "parent" | "dark" | "light";

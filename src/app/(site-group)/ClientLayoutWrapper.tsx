@@ -5,10 +5,10 @@ import { ReactNode, useMemo } from "react";
 import { tinaField, useTina } from "tinacms/dist/react";
 import MainBlock from "../../components/blocks/layout-blocks/main/MainBlock";
 import {
-  layoutFooterBlockComponents,
   layoutHeaderBlockComponents,
-  pageBlockComponents,
-} from "../../components/blocks/templates";
+  layoutFooterBlockComponents,
+} from "@/components/blocks/layout-blocks";
+import { sectionBlockComponents } from "@/components/blocks/section-blocks";
 
 interface LayoutData {
   path: string;
@@ -114,7 +114,7 @@ function LayoutRenderer({
 
     const BlockComponent =
       layoutHeaderBlockComponents[templateName] ||
-      pageBlockComponents[templateName];
+      sectionBlockComponents[templateName];
 
     if (!BlockComponent) {
       console.warn(`No header component found for block type: ${templateName}`);
@@ -147,7 +147,7 @@ function LayoutRenderer({
 
     const BlockComponent =
       layoutFooterBlockComponents[templateName] ||
-      pageBlockComponents[templateName];
+      sectionBlockComponents[templateName];
 
     if (!BlockComponent) {
       console.warn(`No footer component found for block type: ${templateName}`);
