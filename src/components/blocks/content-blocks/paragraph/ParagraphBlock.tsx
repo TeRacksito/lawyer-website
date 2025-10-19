@@ -1,5 +1,5 @@
-import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { motion } from "framer-motion";
+import { TinaMarkdownRenderer } from "@/components/utils/TinaMarkdownRenderer";
 
 interface ParagraphBlockProps {
   data: {
@@ -16,6 +16,8 @@ export default function ParagraphBlock({
   dataTinaField,
   motionDelay,
 }: ParagraphBlockProps) {
+  console.log("content", data.text);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -27,7 +29,7 @@ export default function ParagraphBlock({
       } max-w-4xl mx-auto m-3 ${data.textAlign ? data.textAlign : ""}`}
       data-tina-field={dataTinaField}
     >
-      <TinaMarkdown content={data.text} />
+      <TinaMarkdownRenderer content={data.text} />
     </motion.div>
   );
 }

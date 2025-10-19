@@ -1,5 +1,5 @@
-import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { tinaField } from "tinacms/dist/react";
+import { TinaMarkdownRenderer } from "@/components/utils/TinaMarkdownRenderer";
 
 interface ContentBlockProps {
   data: {
@@ -67,7 +67,7 @@ export default function ContentBlock({ data }: ContentBlockProps) {
                 className="prose prose-lg max-w-none"
                 data-tina-field={tinaField(data, "content")}
               >
-                <TinaMarkdown content={content} />
+                <TinaMarkdownRenderer content={content} />
               </div>
             )}
           </div>

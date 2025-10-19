@@ -1,5 +1,5 @@
 import { tinaField } from "tinacms/dist/react";
-import { TinaMarkdown } from "tinacms/dist/rich-text";
+import { TinaMarkdownRenderer } from "@/components/utils/TinaMarkdownRenderer";
 import Link from "next/link";
 
 interface FooterBlockProps {
@@ -300,7 +300,7 @@ export default function FooterBlock({ data }: FooterBlockProps) {
                     data-tina-field={tinaField(legalNotice, "disclaimers")}
                     className="prose prose-sm text-xs max-w-none"
                   >
-                    <TinaMarkdown content={legalNotice.disclaimers} />
+                    <TinaMarkdownRenderer content={legalNotice.disclaimers} />
                   </div>
                 )}
               </div>
