@@ -16,8 +16,6 @@ export default function ParagraphBlock({
   dataTinaField,
   motionDelay,
 }: ParagraphBlockProps) {
-  console.log("content", data.text);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
