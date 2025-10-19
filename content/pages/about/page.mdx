@@ -21,7 +21,9 @@ blocks:
             _template: name_presentation
         _template: special_block
     _template: basic_section
-  - columns:
+  - show_divider: false
+    verticalAlign: items-center
+    columns:
       - content_blocks:
           - title: El Significado de Nuestro Nombre
             level: h3
@@ -40,7 +42,21 @@ blocks:
             textAlign: text-left
             proseSize: prose-lg
             _template: paragraph
-      - content_blocks: []
+      - content_blocks:
+          - special_blocks:
+              - title: Nuestros pilares
+                pillars:
+                  - letter: C
+                    title: Consultas Accesibles
+                    description: Sin costos iniciales para evaluar tu caso
+                  - letter: G
+                    title: Gestión Transparente
+                    description: Procesos claros y comunicación honesta
+                  - letter: C
+                    title: Compromiso Personal
+                    description: Cada caso recibe atención personalizada
+                _template: values_presentation
+            _template: special_block
     _template: column
 ---
 

@@ -9,6 +9,8 @@ export interface ColumnSectionData {
 
 export interface ColumnSectionBlockData {
   columns?: ColumnSectionData[];
+  show_divider?: boolean;
+  verticalAlign?: string;
 }
 
 export interface ColumnSectionBlockProps {
@@ -20,7 +22,11 @@ export default function ColumnSectionBlock({
   data,
   dataTinaField,
 }: ColumnSectionBlockProps) {
-  const { columns = [] } = data;
+  const {
+    columns = [],
+    show_divider = false,
+    verticalAlign = "items-start",
+  } = data;
   const columnCount = columns.length || 2;
 
   const getGridColsClass = (count: number): string => {
@@ -38,10 +44,17 @@ export default function ColumnSectionBlock({
     <div
       className={`grid ${getGridColsClass(
         columnCount
-      )} gap-6 px-6 py-8 max-w-4xl mx-auto`}
+      )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
     >
       {columns.map((column, columnIndex) => (
-        <div key={columnIndex} className="flex flex-col">
+        <div
+          key={columnIndex}
+          className={`flex flex-col ${
+            show_divider && columnIndex !== columns.length - 1
+              ? "pr-6 border-r border-gray-300"
+              : ""
+          }`}
+        >
           <BlockRenderer
             blocks={column.content_blocks}
             components={contentBlockComponents}

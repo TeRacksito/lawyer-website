@@ -1,7 +1,7 @@
-import { Template } from "tinacms";
-import React from "react";
-import { truncateText } from "@/components/utils/truncate";
 import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
+import { verticalAlignField } from "@/components/utils/template-fields/vertical-align.field";
+import React from "react";
+import { Template } from "tinacms";
 import { contentBlockTemplates } from "../../content-blocks";
 
 React;
@@ -17,6 +17,8 @@ export const columnSectionTemplate: Template = {
       };
     },
     defaultItem: {
+      show_divider: false,
+      verticalAlign: "items-start",
       columns: [{ content_blocks: [] }, { content_blocks: [] }],
     },
   },
@@ -28,6 +30,13 @@ export const columnSectionTemplate: Template = {
         "por la cantidad de items que agregues en la lista de columnas. Cada columna puede contener bloques de contenido normal, " +
         "permitiendo crear layouts más complejos y visualmente interesantes."
     ),
+    {
+      type: "boolean",
+      name: "show_divider",
+      label: "Mostrar separador vertical",
+      description: "Muestra una línea vertical entre las columnas",
+    },
+    verticalAlignField,
     {
       type: "object",
       name: "columns",

@@ -3,12 +3,14 @@ import { callToActionBlock } from "./call-to-action";
 import { localNavigationBlock } from "./local-navigation";
 import { namePresentationBlock } from "./name-presentation";
 import { servicesListBlock } from "./services-list";
+import { valuesPresentationBlock } from "./values-presentation";
 
 export const specialBlocks: BlockRegistry = [
   callToActionBlock,
   servicesListBlock,
   localNavigationBlock,
   namePresentationBlock,
+  valuesPresentationBlock,
 ];
 
 export const specialBlocksTemplates = specialBlocks.map(
