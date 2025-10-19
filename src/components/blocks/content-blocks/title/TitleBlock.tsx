@@ -4,6 +4,7 @@ interface TitleBlockProps {
   data: {
     title?: string | null;
     level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | null;
+    textAlign?: string | null;
   };
   dataTinaField?: string;
   motionDelay?: number;
@@ -36,12 +37,13 @@ export default function TitleBlock({
   motionDelay,
 }: TitleBlockProps) {
   const { title, level } = data;
+  const textAlign = data.textAlign || "text-center";
 
   const HeadingTag =
     level && motionHeadings[level] ? motionHeadings[level] : motion.h2;
 
   return (
-    <div className="max-w-4xl mx-auto text-center">
+    <div className={`max-w-4xl mx-auto ${textAlign.replace("text-", "text-")}`}>
       {title && (
         <HeadingTag
           initial={{ opacity: 0 }}
