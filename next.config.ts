@@ -5,15 +5,16 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'assets.tina.io',
+        protocol: "https",
+        hostname: "assets.tina.io",
       },
     ],
+    qualities: [90],
   },
 };
 
 export default nextConfig;
 
 // added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
-import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 initOpenNextCloudflareForDev();
