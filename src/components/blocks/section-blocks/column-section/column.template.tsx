@@ -19,6 +19,7 @@ export const columnSectionTemplate: Template = {
     defaultItem: {
       show_divider: false,
       verticalAlign: "items-start",
+      max_columns: 2,
       columns: [{ content_blocks: [] }, { content_blocks: [] }],
     },
   },
@@ -35,6 +36,13 @@ export const columnSectionTemplate: Template = {
       name: "show_divider",
       label: "Mostrar separador vertical",
       description: "Muestra una línea vertical entre las columnas",
+    },
+    {
+      type: "number",
+      name: "max_columns",
+      label: "Número máximo de columnas",
+      description:
+        "Define cuántas columnas se mostrarán por fila en pantallas grandes (2-6).",
     },
     verticalAlignField,
     {

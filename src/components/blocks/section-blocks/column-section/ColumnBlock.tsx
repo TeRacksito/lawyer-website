@@ -11,6 +11,7 @@ export interface ColumnSectionBlockData {
   columns?: ColumnSectionData[];
   show_divider?: boolean;
   verticalAlign?: string;
+  max_columns?: number;
 }
 
 export interface ColumnSectionBlockProps {
@@ -26,8 +27,9 @@ export default function ColumnSectionBlock({
     columns = [],
     show_divider = false,
     verticalAlign = "items-start",
+    max_columns = 2,
   } = data;
-  const columnCount = columns.length || 2;
+  const columnCount = Math.min(max_columns, columns.length || 2);
 
   const getGridColsClass = (count: number): string => {
     const colsMap: Record<number, string> = {
@@ -40,29 +42,66 @@ export default function ColumnSectionBlock({
     return colsMap[count] || colsMap[2];
   };
 
+  const gridId = `column-grid-${Math.random().toString(36).substr(2, 9)}`;
+
+  const getDividerStyles = (count: number): string => {
+    if (!show_divider) return "";
+
+    return `
+      @media (min-width: 640px) {
+        #${gridId} > *:not(:nth-child(2n))::after {
+          content: '';
+          position: absolute;
+          right: -0.75rem;
+          top: 0;
+          bottom: 0;
+          width: 1px;
+          background-color: rgb(209 213 219);
+        }
+      }
+      ${
+        count >= 3
+          ? `
+      @media (min-width: 1024px) {
+        #${gridId} > *:nth-child(2n)::after {
+          content: '';
+          position: absolute;
+          right: -0.75rem;
+          top: 0;
+          bottom: 0;
+          width: 1px;
+          background-color: rgb(209 213 219);
+        }
+        #${gridId} > *:nth-child(${count}n)::after {
+          display: none;
+        }
+      }
+      `
+          : ""
+      }
+    `;
+  };
+
   return (
-    <div
-      className={`grid ${getGridColsClass(
-        columnCount
-      )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
-    >
-      {columns.map((column, columnIndex) => (
-        <div
-          key={columnIndex}
-          className={`flex flex-col ${
-            show_divider && columnIndex !== columns.length - 1
-              ? "pr-6 border-r border-gray-300"
-              : ""
-          }`}
-        >
-          <BlockRenderer
-            blocks={column.content_blocks}
-            components={contentBlockComponents}
-            parentData={data}
-            blocksFieldName={`columns.${columnIndex}.content_blocks`}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      {show_divider && <style>{getDividerStyles(columnCount)}</style>}
+      <div
+        id={gridId}
+        className={`grid ${getGridColsClass(
+          columnCount
+        )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
+      >
+        {columns.map((column, columnIndex) => (
+          <div key={columnIndex} className="flex flex-col relative">
+            <BlockRenderer
+              blocks={column.content_blocks}
+              components={contentBlockComponents}
+              parentData={data}
+              blocksFieldName={`columns.${columnIndex}.content_blocks`}
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
