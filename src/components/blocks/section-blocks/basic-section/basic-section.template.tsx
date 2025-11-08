@@ -42,17 +42,25 @@ export const basicSectionTemplate: Template = {
     themeField,
     {
       type: "string",
-      name: "name",
+      name: "basic_section_name",
       label: "Nombre de la Sección",
       description:
         "Un nombre descriptivo para esta sección (no se muestra en el sitio)",
     },
     {
       type: "object",
-      name: "content_blocks",
+      name: "basic_section_content_blocks",
       label: "Bloques de contenido",
       list: true,
-      templates: contentBlockTemplates,
+      fields: [
+        {
+          type: "object",
+          name: "basic_section_content_blocks_list",
+          label: "Bloques de contenido",
+          list: true,
+          templates: contentBlockTemplates,
+        },
+      ],
     },
   ],
 };

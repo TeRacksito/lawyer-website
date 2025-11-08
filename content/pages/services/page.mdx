@@ -19,7 +19,7 @@ seo:
     ogType: website
     twitterCard: summary
   advanced:
-    robots: 'index, follow'
+    robots: "index, follow"
 blocks:
   - variant: heroTitle
     backgroundImage: /images/bookshelf.webp
@@ -29,39 +29,40 @@ blocks:
     subtitle: Descubre cómo podemos ayudarte con soluciones personalizadas y efectivas.
     _template: hero
   - theme: parent
-    name: Solicitar Consulta Gratuita
-    content_blocks:
-      - title: Consulta gratuita
-        level: h2
-        _template: title
-      - text: >
-          Ofrecemos una consulta gratuita para evaluar tu caso y ofrecerte
-          soluciones personalizadas. Hola.
-        textAlign: text-center
-        proseSize: prose-lg
-        _template: paragraph
-      - special_blocks:
-          - primaryButton:
-              text: Solicitar Consulta Gratuita
-              href: /old/contact
-            secondaryButton:
-              text: ''
-              href: ''
-            _template: call_to_action
-        _template: special_block
+    basic_section_name: Solicitar Consulta Gratuita
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Consulta gratuita
+            level: h2
+            _template: title
+          - text: >
+              Ofrecemos una consulta gratuita para evaluar tu caso y ofrecerte
+              soluciones personalizadas. Hola.
+            textAlign: text-center
+            proseSize: prose-lg
+            _template: paragraph
+          - special_blocks:
+              - primaryButton:
+                  text: Solicitar Consulta Gratuita
+                  href: /old/contact
+                secondaryButton:
+                  text: ""
+                  href: ""
+                _template: call_to_action
+            _template: special_block
     _template: basic_section
   - theme: parent
-    content_blocks:
-      - title: Áreas de práctica
-        level: h2
-        _template: title
-      - special_blocks:
-          - searchEnabled: true
-            searchPlaceholder: Buscar servicios...
-            noResultsMessage: No se encontraron servicios que coincidan con tu búsqueda.
-            services: []
-            _template: services_list
-        _template: special_block
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Áreas de práctica
+            level: h2
+            _template: title
+          - special_blocks:
+              - searchEnabled: true
+                searchPlaceholder: Buscar servicios...
+                noResultsMessage: No se encontraron servicios que coincidan con tu búsqueda.
+                services: []
+                _template: services_list
+            _template: special_block
     _template: basic_section
 ---
-

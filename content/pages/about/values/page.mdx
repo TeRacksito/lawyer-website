@@ -3,19 +3,20 @@ draft: false
 title: Nuestros Valores
 blocks:
   - theme: parent
-    name: Lo Que Nos Define
-    content_blocks:
-      - title: Lo Que Nos Define
-        level: h2
-        textAlign: text-center
-        _template: title
-      - text: >
-          Estos son los **principios fundamentales** que guían nuestro trabajo
-          diario y que nos ayudan a construir relaciones sólidas con nuestros
-          clientes.
-        textAlign: text-left
-        proseSize: prose-lg
-        _template: paragraph
+    basic_section_name: Lo Que Nos Define
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Lo Que Nos Define
+            level: h2
+            textAlign: text-center
+            _template: title
+          - text: >
+              Estos son los **principios fundamentales** que guían nuestro trabajo
+              diario y que nos ayudan a construir relaciones sólidas con nuestros
+              clientes.
+            textAlign: text-left
+            proseSize: prose-lg
+            _template: paragraph
     _template: basic_section
   - show_divider: true
     max_columns: 2
@@ -95,26 +96,26 @@ blocks:
             _template: special_block
     _template: column
   - theme: parent
-    name: Nuestra Misión
-    content_blocks:
-      - special_blocks:
-          - icon:
-              textAlign: text-center
-            value_card_title:
-              textAlign: text-center
-              value: Nuestra Misión
-            description:
-              textAlign: text-center
-              value: >
-                Brindar asesoramiento legal integral y de alta calidad,
-                contribuyendo al acceso efectivo de la justicia para nuestros
-                clientes. Nos esforzamos por ser un despacho de referencia,
-                fundamentado en valores éticos sólidos y en la búsqueda
-                constante de resultados excepcionales.
-            bgColor: bg-primary/10
-            disposition: top
-            _template: value_card
-        _template: special_block
+    basic_section_name: Nuestra Misión
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - special_blocks:
+              - icon:
+                  textAlign: text-center
+                value_card_title:
+                  textAlign: text-center
+                  value: Nuestra Misión
+                description:
+                  textAlign: text-center
+                  value: >
+                    Brindar asesoramiento legal integral y de alta calidad,
+                    contribuyendo al acceso efectivo de la justicia para nuestros
+                    clientes. Nos esforzamos por ser un despacho de referencia,
+                    fundamentado en valores éticos sólidos y en la búsqueda
+                    constante de resultados excepcionales.
+                bgColor: bg-primary/10
+                disposition: top
+                _template: value_card
+            _template: special_block
     _template: basic_section
 ---
-
