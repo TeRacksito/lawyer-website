@@ -42,7 +42,9 @@ export default function ColumnSectionBlock({
     return colsMap[count] || colsMap[2];
   };
 
-  const gridId = `column-grid-${Math.random().toString(36).substr(2, 9)}`;
+  const gridId = `column-grid-${
+    dataTinaField?.replace(/\./g, "-") || "unknown"
+  }`;
 
   const getDividerStyles = (count: number): string => {
     if (!show_divider) return "";
@@ -85,7 +87,7 @@ export default function ColumnSectionBlock({
   return (
     <>
       {show_divider && <style>{getDividerStyles(columnCount)}</style>}
-      <div
+      <section
         id={gridId}
         className={`grid ${getGridColsClass(
           columnCount
@@ -101,7 +103,7 @@ export default function ColumnSectionBlock({
             />
           </div>
         ))}
-      </div>
+      </section>
     </>
   );
 }

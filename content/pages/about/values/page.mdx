@@ -17,46 +17,104 @@ blocks:
         proseSize: prose-lg
         _template: paragraph
     _template: basic_section
-  - show_divider: false
+  - show_divider: true
     max_columns: 2
     verticalAlign: items-start
     columns:
       - content_blocks:
           - special_blocks:
-              - icon: ⚖️
-                title: Justicia
-                description: >
-                  Añade aquí tu visión sobre la justicia y cómo la aplicas en
-                  cada caso.
+              - icon:
+                  textAlign: text-center
+                  value: ⚖️
+                value_card_title:
+                  textAlign: text-center
+                  value: Justicia
+                description:
+                  textAlign: text-center
+                  value: >
+                    Nos dedicamos a defender los derechos de nuestros clientes
+                    con rigor legal y ética profesional. Cada caso es una
+                    oportunidad para hacer valer la justicia.
+                bgColor: bg-base-200
+                disposition: top
                 _template: value_card
             _template: special_block
       - content_blocks:
           - special_blocks:
-              - icon: "\U0001F91D"
-                title: Compromiso
-                description: >
-                  Describe el nivel de dedicación que ofreces a tus clientes y
-                  casos.
+              - icon:
+                  textAlign: text-center
+                  value: "\U0001F91D"
+                value_card_title:
+                  textAlign: text-center
+                  value: Compromiso
+                description:
+                  textAlign: text-center
+                  value: >
+                    Nos comprometemos a brindar un servicio de excelencia,
+                    dedicando nuestro tiempo y expertise a resolver los asuntos
+                    legales con máxima responsabilidad.
+                bgColor: bg-base-200
+                disposition: top
                 _template: value_card
             _template: special_block
       - content_blocks:
           - special_blocks:
-              - icon: "\U0001F4A1"
-                title: Innovación
-                description: >
-                  Explica cómo integras nuevas tecnologías y métodos en tu
-                  práctica legal.
+              - icon:
+                  textAlign: text-center
+                  value: "\U0001F4A1"
+                value_card_title:
+                  textAlign: text-center
+                  value: Innovación
+                description:
+                  textAlign: text-center
+                  value: >
+                    Adoptamos las mejores prácticas y tecnologías para optimizar
+                    nuestros procesos legales, garantizando eficiencia y
+                    resultados superiores para nuestros clientes.
+                bgColor: bg-base-200
+                disposition: top
                 _template: value_card
             _template: special_block
       - content_blocks:
           - special_blocks:
-              - icon: "\U0001F3AF"
-                title: Excelencia
-                description: >
-                  Define qué significa la excelencia en tu trabajo y cómo la
-                  persigues.
+              - icon:
+                  textAlign: text-center
+                  value: "\U0001F3AF"
+                value_card_title:
+                  textAlign: text-center
+                  value: Excelencia
+                description:
+                  textAlign: text-center
+                  value: >
+                    Perseguimos la excelencia en cada aspecto de nuestro
+                    trabajo, desde la asesoría inicial hasta la resolución
+                    final, garantizando la máxima calidad profesional.
+                bgColor: bg-base-200
+                disposition: top
                 _template: value_card
             _template: special_block
     _template: column
+  - theme: parent
+    name: Nuestra Misión
+    content_blocks:
+      - special_blocks:
+          - icon:
+              textAlign: text-center
+            value_card_title:
+              textAlign: text-center
+              value: Nuestra Misión
+            description:
+              textAlign: text-center
+              value: >
+                Brindar asesoramiento legal integral y de alta calidad,
+                contribuyendo al acceso efectivo de la justicia para nuestros
+                clientes. Nos esforzamos por ser un despacho de referencia,
+                fundamentado en valores éticos sólidos y en la búsqueda
+                constante de resultados excepcionales.
+            bgColor: bg-primary/10
+            disposition: top
+            _template: value_card
+        _template: special_block
+    _template: basic_section
 ---
 
