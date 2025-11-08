@@ -1,5 +1,60 @@
 ---
 draft: false
 title: Nuestro Equipo
+blocks:
+  - theme: parent
+    content_blocks:
+      - title: Nuestro Equipo & Red de Colaboradores
+        level: h2
+        textAlign: text-center
+        _template: title
+      - text: >
+          Un **equipo central** de abogados especializados respaldado por una
+          **extensa red de colaboradores** en toda España. Profesionales
+          comprometidos con la excelencia legal y el servicio personalizado.
+        textAlign: text-center
+        proseSize: prose-xl
+        _template: paragraph
+    _template: basic_section
+  - column_content_blocks:
+      - column_content_blocks_list:
+          - title: Equipo Central
+            level: h2
+            textAlign: text-center
+            _template: title
+    show_divider: false
+    max_columns: 2
+    verticalAlign: items-start
+    columns:
+      - content_blocks:
+          - special_blocks:
+              - personal_card_image: ""
+                personal_card_name: Luis Cruz
+                personal_card_position: Socio Fundador
+                personal_card_location: Madrid
+                personal_card_description: |
+                  Descripción breve del miembro del equipo.
+                personal_card_specialties:
+                  - Derecho Penal
+                  - Derecho Civil
+                  - Derecho Laboral
+                _template: personal_card
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - personal_card_image: ""
+                personal_card_name: Carlos Mendoza López
+                personal_card_position: Abogado Senior
+                personal_card_location: Barcelona
+                personal_card_description: >
+                  Experto en derecho mercantil y societario con 12 años de
+                  experiencia. Ha asesorado a más de 200 empresas en procesos de
+                  restructuración y fusiones.
+                personal_card_specialties:
+                  - Derecho Mercantil
+                  - Derecho Societario
+                  - Funciones y Adquisiciones
+                _template: personal_card
+            _template: special_block
+    _template: column
 ---
-

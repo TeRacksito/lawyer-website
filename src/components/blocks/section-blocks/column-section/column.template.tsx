@@ -17,6 +17,9 @@ export const columnSectionTemplate: Template = {
       };
     },
     defaultItem: {
+      column_content_blocks: {
+        column_content_blocks_list: [],
+      },
       show_divider: false,
       verticalAlign: "items-start",
       max_columns: 2,
@@ -31,6 +34,23 @@ export const columnSectionTemplate: Template = {
         "por la cantidad de items que agregues en la lista de columnas. Cada columna puede contener bloques de contenido normal, " +
         "permitiendo crear layouts más complejos y visualmente interesantes."
     ),
+    {
+      type: "object",
+      name: "column_content_blocks",
+      label: "Bloques de contenido precedentes",
+      description:
+        "Bloques de contenido que se mostrarán antes de los bloques de la columna.",
+      list: true,
+      fields: [
+        {
+          type: "object",
+          name: "column_content_blocks_list",
+          label: "Bloques de contenido",
+          list: true,
+          templates: contentBlockTemplates,
+        },
+      ],
+    },
     {
       type: "boolean",
       name: "show_divider",

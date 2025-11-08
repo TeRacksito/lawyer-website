@@ -6,6 +6,7 @@ import { servicesListBlock } from "./services-list";
 import { valuesPresentationBlock } from "./values-presentation";
 import { timelineBlock } from "./timeline";
 import { valueCardBlock } from "./value-card";
+import { personalCardBlock } from "./personal-card";
 
 export const specialBlocks: BlockRegistry = [
   callToActionBlock,
@@ -15,6 +16,7 @@ export const specialBlocks: BlockRegistry = [
   valuesPresentationBlock,
   timelineBlock,
   valueCardBlock,
+  personalCardBlock,
 ];
 
 export const specialBlocksTemplates = specialBlocks.map(

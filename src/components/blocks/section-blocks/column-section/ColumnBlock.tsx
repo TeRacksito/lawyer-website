@@ -8,6 +8,9 @@ export interface ColumnSectionData {
 }
 
 export interface ColumnSectionBlockData {
+  column_content_blocks?: {
+    column_content_blocks_list?: any[];
+  }[];
   columns?: ColumnSectionData[];
   show_divider?: boolean;
   verticalAlign?: string;
@@ -24,6 +27,7 @@ export default function ColumnSectionBlock({
   dataTinaField,
 }: ColumnSectionBlockProps) {
   const {
+    column_content_blocks,
     columns = [],
     show_divider = false,
     verticalAlign = "items-start",
@@ -86,23 +90,34 @@ export default function ColumnSectionBlock({
 
   return (
     <>
-      {show_divider && <style>{getDividerStyles(columnCount)}</style>}
-      <section
-        id={gridId}
-        className={`grid ${getGridColsClass(
-          columnCount
-        )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
-      >
-        {columns.map((column, columnIndex) => (
-          <div key={columnIndex} className="flex flex-col relative">
-            <BlockRenderer
-              blocks={column.content_blocks}
-              components={contentBlockComponents}
-              parentData={data}
-              blocksFieldName={`columns.${columnIndex}.content_blocks`}
-            />
-          </div>
+      <section>
+        {column_content_blocks && column_content_blocks.map((_, index) => (
+          <BlockRenderer
+            key={index}
+            blocks={column_content_blocks[index].column_content_blocks_list}
+            components={contentBlockComponents}
+            parentData={data}
+            blocksFieldName={`column_content_blocks.${index}.column_content_blocks_list`}
+          />
         ))}
+        {show_divider && <style>{getDividerStyles(columnCount)}</style>}
+        <div
+          id={gridId}
+          className={`grid ${getGridColsClass(
+            columnCount
+          )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
+        >
+          {columns.map((column, columnIndex) => (
+            <div key={columnIndex} className="flex flex-col relative">
+              <BlockRenderer
+                blocks={column.content_blocks}
+                components={contentBlockComponents}
+                parentData={data}
+                blocksFieldName={`columns.${columnIndex}.content_blocks`}
+              />
+            </div>
+          ))}
+        </div>
       </section>
     </>
   );
