@@ -13,17 +13,18 @@ headerBlocks:
     basic_section_content_blocks:
       - basic_section_content_blocks_list:
           - special_blocks:
-              - flexDirection: row
-                links:
-                  - label: Nuestra Historia
-                    url: /about
-                  - label: Nuestra Carrera
-                    url: /about/career
-                  - label: Nuestros Valores
-                    url: /about/values
-                  - label: Nuestro Equipo
-                    url: /about/team
-                _template: local_navigation
+              - special_blocks_list:
+                  - flexDirection: row
+                    links:
+                      - label: Nuestra Historia
+                        url: /about
+                      - label: Nuestra Carrera
+                        url: /about/career
+                      - label: Nuestros Valores
+                        url: /about/values
+                      - label: Nuestro Equipo
+                        url: /about/team
+                    _template: local_navigation
             _template: special_block
     _template: basic_section
 main:
@@ -37,17 +38,18 @@ footerBlocks:
     basic_section_content_blocks:
       - basic_section_content_blocks_list:
           - special_blocks:
-              - flexDirection: row
-                links:
-                  - label: Nuestra Historia
-                    url: /about
-                  - label: Nuestra Carrera
-                    url: /about/career
-                  - label: Nuestros Valores
-                    url: /about/values
-                  - label: Nuestro Equipo
-                    url: /about/team
-                _template: local_navigation
+              - special_blocks_list:
+                  - flexDirection: row
+                    links:
+                      - label: Nuestra Historia
+                        url: /about
+                      - label: Nuestra Carrera
+                        url: /about/career
+                      - label: Nuestros Valores
+                        url: /about/values
+                      - label: Nuestro Equipo
+                        url: /about/team
+                    _template: local_navigation
             _template: special_block
           - text: |
               Explora más contenido cambiando de sección
@@ -68,14 +70,15 @@ footerBlocks:
             proseSize: prose-lg
             _template: paragraph
           - special_blocks:
-              - primaryButton:
-                  text: Ver Nuestros Servicios
-                  href: /services
-                secondaryButton:
-                  text: Consulta Gratuita
-                  href: /contact
-                  hiddenText: Reserva Una
-                _template: call_to_action
+              - special_blocks_list:
+                  - primaryButton:
+                      text: Ver Nuestros Servicios
+                      href: /services
+                    secondaryButton:
+                      text: Consulta Gratuita
+                      href: /contact
+                      hiddenText: Reserva Una
+                    _template: call_to_action
             _template: special_block
     _template: basic_section
 ---

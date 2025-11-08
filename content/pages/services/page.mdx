@@ -42,13 +42,14 @@ blocks:
             proseSize: prose-lg
             _template: paragraph
           - special_blocks:
-              - primaryButton:
-                  text: Solicitar Consulta Gratuita
-                  href: /old/contact
-                secondaryButton:
-                  text: ""
-                  href: ""
-                _template: call_to_action
+              - special_blocks_list:
+                  - primaryButton:
+                      text: Solicitar Consulta Gratuita
+                      href: /old/contact
+                    secondaryButton:
+                      text: ""
+                      href: ""
+                    _template: call_to_action
             _template: special_block
     _template: basic_section
   - theme: parent
@@ -58,11 +59,12 @@ blocks:
             level: h2
             _template: title
           - special_blocks:
-              - searchEnabled: true
-                searchPlaceholder: Buscar servicios...
-                noResultsMessage: No se encontraron servicios que coincidan con tu búsqueda.
-                services: []
-                _template: services_list
+              - special_blocks_list:
+                  - searchEnabled: true
+                    searchPlaceholder: Buscar servicios...
+                    noResultsMessage: No se encontraron servicios que coincidan con tu búsqueda.
+                    services: []
+                    _template: services_list
             _template: special_block
     _template: basic_section
 ---

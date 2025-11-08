@@ -6,7 +6,9 @@ import { specialBlockComponents } from "../../special-blocks";
 
 export interface SpecialBlockData {
   theme?: "parent" | "dark" | "light";
-  special_blocks?: any[];
+  special_blocks?: {
+    special_blocks_list?: any[];
+  }[];
   [key: string]: any;
 }
 
@@ -30,13 +32,16 @@ export default function SpecialBlock({
         ? { "data-tina-field": dataTinaField, className: "p-5" }
         : {})}
     >
-      <BlockRenderer
-        blocks={special_blocks}
-        components={specialBlockComponents}
-        parentData={data}
-        blocksFieldName="special_blocks"
-        previousDelay={motionDelay || 0}
-      />
+      {special_blocks &&
+        special_blocks.map((_, index) => (
+          <BlockRenderer
+            key={index}
+            blocks={special_blocks[index].special_blocks_list}
+            components={specialBlockComponents}
+            parentData={data}
+            blocksFieldName={`special_blocks.${index}.special_blocks_list`}
+          />
+        ))}
     </div>
   );
 }

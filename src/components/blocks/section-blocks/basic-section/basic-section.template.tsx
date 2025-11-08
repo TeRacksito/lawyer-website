@@ -13,10 +13,12 @@ export const basicSectionTemplate: Template = {
   label: "Sección Básica",
   ui: {
     itemProps: (item) => {
-      const nameStr = String(item?.name ?? "");
+      const nameStr = String(item?.basic_section_name ?? "");
       const truncated = truncateText(nameStr, 15);
       return {
-        label: item?.name ? `Sección (${truncated})` : "Sección Básica",
+        label: item?.basic_section_name
+          ? `Sección (${truncated})`
+          : "Sección Básica",
       };
     },
     defaultItem: {
@@ -52,6 +54,27 @@ export const basicSectionTemplate: Template = {
       name: "basic_section_content_blocks",
       label: "Bloques de contenido",
       list: true,
+      ui: {
+        itemProps: (item) => {
+          return {
+            label: item?.basic_section_content_blocks_list?.length
+              ? `S.B. (${
+                  contentBlockTemplates.find(
+                    (template) =>
+                      template.name ===
+                      item?.basic_section_content_blocks_list[0]?._template
+                  )?.label
+                } ${
+                  item?.basic_section_content_blocks_list?.length > 1
+                    ? `, +${
+                        item?.basic_section_content_blocks_list?.length - 1
+                      }`
+                    : ""
+                })`
+              : "Bloque de contenido",
+          };
+        },
+      },
       fields: [
         {
           type: "object",

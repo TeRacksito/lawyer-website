@@ -11,18 +11,23 @@ export const specialBlockTemplate: Template = {
   ui: {
     itemProps: (item) => {
       return {
-        label: item?.special_blocks
-          ? `B.E. (${
-              specialBlocksTemplates.find(
-                (template) =>
-                  template.name === item?.special_blocks[0]._template
-              )?.label
-            }${
-              item?.special_blocks.length > 1
-                ? `, +${item?.special_blocks.length - 1}`
-                : ""
-            })`
-          : "Bloque Especial",
+        label:
+          item?.special_blocks.length &&
+          item?.special_blocks[0]?.special_blocks_list.length
+            ? `B.E. (${
+                specialBlocksTemplates.find(
+                  (template) =>
+                    template.name ===
+                    item?.special_blocks[0]?.special_blocks_list[0]?._template
+                )?.label
+              }${
+                item?.special_blocks[0]?.special_blocks_list.length > 1
+                  ? `, +${
+                      item?.special_blocks[0]?.special_blocks_list.length - 1
+                    }`
+                  : ""
+              })`
+            : "Bloque Especial",
       };
     },
     defaultItem: {
@@ -46,7 +51,36 @@ export const specialBlockTemplate: Template = {
       name: "special_blocks",
       label: "Bloques Especiales",
       list: true,
-      templates: specialBlocksTemplates,
+      ui: {
+        itemProps: (item) => {
+          return {
+            label:
+              item?.special_blocks_list?.length &&
+              item?.special_blocks_list[0]?._template
+                ? `B.E. (${
+                    specialBlocksTemplates.find(
+                      (template) =>
+                        template.name ===
+                        item?.special_blocks_list[0]?._template
+                    )?.label
+                  }${
+                    item?.special_blocks_list.length > 1
+                      ? `, +${item?.special_blocks_list.length - 1}`
+                      : ""
+                  })`
+                : "Bloque Especial",
+          };
+        },
+      },
+      fields: [
+        {
+          type: "object",
+          name: "special_blocks_list",
+          label: "Bloques Especiales",
+          list: true,
+          templates: specialBlocksTemplates,
+        },
+      ],
     },
   ],
 };
