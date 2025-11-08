@@ -10,8 +10,8 @@ blocks:
             textAlign: text-center
             _template: title
           - text: >
-              Un **equipo central** de abogados especializados respaldado por una
-              **extensa red de colaboradores** en toda España. Profesionales
+              Un **equipo central** de abogados especializados respaldado por
+              una **extensa red de colaboradores** en toda España. Profesionales
               comprometidos con la excelencia legal y el servicio personalizado.
             textAlign: text-center
             proseSize: prose-xl
@@ -30,7 +30,7 @@ blocks:
       - content_blocks:
           - special_blocks:
               - special_blocks_list:
-                  - personal_card_image: ""
+                  - personal_card_image: ''
                     personal_card_name: Luis Cruz
                     personal_card_position: Socio Fundador
                     personal_card_location: Madrid
@@ -45,14 +45,14 @@ blocks:
       - content_blocks:
           - special_blocks:
               - special_blocks_list:
-                  - personal_card_image: ""
+                  - personal_card_image: ''
                     personal_card_name: Carlos Mendoza López
                     personal_card_position: Abogado Senior
                     personal_card_location: Barcelona
                     personal_card_description: >
                       Experto en derecho mercantil y societario con 12 años de
-                      experiencia. Ha asesorado a más de 200 empresas en procesos de
-                      restructuración y fusiones.
+                      experiencia. Ha asesorado a más de 200 empresas en
+                      procesos de restructuración y fusiones.
                     personal_card_specialties:
                       - Derecho Mercantil
                       - Derecho Societario
@@ -60,4 +60,71 @@ blocks:
                     _template: personal_card
             _template: special_block
     _template: column
+  - theme: parent
+    basic_section_name: Colaboradores
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Red de Colaboradores en España
+            level: h2
+            textAlign: text-center
+            _template: title
+          - text: >
+              Trabajamos con una red cuidadosamente seleccionada de abogados
+              especialistas en las principales ciudades de España, garantizando
+              cobertura nacional y expertise local.
+            textAlign: text-center
+            proseSize: prose-lg
+            _template: paragraph
+    _template: basic_section
+  - column_content_blocks: []
+    show_divider: false
+    max_columns: 4
+    verticalAlign: items-start
+    columns:
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - counter_value_value: 10
+                    counter_value_label: Ciudades
+                    counter_value_prefix: ''
+                    counter_value_suffix: ''
+                    counter_value_duration: 2000
+                    bgColor: bg-base-200
+                    _template: counter_value
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - counter_value_value: 25
+                    counter_value_label: Colaboradores
+                    counter_value_prefix: ''
+                    counter_value_suffix: +
+                    counter_value_duration: 2000
+                    bgColor: bg-base-200
+                    _template: counter_value
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - counter_value_value: 8
+                    counter_value_label: Años Promedio
+                    counter_value_prefix: ''
+                    counter_value_suffix: +
+                    counter_value_duration: 2000
+                    bgColor: bg-base-200
+                    _template: counter_value
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - counter_value_value: 1200
+                    counter_value_label: Casos Exitosos
+                    counter_value_prefix: ''
+                    counter_value_suffix: +
+                    counter_value_duration: 2000
+                    bgColor: bg-base-200
+                    _template: counter_value
+            _template: special_block
+    _template: column
 ---
+

@@ -17,9 +17,7 @@ export const columnSectionTemplate: Template = {
       };
     },
     defaultItem: {
-      column_content_blocks: {
-        column_content_blocks_list: [],
-      },
+      column_content_blocks: [],
       show_divider: false,
       verticalAlign: "items-start",
       max_columns: 2,

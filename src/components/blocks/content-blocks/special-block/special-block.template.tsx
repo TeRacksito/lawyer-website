@@ -12,8 +12,8 @@ export const specialBlockTemplate: Template = {
     itemProps: (item) => {
       return {
         label:
-          item?.special_blocks.length &&
-          item?.special_blocks[0]?.special_blocks_list.length
+          item?.special_blocks?.length &&
+          item?.special_blocks[0]?.special_blocks_list?.length
             ? `B.E. (${
                 specialBlocksTemplates.find(
                   (template) =>
@@ -21,9 +21,9 @@ export const specialBlockTemplate: Template = {
                     item?.special_blocks[0]?.special_blocks_list[0]?._template
                 )?.label
               }${
-                item?.special_blocks[0]?.special_blocks_list.length > 1
+                item?.special_blocks[0]?.special_blocks_list?.length > 1
                   ? `, +${
-                      item?.special_blocks[0]?.special_blocks_list.length - 1
+                      item?.special_blocks[0]?.special_blocks_list?.length - 1
                     }`
                   : ""
               })`
