@@ -6,6 +6,7 @@ import { contentBlockComponents } from "../../content-blocks";
 
 export interface BasicSectionBlockData {
   theme?: "parent" | "dark" | "light";
+  basic_section_rounded_card?: boolean;
   basic_section_content_blocks?: {
     basic_section_content_blocks_list?: any[];
   }[];
@@ -21,7 +22,8 @@ export default function BasicSectionBlock({
   data,
   dataTinaField,
 }: BasicSectionBlockProps) {
-  const { theme, basic_section_content_blocks } = data;
+  const { theme, basic_section_content_blocks, basic_section_rounded_card } =
+    data;
 
   return (
     <section
@@ -29,7 +31,11 @@ export default function BasicSectionBlock({
       {...(basic_section_content_blocks === null
         ? { "data-tina-field": dataTinaField, className: "p-5" }
         : {})}
-      className="px-6 py-16"
+      className={`${
+        basic_section_rounded_card
+          ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200"
+          : "px-6"
+      } py-16`}
     >
       {basic_section_content_blocks &&
         basic_section_content_blocks.map((_, index) => (

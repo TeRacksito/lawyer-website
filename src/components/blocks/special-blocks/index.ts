@@ -8,6 +8,7 @@ import { timelineBlock } from "./timeline";
 import { valueCardBlock } from "./value-card";
 import { personalCardBlock } from "./personal-card";
 import { counterValueBlock } from "./counter-value";
+import { interactiveMapBlock } from "./interactive-map";
 
 export const specialBlocks: BlockRegistry = [
   callToActionBlock,
@@ -19,6 +20,7 @@ export const specialBlocks: BlockRegistry = [
   valueCardBlock,
   personalCardBlock,
   counterValueBlock,
+  interactiveMapBlock,
 ];
 
 export const specialBlocksTemplates = specialBlocks.map(

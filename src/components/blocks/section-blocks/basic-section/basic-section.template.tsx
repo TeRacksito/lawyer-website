@@ -43,6 +43,12 @@ export const basicSectionTemplate: Template = {
     ),
     themeField,
     {
+      type: "boolean",
+      name: "basic_section_rounded_card",
+      label: "Tipo Tarjeta Redondeada",
+      description: "Si la sección debe ser una tarjeta redondeada",
+    },
+    {
       type: "string",
       name: "basic_section_name",
       label: "Nombre de la Sección",

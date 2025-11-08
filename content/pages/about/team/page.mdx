@@ -126,5 +126,35 @@ blocks:
                     _template: counter_value
             _template: special_block
     _template: column
+  - theme: parent
+    basic_section_rounded_card: true
+    basic_section_name: Mapa
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Cobertura Nacional
+            level: h3
+            textAlign: text-center
+            _template: title
+          - text: >
+              Interactúa con el mapa para conocer nuestros colaboradores en cada
+              región. Cada punto representa un abogado especializado listo para
+              asistirte.
+            textAlign: text-center
+            proseSize: prose-lg
+            _template: paragraph
+          - special_blocks:
+              - special_blocks_list:
+                  - interactive_map_collaborators:
+                      - collaborator_name: test
+                        collaborator_specialty: test
+                        collaborator_mainFocus: test
+                        collaborator_experience: test
+                        collaborator_cities:
+                          - Madrid
+                          - Barcelona
+                    bgColor: bg-base-200
+                    _template: interactive_map
+            _template: special_block
+    _template: basic_section
 ---
 
