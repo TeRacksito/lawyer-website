@@ -104,25 +104,29 @@ export default function TitleBlock({
     level && motionHeadings[level] ? motionHeadings[level] : motion.h2;
 
   return (
-    <div className={`max-w-4xl mx-auto ${textAlign.replace("text-", "text-")}`}>
-      {title && (
-        <HeadingTag
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: motionDelay, duration: 0.8 }}
-          className={
-            levelClasses[level || "h2"] +
-            " " +
-            levelMarginClasses[level || "h2"][
-              data.verticalAlign || "items-center"
-            ]
-          }
-          data-tina-field={dataTinaField}
-        >
-          {title}
-        </HeadingTag>
-      )}
+    <div className="w-full">
+      <div
+        className={`max-w-4xl mx-auto ${textAlign.replace("text-", "text-")}`}
+      >
+        {title && (
+          <HeadingTag
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: motionDelay, duration: 0.8 }}
+            className={
+              levelClasses[level || "h2"] +
+              " " +
+              levelMarginClasses[level || "h2"][
+                data.verticalAlign || "items-center"
+              ]
+            }
+            data-tina-field={dataTinaField}
+          >
+            {title}
+          </HeadingTag>
+        )}
+      </div>
     </div>
   );
 }

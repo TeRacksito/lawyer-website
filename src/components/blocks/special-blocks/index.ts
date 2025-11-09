@@ -10,6 +10,7 @@ import { personalCardBlock } from "./personal-card";
 import { counterValueBlock } from "./counter-value";
 import { interactiveMapBlock } from "./interactive-map";
 import { emergenciesBlock } from "./emergencies";
+import { faqBlock } from "./faq";
 
 export const specialBlocks: BlockRegistry = [
   callToActionBlock,
@@ -23,6 +24,7 @@ export const specialBlocks: BlockRegistry = [
   counterValueBlock,
   interactiveMapBlock,
   emergenciesBlock,
+  faqBlock,
 ];
 
 export const specialBlocksTemplates = specialBlocks.map(

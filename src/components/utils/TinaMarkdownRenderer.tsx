@@ -1,5 +1,6 @@
 import { TinaMarkdown, TinaMarkdownContent } from "tinacms/dist/rich-text";
 import React from "react";
+import Link from "next/link";
 
 interface TinaMarkdownRendererProps {
   content: any;
@@ -24,14 +25,16 @@ const tinaMarkdownComponents: Record<string, React.ComponentType<any>> = {
       {value}
     </code>
   ),
-  a: ({ children, href }: { children: React.ReactNode; href?: string }) => (
-    <a
-      href={href}
-      className="text-primary hover:underline hover:text-primary/80"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ children, url }: { children: React.ReactNode; url?: string }) => {
+    return (
+      <Link
+        href={url || "#"}
+        className="text-primary hover:underline hover:text-primary/80 cursor-pointer"
+      >
+        {children}
+      </Link>
+    );
+  },
   blockquote: ({ children }: { children: React.ReactNode }) => (
     <blockquote className="border-l-4 border-primary pl-4 italic text-gray-700">
       {children}
@@ -79,7 +82,9 @@ const tinaMarkdownComponents: Record<string, React.ComponentType<any>> = {
   ol: ({ children }: { children: React.ReactNode }) => (
     <ol className="list-decimal list-inside space-y-1">{children}</ol>
   ),
-  li: ({ children }: { children: React.ReactNode }) => <li>{children}</li>,
+  li: ({ children }: { children: React.ReactNode }) => (
+    <li className="[&>div]:inline">{children}</li>
+  ),
   bold: ({ children }: { children: string }) => {
     return <strong className="text-primary font-semibold">{children}</strong>;
   },
