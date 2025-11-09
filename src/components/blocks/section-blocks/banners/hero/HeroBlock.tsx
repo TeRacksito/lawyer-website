@@ -57,21 +57,23 @@ export default function HeroBlock({ data }: HeroBlockProps) {
         }`}
       />
 
-      <Image
-        src={backgroundImage || ""}
-        alt="Hero background"
-        fill={true}
-        priority={true}
-        quality={90}
-        className={`object-cover transition-all duration-500 ease-out ${
-          isImageLoaded ? "opacity-100 scale-100" : "opacity-1 scale-105"
-        }`}
-        style={{
-          objectPosition: `center ${clampedYShift}%`,
-        }}
-        onLoad={() => setIsImageLoaded(true)}
-        data-tina-field={tinaField(data, "backgroundImage")}
-      />
+      {backgroundImage && (
+        <Image
+          src={backgroundImage}
+          alt="Hero background"
+          fill={true}
+          priority={true}
+          quality={90}
+          className={`object-cover transition-all duration-500 ease-out ${
+            isImageLoaded ? "opacity-100 scale-100" : "opacity-1 scale-105"
+          }`}
+          style={{
+            objectPosition: `center ${clampedYShift}%`,
+          }}
+          onLoad={() => setIsImageLoaded(true)}
+          data-tina-field={tinaField(data, "backgroundImage")}
+        />
+      )}
 
       <div className="absolute inset-0 bg-black/70" />
 

@@ -51,6 +51,20 @@ export const valueCardTemplate: Template = {
       "Tarjeta individual que representa un valor o principio con icono, título y descripción"
     ),
     {
+      type: "boolean",
+      name: "value_card_full_width",
+      label: "Ancho completo",
+      description:
+        "Si está activado, la tarjeta ocupará todo el ancho disponible",
+    },
+    {
+      type: "boolean",
+      name: "value_card_simplified",
+      label: "Diseño simplificado",
+      description:
+        "Si está activado, la tarjeta tendrá un diseño más simple y compacto",
+    },
+    {
       type: "object",
       name: "icon",
       label: "Icono",

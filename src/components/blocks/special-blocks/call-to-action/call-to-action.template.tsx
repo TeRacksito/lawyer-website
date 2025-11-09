@@ -7,11 +7,11 @@ export const callToActionTemplate: Template = {
     defaultItem: {
       primaryButton: {
         text: "Solicitar Consulta Gratuita",
-        href: "/old/contact",
+        href: "/contact",
       },
       secondaryButton: {
         text: "Ver Nuestros Servicios",
-        href: "/old/services",
+        href: "/services",
       },
     },
   },

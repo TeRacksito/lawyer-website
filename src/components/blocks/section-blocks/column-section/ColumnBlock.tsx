@@ -126,24 +126,36 @@ export default function ColumnSectionBlock({
         }`}
       >
         {columns &&
-          columns.map((column, columnIndex) => (
-            // <div
-            //   key={columnIndex}
-            //   className={`flex flex-col relative ${
-            //     verticalAlign === "items-stretch" ? "h-full" : ""
-            //   }`}
-            // >
+          columns.map(
+            (column, columnIndex) =>
+              // <div
+              //   key={columnIndex}
+              //   className={`flex flex-col relative ${
+              //     verticalAlign === "items-stretch" ? "h-full" : ""
+              //   }`}
+              // >
 
-            <BlockRenderer
-              key={columnIndex}
-              blocks={column.content_blocks}
-              components={contentBlockComponents}
-              parentData={data}
-              blocksFieldName={`columns.${columnIndex}.content_blocks`}
-            />
+              column?.content_blocks && column?.content_blocks?.length > 1 ? (
+                <div key={columnIndex} className="gap-2 flex flex-col">
+                  <BlockRenderer
+                    blocks={column.content_blocks}
+                    components={contentBlockComponents}
+                    parentData={data}
+                    blocksFieldName={`columns.${columnIndex}.content_blocks`}
+                  />
+                </div>
+              ) : (
+                <BlockRenderer
+                  key={columnIndex}
+                  blocks={column.content_blocks}
+                  components={contentBlockComponents}
+                  parentData={data}
+                  blocksFieldName={`columns.${columnIndex}.content_blocks`}
+                />
+              )
 
             // </div>
-          ))}
+          )}
       </div>
     </section>
   );

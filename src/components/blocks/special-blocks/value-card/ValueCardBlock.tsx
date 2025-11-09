@@ -8,6 +8,8 @@ import * as FaIcons from "react-icons/fa6";
 
 interface ValueCardBlockProps {
   data: {
+    value_card_full_width?: boolean;
+    value_card_simplified?: boolean;
     icon?: {
       value?: string;
       fa_icon?: string;
@@ -34,6 +36,8 @@ export default function ValueCardBlock({
   motionDelay = 0,
 }: ValueCardBlockProps) {
   const {
+    value_card_full_width = false,
+    value_card_simplified = false,
     icon = {},
     value_card_title = {},
     description = {},
@@ -98,7 +102,7 @@ export default function ValueCardBlock({
 
     const descriptionElement = (
       <div
-        className={`text-base-content/80 prose prose-sm max-w-none ${descriptionAlign}`}
+        className={`text-base-content/80 prose prose-sm max-w-none ${descriptionAlign} ${value_card_simplified ? "mt-0" : ""}`}
         data-tina-field={tinaField(description, "value")}
       >
         <TinaMarkdownRenderer content={descriptionValue} />
@@ -138,13 +142,31 @@ export default function ValueCardBlock({
     );
   };
 
+  if (value_card_simplified) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: motionDelay, duration: 0.6 }}
+        className={`${value_card_full_width ? "w-full" : ""}`}
+        data-tina-field={dataTinaField}
+      >
+        <div>{renderContent()}</div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: motionDelay, duration: 0.6 }}
-      className={`card ${bgColor} shadow-lg hover:shadow-xl transition-shadow max-w-4xl mx-auto`}
+      className={`card ${bgColor} shadow-lg hover:shadow-xl transition-shadow max-w-4xl ${
+        value_card_full_width ? "w-full" : "mx-auto"
+      }`}
+      data-tina-field={dataTinaField}
     >
       <div className="card-body">{renderContent()}</div>
     </motion.div>
