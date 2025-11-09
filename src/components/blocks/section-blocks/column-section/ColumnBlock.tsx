@@ -1,5 +1,6 @@
 "use client";
 
+import { getThemeProps } from "@/components/utils/ThemeAttribute";
 import BlockRenderer from "../../BlocksRenderer";
 import { contentBlockComponents } from "../../content-blocks";
 
@@ -8,6 +9,8 @@ export interface ColumnSectionData {
 }
 
 export interface ColumnSectionBlockData {
+  theme?: "parent" | "dark" | "light";
+  column_rounded_card?: boolean;
   column_content_blocks?: {
     column_content_blocks_list?: any[];
   }[];
@@ -27,13 +30,15 @@ export default function ColumnSectionBlock({
   dataTinaField,
 }: ColumnSectionBlockProps) {
   const {
+    theme,
+    column_rounded_card,
     column_content_blocks,
     columns = [],
     show_divider = false,
     verticalAlign = "items-start",
     max_columns = 2,
   } = data;
-  const columnCount = Math.min(max_columns, columns.length || 2);
+  const columnCount = Math.min(max_columns, columns?.length || 2);
 
   const getGridColsClass = (count: number): string => {
     const colsMap: Record<number, string> = {
@@ -90,33 +95,44 @@ export default function ColumnSectionBlock({
 
   return (
     <>
-      <section>
-        {column_content_blocks && column_content_blocks.map((_, index) => (
-          <BlockRenderer
-            key={index}
-            blocks={column_content_blocks[index].column_content_blocks_list}
-            components={contentBlockComponents}
-            parentData={data}
-            blocksFieldName={`column_content_blocks.${index}.column_content_blocks_list`}
-          />
-        ))}
+      <section
+        {...getThemeProps(theme)}
+        className={`${
+          column_rounded_card
+            ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200 py-5"
+            : "px-6 py-3"
+        } my-5`}
+      >
+        {column_content_blocks &&
+          column_content_blocks.map((_, index) => (
+            <BlockRenderer
+              key={index}
+              blocks={column_content_blocks[index].column_content_blocks_list}
+              components={contentBlockComponents}
+              parentData={data}
+              blocksFieldName={`column_content_blocks.${index}.column_content_blocks_list`}
+            />
+          ))}
         {show_divider && <style>{getDividerStyles(columnCount)}</style>}
         <div
           id={gridId}
           className={`grid ${getGridColsClass(
             columnCount
-          )} gap-6 px-6 py-8 max-w-4xl mx-auto ${verticalAlign}`}
+          )} gap-6 px-6 py-8 ${verticalAlign} ${
+            column_rounded_card ? "" : "max-w-6xl mx-auto"
+          }`}
         >
-          {columns.map((column, columnIndex) => (
-            <div key={columnIndex} className="flex flex-col relative">
-              <BlockRenderer
-                blocks={column.content_blocks}
-                components={contentBlockComponents}
-                parentData={data}
-                blocksFieldName={`columns.${columnIndex}.content_blocks`}
-              />
-            </div>
-          ))}
+          {columns &&
+            columns.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex flex-col relative">
+                <BlockRenderer
+                  blocks={column.content_blocks}
+                  components={contentBlockComponents}
+                  parentData={data}
+                  blocksFieldName={`columns.${columnIndex}.content_blocks`}
+                />
+              </div>
+            ))}
         </div>
       </section>
     </>

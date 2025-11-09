@@ -145,10 +145,12 @@ blocks:
           - special_blocks:
               - special_blocks_list:
                   - interactive_map_collaborators:
-                      - collaborator_name: test
-                        collaborator_specialty: test
-                        collaborator_mainFocus: test
-                        collaborator_experience: test
+                      - collaborator_name: Carlos Mendoza López
+                        collaborator_specialty: Derecho Mercantil
+                        collaborator_mainFocus: >-
+                          Experto en fusiones, adquisiciones y derecho
+                          societario
+                        collaborator_experience: 12 años
                         collaborator_cities:
                           - Madrid
                           - Barcelona
@@ -156,5 +158,75 @@ blocks:
                     _template: interactive_map
             _template: special_block
     _template: basic_section
+  - theme: dark
+    column_rounded_card: true
+    column_content_blocks:
+      - column_content_blocks_list:
+          - title: ¿Por qué elegir nuestra red?
+            level: h2
+            textAlign: text-center
+            _template: title
+    show_divider: false
+    max_columns: 3
+    verticalAlign: items-start
+    columns:
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - icon:
+                      textAlign: text-center
+                      value: "\U0001F606"
+                      fa_icon: FaLocationDot
+                    value_card_title:
+                      textAlign: text-center
+                      value: Conocimiento Local
+                    description:
+                      textAlign: text-center
+                      value: >
+                        Cada colaborador conoce profundamente las
+                        particularidades legales y judiciales de su región.
+                    bgColor: bg-base-200
+                    disposition: top
+                    _template: value_card
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - icon:
+                      textAlign: text-center
+                      value: "\U0001F606"
+                      fa_icon: FaRegCircleCheck
+                    value_card_title:
+                      textAlign: text-center
+                      value: Calidad Garantizada
+                    description:
+                      textAlign: text-center
+                      value: >
+                        Todos nuestros colaboradores han sido cuidadosamente
+                        seleccionados por su experiencia y ética profesional.
+                    bgColor: bg-base-200
+                    disposition: top
+                    _template: value_card
+            _template: special_block
+      - content_blocks:
+          - special_blocks:
+              - special_blocks_list:
+                  - icon:
+                      textAlign: text-center
+                      value: "\U0001F606"
+                      fa_icon: FaBolt
+                    value_card_title:
+                      textAlign: text-center
+                      value: Valor
+                    description:
+                      textAlign: text-center
+                      value: >
+                        Network integrado que permite respuestas inmediatas y
+                        coordinación eficiente en todo el territorio.
+                    bgColor: bg-base-200
+                    disposition: top
+                    _template: value_card
+            _template: special_block
+    _template: column
 ---
 

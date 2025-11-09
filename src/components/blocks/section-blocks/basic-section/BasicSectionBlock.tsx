@@ -33,9 +33,9 @@ export default function BasicSectionBlock({
         : {})}
       className={`${
         basic_section_rounded_card
-          ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200"
-          : "px-6"
-      } py-16`}
+          ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200 py-5"
+          : "px-6 py-3"
+      } my-5`}
     >
       {basic_section_content_blocks &&
         basic_section_content_blocks.map((_, index) => (

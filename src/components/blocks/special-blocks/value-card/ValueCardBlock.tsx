@@ -4,10 +4,13 @@ import { motion } from "framer-motion";
 import { tinaField } from "tinacms/dist/react";
 import { TinaMarkdownRenderer } from "@/components/utils/TinaMarkdownRenderer";
 
+import * as FaIcons from "react-icons/fa6";
+
 interface ValueCardBlockProps {
   data: {
     icon?: {
       value?: string;
+      fa_icon?: string;
       textAlign?: string;
     };
     value_card_title?: {
@@ -45,15 +48,44 @@ export default function ValueCardBlock({
   const descriptionValue = description?.value;
   const descriptionAlign = description?.textAlign || "text-center";
 
+  const IconComponent = icon?.fa_icon
+    ? (FaIcons as Record<string, React.ComponentType<{ className?: string }>>)[
+        icon.fa_icon
+      ]
+    : null;
+
+  const getIconContainerClass = (align: string) => {
+    const flexAlign =
+      align === "text-center"
+        ? "justify-center"
+        : align === "text-left"
+        ? "justify-start"
+        : "justify-end";
+    return `flex items-center ${flexAlign}`;
+  };
+
   const renderContent = () => {
-    const iconElement = iconValue && (
-      <div
-        className={`text-4xl flex-shrink-0 ${iconAlign}`}
-        data-tina-field={tinaField(icon, "value")}
-      >
-        {iconValue}
-      </div>
-    );
+    const iconElement =
+      (IconComponent && (
+        <div
+          className={`text-4xl flex-shrink-0 ${getIconContainerClass(
+            iconAlign
+          )}`}
+          data-tina-field={tinaField(icon, "fa_icon")}
+        >
+          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <IconComponent className="w-9 h-9 text-primary" />
+          </div>
+        </div>
+      )) ||
+      (iconValue && (
+        <div
+          className={`text-4xl flex-shrink-0 ${iconAlign}`}
+          data-tina-field={tinaField(icon, "value")}
+        >
+          {iconValue}
+        </div>
+      ));
 
     const titleElement = (
       <h3

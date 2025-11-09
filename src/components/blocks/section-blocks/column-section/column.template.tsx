@@ -3,6 +3,7 @@ import { verticalAlignField } from "@/components/utils/template-fields/vertical-
 import React from "react";
 import { Template } from "tinacms";
 import { contentBlockTemplates } from "../../content-blocks";
+import { themeField } from "@/components/utils/template-fields/theme.field";
 
 React;
 
@@ -32,6 +33,13 @@ export const columnSectionTemplate: Template = {
         "por la cantidad de items que agregues en la lista de columnas. Cada columna puede contener bloques de contenido normal, " +
         "permitiendo crear layouts más complejos y visualmente interesantes."
     ),
+    themeField,
+    {
+      type: "boolean",
+      name: "column_rounded_card",
+      label: "Tipo Tarjeta Redondeada",
+      description: "Si la sección debe ser una tarjeta redondeada",
+    },
     {
       type: "object",
       name: "column_content_blocks",

@@ -333,3 +333,7 @@ When working with this system, search for:
 - **"data-tina-field"** - Visual editing binding
 
 These patterns appear consistently across all blocks and utilities.
+
+
+It's important to know that any text inside a TinaCMS field on the editor as a custom component,
+will not wrap automatically. You need to add this styling `leading-relaxed whitespace-pre-line`

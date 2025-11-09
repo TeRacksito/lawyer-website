@@ -8,16 +8,17 @@ import { createRoot } from "react-dom/client";
 React;
 
 interface EmojiTextInputProps {
+  field: {
+    label?: string;
+    description?: string;
+    namespace: string[];
+  };
   input: {
     name: string;
     value: string;
-    onChange: (value: string) => void;
-    onBlur: () => void;
-    onFocus: () => void;
-  };
-  field?: {
-    label?: string;
-    description?: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur: (event?: React.FocusEvent<HTMLInputElement>) => void;
+    onFocus: (event?: React.FocusEvent<HTMLInputElement>) => void;
   };
 }
 
@@ -69,21 +70,25 @@ function ShadowWrapper({
  */
 export default function EmojiTextInput({ input, field }: EmojiTextInputProps) {
   const [showPicker, setShowPicker] = useState(false);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleEmojiSelect = (emojiData: { emoji: string }) => {
-    input.onChange(input.value + emojiData.emoji);
+    const newValue = input.value + emojiData.emoji;
+    const event = {
+      target: { value: newValue },
+    } as React.ChangeEvent<HTMLInputElement>;
+    input.onChange(event);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    input.onChange(e.target.value);
+    input.onChange(e);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node)
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
       ) {
         setShowPicker(false);
       }
@@ -99,30 +104,50 @@ export default function EmojiTextInput({ input, field }: EmojiTextInputProps) {
   }, [showPicker]);
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2 items-center">
-        <div className="flex-1">
+    <div
+      ref={containerRef}
+      className="flex flex-col gap-4 bg-gradient-to-br from-base-50 to-base-100 p-6 rounded-xl border border-base-200 shadow-sm"
+    >
+      {(field?.label || field?.description) && (
+        <div className="pb-4 border-b border-base-300/50">
+          {field?.label && (
+            <h3 className="text-sm font-semibold text-base-content mb-1">
+              {field.label}
+            </h3>
+          )}
+          {field?.description && (
+            <p className="text-xs text-base-content/70 leading-relaxed">
+              {field.description}
+            </p>
+          )}
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <div className="relative">
           <input
             {...input}
             type="text"
             value={input.value || ""}
             onChange={handleInputChange}
-            placeholder={field?.description || "Enter text or select emoji"}
-            className="input input-bordered w-full"
+            placeholder="Ingresa texto o selecciona emoji"
+            className="input input-bordered w-full p-2"
           />
+          <button
+            type="button"
+            onClick={() => setShowPicker(!showPicker)}
+            className={`absolute right-3 top-1/2 -translate-y-1/2 text-2xl transition-transform duration-200 ${
+              showPicker ? "scale-125" : "hover:scale-110"
+            }`}
+            title="Abrir selector de emoji"
+          >
+            😊
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowPicker(!showPicker)}
-          className="btn btn-icon btn-outline"
-          title="Toggle emoji picker"
-        >
-          😊
-        </button>
       </div>
 
       {showPicker && (
-        <div ref={pickerRef} className="relative">
+        <div className="pt-4 border-t border-base-300">
           <ShadowWrapper>
             <EmojiPicker
               onEmojiClick={handleEmojiSelect}
