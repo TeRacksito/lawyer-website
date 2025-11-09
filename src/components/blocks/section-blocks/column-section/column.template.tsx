@@ -18,6 +18,9 @@ export const columnSectionTemplate: Template = {
       };
     },
     defaultItem: {
+      theme: "parent",
+      column_rounded_card: false,
+      column_compact_width: false,
       column_content_blocks: [],
       show_divider: false,
       verticalAlign: "items-start",
@@ -39,6 +42,12 @@ export const columnSectionTemplate: Template = {
       name: "column_rounded_card",
       label: "Tipo Tarjeta Redondeada",
       description: "Si la sección debe ser una tarjeta redondeada",
+    },
+    {
+      type: "boolean",
+      name: "column_compact_width",
+      label: "Ancho compacto",
+      description: "Si está activado, reduce el ancho máximo de la sección",
     },
     {
       type: "object",

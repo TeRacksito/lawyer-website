@@ -18,7 +18,7 @@ export interface SpecialBlockProps {
   motionDelay?: number;
 }
 
-export default function SpecialBlock({
+function WrapperSpecialBlock({
   data,
   dataTinaField,
   motionDelay,
@@ -26,12 +26,7 @@ export default function SpecialBlock({
   const { theme, special_blocks } = data;
 
   return (
-    <div
-      {...getThemeProps(theme)}
-      {...(special_blocks === null
-        ? { "data-tina-field": dataTinaField, className: "p-5" }
-        : {})}
-    >
+    <>
       {special_blocks &&
         special_blocks.map((_, index) => (
           <BlockRenderer
@@ -42,6 +37,48 @@ export default function SpecialBlock({
             blocksFieldName={`special_blocks.${index}.special_blocks_list`}
           />
         ))}
-    </div>
+    </>
+  );
+}
+
+export default function SpecialBlock({
+  data,
+  dataTinaField,
+  motionDelay,
+}: SpecialBlockProps) {
+  const { theme, special_blocks } = data;
+
+  const themeObject = getThemeProps(theme);
+
+  // return themeObject || special_blocks === null ? (
+  //   <div
+  //     {...themeObject}
+  //     {...(special_blocks === null
+  //       ? { "data-tina-field": dataTinaField, className: "p-5" }
+  //       : {})}
+  //   >
+  //     div
+  //     <WrapperSpecialBlock
+  //       data={data}
+  //       dataTinaField={dataTinaField}
+  //       motionDelay={motionDelay}
+  //     />
+  //   </div>
+  // ) : (
+  //   <>
+  //     no-div
+  //     <WrapperSpecialBlock
+  //       data={data}
+  //       dataTinaField={dataTinaField}
+  //       motionDelay={motionDelay}
+  //     />
+  //   </>
+  // );
+  return (
+    <WrapperSpecialBlock
+      data={data}
+      dataTinaField={dataTinaField}
+      motionDelay={motionDelay}
+    />
   );
 }

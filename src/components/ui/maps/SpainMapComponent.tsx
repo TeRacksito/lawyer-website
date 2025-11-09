@@ -300,13 +300,13 @@ export default function SpainMapComponent({
 
   // Get collaborators for a specific city
   const getCollaboratorsForCity = (cityName: string) => {
-    return collaborators.filter((collaborator) =>
+    return collaborators?.filter((collaborator) =>
       collaborator.collaborator_cities?.includes(cityName)
     );
   };
 
   const citiesWithCollaborators = SPANISH_CITIES.filter((city) => {
-    return getCollaboratorsForCity(city.name).length > 0;
+    return getCollaboratorsForCity(city.name)?.length > 0;
   });
 
   return (
@@ -705,7 +705,7 @@ export default function SpainMapComponent({
           </motion.div>
         )}
 
-        {!selectedCity && (
+        {
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -715,7 +715,7 @@ export default function SpainMapComponent({
           >
             Haz clic en cualquier ciudad del mapa para filtrar por región
           </motion.p>
-        )}
+        }
 
         <div className="flex items-center justify-between mb-6">
           <h4 className="text-xl font-semibold">
@@ -742,18 +742,20 @@ export default function SpainMapComponent({
         >
           {(() => {
             const collaboratorsToShow = selectedCity
-              ? collaborators.filter((collaborator) =>
+              ? collaborators?.filter((collaborator) =>
                   collaborator.collaborator_cities?.includes(selectedCity)
                 )
               : collaborators;
 
-            return collaboratorsToShow.map((collaborator, idx) => (
+            return collaboratorsToShow?.map((collaborator, idx) => (
               <CollaboratorCard
                 key={collaborator.collaborator_name}
                 collaborator={collaborator}
                 mode={selectedCity ? "extended" : "minified"}
                 animationDelay={idx * 0.1}
                 onContact={handleCollaboratorContact}
+                onSelectCity={setSelectedCity}
+                selectedCity={selectedCity}
                 dataTinaField={`${dataTinaField}.interactive_map_collaborators.${idx}`}
               />
             ));

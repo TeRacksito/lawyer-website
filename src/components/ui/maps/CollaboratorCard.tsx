@@ -8,6 +8,8 @@ export interface CollaboratorCardProps {
   mode: "minified" | "extended";
   animationDelay?: number;
   onContact?: (collaborator: Collaborator) => void;
+  onSelectCity?: (city: string) => void;
+  selectedCity?: string | null;
   dataTinaField?: string;
 }
 
@@ -16,6 +18,8 @@ export default function CollaboratorCard({
   mode,
   animationDelay = 0,
   onContact,
+  onSelectCity,
+  selectedCity,
   dataTinaField,
 }: CollaboratorCardProps) {
   const isExtended = mode === "extended";
@@ -32,71 +36,97 @@ export default function CollaboratorCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: animationDelay, duration: 0.5 }}
-      className={`card bg-base-200 shadow-sm hover:shadow-md transition-shadow duration-300 ${
-        isExtended ? "card-side md:card-normal" : ""
+      className={`card bg-base-100 border border-base-300 shadow-md hover:shadow-lg transition-all duration-300 ${
+        isExtended ? "" : ""
       }`}
       data-tina-field={dataTinaField}
     >
-      <div className={`card-body ${isExtended ? "p-6 md:p-4" : "p-4"}`}>
-        {/* Extended view with photo */}
-        {isExtended && (
-          <div className="flex items-start gap-4 md:flex-col md:gap-2">
-            <figure className="flex-shrink-0 md:self-center">
-              <img
-                src="https://placehold.co/600x400"
-                alt={collaborator.collaborator_name}
-                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover bg-base-300"
-              />
-            </figure>
-            <div className="flex-1 md:flex-none md:text-center">
-              <h5 className="card-title text-lg md:text-xl text-primary mb-2">
-                {collaborator.collaborator_name}
-              </h5>
-              <div className="text-xs text-base-content/60 mb-2">
-                {collaborator.collaborator_experience}
-              </div>
-            </div>
+      {/* Extended view with photo */}
+      {isExtended && collaborator.collaborator_photo && (
+        <figure className="relative h-48 bg-gradient-to-b from-primary/10 to-transparent overflow-hidden">
+          <img
+            src={collaborator.collaborator_photo}
+            alt={collaborator.collaborator_name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute bottom-3 right-3 ">
+            <span className="text-xs badge badge-lg badge-primary font-semibold shadow-lg">
+              +{collaborator.collaborator_experience} años
+            </span>
           </div>
-        )}
+        </figure>
+      )}
 
-        {/* Minified view header */}
-        {!isExtended && (
-          <h5 className="card-title text-base text-primary mb-2">
-            {collaborator.collaborator_name}
-          </h5>
-        )}
+      <div className={`card-body ${isExtended ? "p-6" : "p-5"}`}>
+        {/* Header with name and experience */}
+        <div className={`${isExtended ? "mb-4" : "mb-3"}`}>
+          <div className="flex items-start justify-between gap-3">
+            <h5 className="card-title text-lg md:text-xl text-primary mb-3 flex-1">
+              {collaborator.collaborator_name}
+            </h5>
+            {isExtended && !collaborator.collaborator_photo && (
+              <div className="badge badge-lg badge-primary font-semibold mt-1">
+                <span className="text-xs">
+                  +{collaborator.collaborator_experience} años
+                </span>
+              </div>
+            )}
+          </div>
+          {!isExtended && (
+            <div className="flex items-center gap-2">
+              <span className="badge badge-primary badge-sm font-semibold">
+                +{collaborator.collaborator_experience} años
+              </span>
+              <span className="text-xs text-base-content/60">experiencia</span>
+            </div>
+          )}
+        </div>
 
         {/* Location badges */}
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <div className="w-full text-xs font-semibold text-base-content/60 uppercase tracking-wide">
+            Localizaciones:
+          </div>
           {collaborator.collaborator_cities?.map((city, cityIdx) => (
-            <span key={cityIdx} className="badge badge-outline badge-sm">
+            <span
+              key={cityIdx}
+              className={`badge badge-sm text-xs ${
+                selectedCity === city
+                  ? "badge-primary"
+                  : "badge-outline cursor-pointer"
+              }`}
+              onClick={() => onSelectCity?.(city)}
+              title={`Seleccionar ciudad ${city}`}
+            >
               {city}
             </span>
           ))}
         </div>
 
         {/* Specialty information */}
-        <div className="space-y-2">
-          <div className={`text-sm ${isExtended ? "mb-3" : "mb-2"}`}>
-            <span className="text-base-content/70">Área principal: </span>
-            <span className="font-medium text-base-content">
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-primary/5 to-transparent rounded-lg p-3">
+            <div className="text-xs font-semibold text-base-content/60 uppercase tracking-wide mb-1">
+              Área principal
+            </div>
+            <div className="text-sm font-medium text-base-content">
               {collaborator.collaborator_specialty}
-            </span>
+            </div>
           </div>
 
           {/* Extended description for extended view */}
           {isExtended && (
-            <div className="text-sm text-base-content/80 leading-relaxed">
+            <div className="text-sm text-base-content/75 leading-relaxed">
               {collaborator.collaborator_mainFocus}
             </div>
           )}
 
           {/* Subtle disclaimer */}
-          <div className="text-xs text-base-content/50 italic">
-            {isExtended
-              ? "Capacitado para asesorar en múltiples áreas del derecho"
-              : "Asesoramiento integral disponible"}
-          </div>
+          {isExtended && (
+            <div className="text-xs text-base-content/50 italic">
+              {collaborator.collaborator_footer}
+            </div>
+          )}
         </div>
 
         {/* Contact action for extended view */}

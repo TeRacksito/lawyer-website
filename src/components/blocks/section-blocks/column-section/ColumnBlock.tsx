@@ -11,6 +11,7 @@ export interface ColumnSectionData {
 export interface ColumnSectionBlockData {
   theme?: "parent" | "dark" | "light";
   column_rounded_card?: boolean;
+  column_compact_width?: boolean;
   column_content_blocks?: {
     column_content_blocks_list?: any[];
   }[];
@@ -32,6 +33,7 @@ export default function ColumnSectionBlock({
   const {
     theme,
     column_rounded_card,
+    column_compact_width = false,
     column_content_blocks,
     columns = [],
     show_divider = false,
@@ -94,47 +96,55 @@ export default function ColumnSectionBlock({
   };
 
   return (
-    <>
-      <section
-        {...getThemeProps(theme)}
-        className={`${
+    <section
+      {...getThemeProps(theme)}
+      className={`${
+        column_rounded_card
+          ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200 py-5"
+          : "px-6 py-3"
+      } my-5`}
+    >
+      {column_content_blocks &&
+        column_content_blocks.map((_, index) => (
+          <BlockRenderer
+            key={index}
+            blocks={column_content_blocks[index].column_content_blocks_list}
+            components={contentBlockComponents}
+            parentData={data}
+            blocksFieldName={`column_content_blocks.${index}.column_content_blocks_list`}
+          />
+        ))}
+      {show_divider && <style>{getDividerStyles(columnCount)}</style>}
+      <div
+        id={gridId}
+        className={`grid ${getGridColsClass(
+          columnCount
+        )} gap-6 px-6 my-8 ${verticalAlign} ${
           column_rounded_card
-            ? "card rounded-2xl px-8 shadow-lg max-w-6xl mx-auto bg-base-200 py-5"
-            : "px-6 py-3"
-        } my-5`}
+            ? ""
+            : `${column_compact_width ? "max-w-4xl" : "max-w-6xl"} mx-auto`
+        }`}
       >
-        {column_content_blocks &&
-          column_content_blocks.map((_, index) => (
+        {columns &&
+          columns.map((column, columnIndex) => (
+            // <div
+            //   key={columnIndex}
+            //   className={`flex flex-col relative ${
+            //     verticalAlign === "items-stretch" ? "h-full" : ""
+            //   }`}
+            // >
+
             <BlockRenderer
-              key={index}
-              blocks={column_content_blocks[index].column_content_blocks_list}
+              key={columnIndex}
+              blocks={column.content_blocks}
               components={contentBlockComponents}
               parentData={data}
-              blocksFieldName={`column_content_blocks.${index}.column_content_blocks_list`}
+              blocksFieldName={`columns.${columnIndex}.content_blocks`}
             />
+
+            // </div>
           ))}
-        {show_divider && <style>{getDividerStyles(columnCount)}</style>}
-        <div
-          id={gridId}
-          className={`grid ${getGridColsClass(
-            columnCount
-          )} gap-6 px-6 py-8 ${verticalAlign} ${
-            column_rounded_card ? "" : "max-w-6xl mx-auto"
-          }`}
-        >
-          {columns &&
-            columns.map((column, columnIndex) => (
-              <div key={columnIndex} className="flex flex-col relative">
-                <BlockRenderer
-                  blocks={column.content_blocks}
-                  components={contentBlockComponents}
-                  parentData={data}
-                  blocksFieldName={`columns.${columnIndex}.content_blocks`}
-                />
-              </div>
-            ))}
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

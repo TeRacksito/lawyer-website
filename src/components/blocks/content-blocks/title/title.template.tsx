@@ -1,8 +1,17 @@
-import { truncateText } from "@/components/utils/truncate";
-import { Template } from "tinacms";
-import { textAlignField } from "@/components/utils/template-fields/text-align.field";
 import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
 import { getTemplateWarningField } from "@/components/utils/template-fields/template-warning";
+import { textAlignField } from "@/components/utils/template-fields/text-align.field";
+import { truncateText } from "@/components/utils/truncate";
+import React from "react";
+import {
+  LuAlignCenterHorizontal,
+  LuAlignEndHorizontal,
+  LuAlignStartHorizontal,
+  LuPanelBottomClose,
+} from "react-icons/lu";
+import { Template } from "tinacms";
+
+React;
 
 export const titleTemplate: Template = {
   name: "title",
@@ -19,6 +28,7 @@ export const titleTemplate: Template = {
       title: "Un Título Atractivo",
       level: "h2",
       textAlign: "text-center",
+      verticalAlign: "items-center",
     },
   },
   fields: [
@@ -62,5 +72,28 @@ export const titleTemplate: Template = {
       ],
     },
     textAlignField,
+    {
+      type: "string",
+      name: "verticalAlign",
+      label: "Alineación vertical",
+      description: "Selecciona la alineación vertical para el texto.",
+      options: [
+        {
+          value: "items-start",
+          label: "Arriba",
+          icon: () => <LuAlignStartHorizontal />,
+        },
+        {
+          value: "items-center",
+          label: "Centro",
+          icon: () => <LuAlignCenterHorizontal />,
+        },
+        {
+          value: "items-end",
+          label: "Abajo",
+          icon: () => <LuAlignEndHorizontal />,
+        },
+      ],
+    },
   ],
 };

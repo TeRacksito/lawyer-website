@@ -136,16 +136,11 @@ export const SPANISH_CITIES: City[] = [
     description: "Derecho turístico e inmobiliario",
   },
   {
-    name: "Tenerife",
-    coordinates: [-16.5129, 28.2916],
-    description: "Derecho canario",
-  },
-  {
     name: "San Sebastián",
     coordinates: [-1.9812, 43.3183],
     description: "Derecho gastronómico y cultural",
   },
-];
+].sort((a, b) => a.name.localeCompare(b.name)) as City[];
 
 export const getCityOptions = () => {
   return SPANISH_CITIES.map((city) => ({

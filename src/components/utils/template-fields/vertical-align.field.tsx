@@ -3,6 +3,7 @@ import {
   LuAlignCenterHorizontal,
   LuAlignEndHorizontal,
   LuAlignStartHorizontal,
+  LuPanelBottomClose,
 } from "react-icons/lu";
 import { Template } from "tinacms";
 
@@ -28,6 +29,11 @@ export const verticalAlignField: Template["fields"][number] = {
       value: "items-end",
       label: "Abajo",
       icon: () => <LuAlignEndHorizontal />,
+    },
+    {
+      value: "items-stretch",
+      label: "Mismo tamaño",
+      icon: () => <LuPanelBottomClose />,
     },
   ],
 };

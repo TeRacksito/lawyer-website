@@ -17,7 +17,9 @@ blocks:
             proseSize: prose-xl
             _template: paragraph
     _template: basic_section
-  - column_content_blocks:
+  - theme: parent
+    column_compact_width: true
+    column_content_blocks:
       - column_content_blocks_list:
           - title: Equipo Central
             level: h2
@@ -25,7 +27,7 @@ blocks:
             _template: title
     show_divider: false
     max_columns: 2
-    verticalAlign: items-start
+    verticalAlign: items-stretch
     columns:
       - content_blocks:
           - special_blocks:
@@ -76,10 +78,12 @@ blocks:
             proseSize: prose-lg
             _template: paragraph
     _template: basic_section
-  - column_content_blocks: []
+  - column_rounded_card: false
+    column_compact_width: false
+    column_content_blocks: []
     show_divider: false
     max_columns: 4
-    verticalAlign: items-start
+    verticalAlign: items-stretch
     columns:
       - content_blocks:
           - special_blocks:
@@ -145,12 +149,14 @@ blocks:
           - special_blocks:
               - special_blocks_list:
                   - interactive_map_collaborators:
-                      - collaborator_name: Carlos Mendoza López
+                      - collaborator_photo: /images/cross.webp
+                        collaborator_name: Carlos Mendoza López
                         collaborator_specialty: Derecho Mercantil
                         collaborator_mainFocus: >-
                           Experto en fusiones, adquisiciones y derecho
                           societario
-                        collaborator_experience: 12 años
+                        collaborator_experience: 12
+                        collaborator_footer: Frase que diría este colaborador
                         collaborator_cities:
                           - Madrid
                           - Barcelona
@@ -165,10 +171,11 @@ blocks:
           - title: ¿Por qué elegir nuestra red?
             level: h2
             textAlign: text-center
+            verticalAlign: items-end
             _template: title
     show_divider: false
     max_columns: 3
-    verticalAlign: items-start
+    verticalAlign: items-stretch
     columns:
       - content_blocks:
           - special_blocks:

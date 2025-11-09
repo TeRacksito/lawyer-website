@@ -29,8 +29,20 @@ export const interactiveMapTemplate: Template = {
         itemProps: (item: any) => ({
           label: item?.collaborator_name || "Nuevo Colaborador",
         }),
+        defaultItem: {
+          collaborator_name: "Nombre del Colaborador",
+          collaborator_specialty: "Especialidad",
+          collaborator_mainFocus: "Enfoque Principal",
+          collaborator_experience: 0,
+        },
       },
       fields: [
+        {
+          type: "image",
+          name: "collaborator_photo",
+          label: "Foto",
+          description: "Foto del colaborador",
+        },
         {
           type: "string",
           name: "collaborator_name",
@@ -50,24 +62,25 @@ export const interactiveMapTemplate: Template = {
           description: "Descripción breve del enfoque profesional",
         },
         {
-          type: "string",
+          type: "number",
           name: "collaborator_experience",
           label: "Experiencia",
           description: "Años de experiencia (ej: '15 años de experiencia')",
         },
         {
           type: "string",
-          name: "collaborator_cities",
-          label: "Ciudad",
-          description: "Ciudad donde trabaja el colaborador",
-          list: true,
-          options: getCityOptions(),
+          name: "collaborator_footer",
+          label: "Información a pie de tarjeta",
+          description:
+            "Texto adicional que aparecerá en el pie de la tarjeta del colaborador",
         },
         {
-          type: "image",
-          name: "collaborator_photo",
-          label: "Foto",
-          description: "Foto del colaborador",
+          type: "string",
+          name: "collaborator_cities",
+          label: "Ciudades",
+          description: "Ciudades donde trabaja el colaborador",
+          list: true,
+          options: getCityOptions(),
         },
       ],
     },

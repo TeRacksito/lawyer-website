@@ -4,12 +4,13 @@ import SpainMapComponent from "@/components/ui/maps/SpainMapComponent";
 import { motion } from "framer-motion";
 
 export interface Collaborator {
+  collaborator_photo?: string;
   collaborator_name?: string;
   collaborator_specialty?: string;
   collaborator_mainFocus?: string;
   collaborator_experience?: string;
+  collaborator_footer?: string;
   collaborator_cities?: string[];
-  collaborator_photo?: string;
 }
 
 interface InteractiveMapBlockProps {
