@@ -3,9 +3,9 @@ draft: false
 title: El blog jurídico
 blocks:
   - variant: heroTitle
-    backgroundImage: /images/cross.webp
+    backgroundImage: /images/blog.webp
     fullScreen: false
-    yShift: 50
+    yShift: 55
     title: El Blog Jurídico
     subtitle: Entérate de nuestros últimos casos y las últimas noticias
     _template: hero
@@ -13,7 +13,11 @@ blocks:
     basic_section_content_blocks:
       - basic_section_content_blocks_list:
           - special_blocks:
-              - {}
+              - special_blocks_list:
+                  - placeholder: Buscar en el blog...
+                    noResultsText: No se encontraron resultados
+                    showResultCount: true
+                    _template: blog_searcher
             _template: special_block
     _template: basic_section
 ---
