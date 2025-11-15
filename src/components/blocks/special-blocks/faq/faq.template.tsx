@@ -8,11 +8,24 @@ export const faqTemplate: Template = {
     defaultItem: {
       title: "Preguntas Frecuentes",
       description: "Encuentra respuestas a las preguntas más comunes",
-      enableSearch: true,
-      items: [
+      faq_enableSearch: true,
+      faq_items: [
         {
-          question: "¿Cuál es tu pregunta?",
-          answer: "Esta es la respuesta a tu pregunta.",
+          faq_item_question: "¿Cuál es tu pregunta?",
+          faq_item_answer: {
+            type: "root",
+            children: [
+              {
+                type: "p",
+                children: [
+                  {
+                    type: "text",
+                    text: "Esta es la respuesta a tu pregunta.",
+                  },
+                ],
+              },
+            ],
+          },
         },
       ],
     },

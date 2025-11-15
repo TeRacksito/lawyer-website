@@ -32,7 +32,7 @@ export default function FaqBlock({
 }: FaqBlockProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeHash, setActiveHash] = useState("");
-  const { faq_items = [], faq_enableSearch = true } = data;
+  const { faq_items = [], faq_enableSearch = true } = data || {};
 
   useEffect(() => {
     const handleHashChange = () => {

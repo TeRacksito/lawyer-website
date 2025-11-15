@@ -107,6 +107,12 @@ const NON_TEXT_KEYS = [
 
 /* --- helpers --- */
 
+function removeDiacritics(s = "") {
+  return String(s)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 function looksLikeNonTextValue(v) {
   if (typeof v !== "string") return false;
   const s = v.trim();
@@ -120,11 +126,13 @@ function looksLikeNonTextValue(v) {
 }
 
 function cleanString(s = "") {
-  return String(s)
-    .replace(/<\/?[^>]+(>|$)/g, "") // strip HTML
-    .replace(/[#_*`>~\-]{1,}/g, " ") // strip markdown-ish markers
-    .replace(/\s+/g, " ")
-    .trim();
+  return removeDiacritics(
+    String(s)
+      .replace(/<\/?[^>]+(>|$)/g, "") // strip HTML
+      .replace(/[#_*`>~\-]{1,}/g, " ") // strip markdown-ish markers
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
 
 /**
@@ -189,6 +197,91 @@ function pathToSlug(filepath) {
   return "/" + rel.replace(/\\/g, "/");
 }
 
+/**
+ * Extract blog-specific metadata from the blog_header block
+ */
+function extractBlogMetadata(blocks) {
+  const metadata = {};
+
+  if (!blocks || !Array.isArray(blocks)) return metadata;
+
+  const blogHeader = blocks.find((block) => block._template === "blog_header");
+
+  if (!blogHeader) return metadata;
+
+  if (blogHeader.blog_header_title) {
+    metadata.headerTitle = cleanString(blogHeader.blog_header_title);
+  }
+
+  if (blogHeader.blog_header_subtitle) {
+    metadata.headerSubtitle = cleanString(blogHeader.blog_header_subtitle);
+  }
+
+  // Extract author information
+  if (blogHeader.blog_header_author) {
+    const author = blogHeader.blog_header_author;
+    if (
+      author.blog_header_author_name ||
+      author.blog_header_author_title ||
+      author.blog_header_author_image
+    ) {
+      metadata.author = {
+        name: author.blog_header_author_name,
+        title: author.blog_header_author_title,
+        image: author.blog_header_author_image,
+      };
+    }
+  }
+
+  // Extract publish date
+  if (blogHeader.blog_header_publish_date) {
+    try {
+      const date = new Date(blogHeader.blog_header_publish_date);
+      metadata.date = date.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (e) {
+      // Invalid date, skip
+    }
+  }
+
+  // Extract read time
+  if (blogHeader.blog_header_read_time) {
+    metadata.readTime = `${blogHeader.blog_header_read_time} min`;
+  }
+
+  // Extract tags
+  if (
+    blogHeader.blog_header_tags &&
+    Array.isArray(blogHeader.blog_header_tags)
+  ) {
+    const tags = blogHeader.blog_header_tags
+      .filter((tag) => tag.blog_header_tag_name)
+      .map((tag) => ({
+        name: tag.blog_header_tag_name,
+        color: tag.blog_header_tag_color || "primary",
+      }));
+    if (tags.length > 0) {
+      metadata.tags = tags;
+    }
+  }
+
+  // Extract featured image
+  if (blogHeader.blog_header_featured_image) {
+    const img = blogHeader.blog_header_featured_image;
+    if (img.blog_header_featured_image_src) {
+      metadata.featuredImage = {
+        src: img.blog_header_featured_image_src,
+        alt: img.blog_header_featured_image_alt || "",
+      };
+    }
+  }
+
+  return metadata;
+}
+
 function buildComponentKeyedDoc(frontmatter, mdxBody, filepath) {
   const blocks = frontmatter.blocks || [];
   const title = frontmatter.title || "";
@@ -200,11 +293,18 @@ function buildComponentKeyedDoc(frontmatter, mdxBody, filepath) {
     url: slug,
   };
 
+  // Extract SEO metadata
   if (frontmatter.seo) {
     if (frontmatter.seo.metaTitle)
       doc["metaTitle"] = cleanString(frontmatter.seo.metaTitle);
     if (frontmatter.seo.metaDescription)
       doc["metaDescription"] = cleanString(frontmatter.seo.metaDescription);
+  }
+
+  // Extract blog-specific metadata (author, date, tags, featured image, etc.)
+  const blogMetadata = extractBlogMetadata(blocks);
+  if (Object.keys(blogMetadata).length > 0) {
+    Object.assign(doc, blogMetadata);
   }
 
   const bodyText = cleanString(mdxBody || "");
@@ -257,7 +357,27 @@ async function build() {
 
     const doc = buildComponentKeyedDoc(data, content, file);
     docs.push(doc);
-    meta.push({ id: doc.id, title: doc.title || doc.id, url: doc.url });
+
+    // Build meta object with all relevant display information
+    const metaItem = {
+      id: doc.id,
+      title: doc.headerTitle || doc.metaTitle || doc.title || doc.id,
+      url: doc.url,
+    };
+
+    // Add description/excerpt if available
+    if (doc.metaDescription) {
+      metaItem.excerpt = doc.headerSubtitle || doc.metaDescription;
+    }
+
+    // Add blog-specific metadata
+    if (doc.date) metaItem.date = doc.date;
+    if (doc.readTime) metaItem.readTime = doc.readTime;
+    if (doc.author) metaItem.author = doc.author;
+    if (doc.tags) metaItem.tags = doc.tags;
+    if (doc.featuredImage) metaItem.featuredImage = doc.featuredImage;
+
+    meta.push(metaItem);
   }
 
   if (!docs.length) {

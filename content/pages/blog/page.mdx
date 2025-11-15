@@ -12,12 +12,37 @@ blocks:
   - theme: parent
     basic_section_content_blocks:
       - basic_section_content_blocks_list:
+          - text: >
+              Su fuente de **conocimiento legal**. Entienda sus derechos y tome
+              decisiones informadas con seguridad.
+            textAlign: text-center
+            proseSize: prose-lg
+            _template: paragraph
           - special_blocks:
               - special_blocks_list:
                   - placeholder: Buscar en el blog...
                     noResultsText: No se encontraron resultados
                     showResultCount: true
                     _template: blog_searcher
+            _template: special_block
+          - special_blocks:
+              - special_blocks_list:
+                  - faq_enableSearch: false
+                    faq_items:
+                      - faq_item_question: ¿Qué es el Blog Jurídico?
+                        faq_item_answer: >
+                          El blog jurídico es un espacio dedicado a compartir
+                          análisis, comentarios y actualizaciones sobre temas
+                          legales de relevancia. A través de nuestras
+                          publicaciones, nos proponemos mantener a nuestros
+                          clientes y seguidores informados sobre los últimos
+                          cambios en la legislación, jurisprudencia destacada y
+                          casos de interés que impactan el panorama legal
+                          actual. Aquí encontrarás insights profesionales,
+                          explicaciones de conceptos legales complejos y
+                          reflexiones sobre cómo estas tendencias pueden
+                          afectarte.
+                    _template: faq
             _template: special_block
     _template: basic_section
 ---

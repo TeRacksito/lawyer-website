@@ -1,13 +1,43 @@
 ---
 draft: false
 title: test
+seo:
+  metaTitle: Blog de Prueba | Consulta Legal Gratuita
+  metaDescription: >-
+    Descubre nuestro primer blog de prueba en CLG. Explora temas legales y
+    consulta gratis para conocer tus opciones. ¡Infórmate ya!
+  keywords:
+    - blog legal
+    - consulta legal gratuita
+    - asesoría jurídica
+    - derecho en España
+    - abogados en España
+    - CLG
+    - servicios legales
+    - derecho civil
+  social:
+    ogType: article
+    twitterCard: summary_large_image
 blocks:
-  - variant: heroTitle
-    fullScreen: false
-    yShift: 50
-    title: Título Principal
-    subtitle: Subtítulo descriptivo que acompaña al título principal
-    _template: hero
+  - blog_header_title: Blog de prueba 1
+    blog_header_subtitle: Este es el primer blog de prueba
+    blog_header_author:
+      blog_header_author_name: Angel Krasimirov
+      blog_header_author_title: Desarrollador
+      blog_header_author_image: /images/blogs/angel-borrar.webp
+    blog_header_publish_date: 2025-11-10T02:20:41.128Z
+    blog_header_read_time: 5
+    blog_header_tags:
+      - blog_header_tag_name: Tag 1
+        blog_header_tag_color: primary
+    blog_header_featured_image:
+      blog_header_featured_image_src: /images/law-balance.webp
+      blog_header_featured_image_alt: Test
+      blog_header_featured_image_footer: >-
+        La figura en la imagen es Lady Justice; una personificación alegórica de
+        la fuerza moral en los sistemas judiciales.
+      blog_header_featured_image_author: unsplash.com
+    _template: blog_header
   - theme: parent
     basic_section_content_blocks:
       - basic_section_content_blocks_list:
@@ -17,21 +47,7 @@ blocks:
             verticalAlign: items-center
             _template: title
           - text: |
-              Texto del nuevo párrafo...
-            textAlign: text-left
-            proseSize: prose-lg
-            _template: paragraph
-    _template: basic_section
-  - theme: parent
-    basic_section_content_blocks:
-      - basic_section_content_blocks_list:
-          - title: Un Título Atractivo
-            level: h2
-            textAlign: text-center
-            verticalAlign: items-center
-            _template: title
-          - text: |
-              Texto del nuevo cascos ...
+              Nuestro equipo de abogados especializados está disponible para responder todas tus preguntas y brindarte la asesoría legal que necesitas. Contáctanos para una consulta gratuita y descubre cómo podemos ayudarte a resolver tu situación jurídica de manera efectiva.
             textAlign: text-left
             proseSize: prose-lg
             _template: paragraph

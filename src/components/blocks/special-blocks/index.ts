@@ -1,17 +1,17 @@
 import { BlockRegistry } from "../types";
+import { blogSearcherBlock } from "./blog-searcher";
 import { callToActionBlock } from "./call-to-action";
-import { localNavigationBlock } from "./local-navigation";
-import { namePresentationBlock } from "./name-presentation";
-import { servicesListBlock } from "./services-list";
-import { valuesPresentationBlock } from "./values-presentation";
-import { timelineBlock } from "./timeline";
-import { valueCardBlock } from "./value-card";
-import { personalCardBlock } from "./personal-card";
 import { counterValueBlock } from "./counter-value";
-import { interactiveMapBlock } from "./interactive-map";
 import { emergenciesBlock } from "./emergencies";
 import { faqBlock } from "./faq";
-import { blogSearcherBlock } from "./blog-searcher";
+import { interactiveMapBlock } from "./interactive-map";
+import { localNavigationBlock } from "./local-navigation";
+import { namePresentationBlock } from "./name-presentation";
+import { personalCardBlock } from "./personal-card";
+import { servicesListBlock } from "./services-list";
+import { timelineBlock } from "./timeline";
+import { valueCardBlock } from "./value-card";
+import { valuesPresentationBlock } from "./values-presentation";
 
 export const specialBlocks: BlockRegistry = [
   callToActionBlock,

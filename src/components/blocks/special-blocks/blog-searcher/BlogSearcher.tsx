@@ -2,13 +2,36 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Fuse from "fuse.js";
+import BlogPostCard from "./BlogPostCard";
+
+interface Tag {
+  name: string;
+  color?: string;
+}
+
+interface Author {
+  name?: string;
+  title?: string;
+  image?: string;
+}
+
+interface FeaturedImage {
+  src: string;
+  alt?: string;
+}
 
 interface PostMeta {
   id: string;
   title: string;
   url: string;
+  excerpt?: string;
+  date?: string;
+  category?: string;
+  readTime?: string;
+  tags?: Tag[];
+  featuredImage?: FeaturedImage;
+  author?: Author;
 }
 
 interface BlogSearcherProps {
@@ -39,6 +62,10 @@ async function decompressGzip(buffer: ArrayBuffer): Promise<string> {
   const response = new Response(decompressed);
   const blob = await response.blob();
   return blob.text();
+}
+
+function removeDiacritics(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 export default function BlogSearcher({
@@ -124,8 +151,8 @@ export default function BlogSearcher({
       return postsMeta;
     }
 
-    const results = fuse.search(searchQuery);
-    console.log(`Search results for "${searchQuery}":`, results);
+    const normalizedQuery = removeDiacritics(searchQuery);
+    const results = fuse.search(normalizedQuery);
     return results.map((result) => result.item);
   }, [fuse, searchQuery, postsMeta]);
 
@@ -155,7 +182,11 @@ export default function BlogSearcher({
         transition={{ delay: motionDelay + 0.2, duration: 0.6 }}
         className="mb-8"
       >
+        <label htmlFor="blog-search" className="sr-only">
+          Buscar posts del blog
+        </label>
         <input
+          id="blog-search"
           type="text"
           placeholder={placeholder}
           value={searchQuery}
@@ -163,43 +194,60 @@ export default function BlogSearcher({
           disabled={isLoading}
           className="input input-bordered w-full bg-base-100 text-base-content placeholder-base-content/50"
           aria-label="Buscar posts del blog"
+          aria-describedby={
+            searchQuery.trim() ? "search-results-count" : undefined
+          }
+          aria-busy={isLoading}
         />
         {showResultCount && !isLoading && searchQuery.trim() && (
-          <p className="text-sm text-base-content/60 mt-2">
+          <p
+            id="search-results-count"
+            className="text-sm text-base-content/60 mt-2"
+            role="status"
+            aria-live="polite"
+          >
             {searchResults.length}{" "}
-            {searchResults.length === 1 ? "resultado" : "resultados"}{" "}
-            encontrados
+            {searchResults.length === 1
+              ? "resultado encontrado"
+              : "resultados encontrados"}{" "}
           </p>
         )}
       </motion.div>
 
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <span className="loading loading-spinner loading-lg"></span>
+        <div
+          className="flex justify-center py-8"
+          role="status"
+          aria-live="polite"
+        >
+          <span
+            className="loading loading-spinner loading-lg"
+            aria-label="Cargando artículos del blog"
+          ></span>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          role="list"
+          aria-label="Resultados de búsqueda de artículos"
+        >
           {searchResults.length > 0 ? (
             searchResults.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: motionDelay + 0.3 + index * 0.05,
-                  duration: 0.5,
-                }}
-              >
-                <Link
-                  href={post.url}
-                  className="card card-border hover:shadow-lg transition-shadow duration-300 block"
-                >
-                  <div className="card-body">
-                    <h3 className="card-title text-primary">{post.title}</h3>
-                  </div>
-                </Link>
-              </motion.div>
+              <div key={post.id} role="listitem">
+                <BlogPostCard
+                  title={post.title}
+                  url={post.url}
+                  excerpt={post.excerpt}
+                  date={post.date}
+                  category={post.category}
+                  readTime={post.readTime}
+                  tags={post.tags}
+                  featuredImage={post.featuredImage}
+                  author={post.author}
+                  motionDelay={motionDelay}
+                  index={index}
+                />
+              </div>
             ))
           ) : searchQuery.trim() ? (
             <motion.div
@@ -207,7 +255,9 @@ export default function BlogSearcher({
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: motionDelay + 0.3, duration: 0.6 }}
-              className="text-center text-base-content/60 py-8"
+              className="col-span-full text-center text-base-content/60 py-8"
+              role="status"
+              aria-live="polite"
             >
               <p>{noResultsText}</p>
             </motion.div>
