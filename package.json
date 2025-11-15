@@ -1,6 +1,7 @@
 {
   "name": "clg",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.14.0",
   "private": true,
   "scripts": {
     "dev": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbopack\"",

@@ -1,7 +1,7 @@
 name: Deploy Worker
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 concurrency:
   group: worker-deploy-prod
@@ -14,19 +14,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.14.0
-      
+
       - name: Install Node.js (Cache pnpm)
         uses: actions/setup-node@v6
         with:
-          node-version: '22.18.0'
+          node-version: "22.18.0"
           package-manager-cache: true
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -43,13 +41,13 @@ jobs:
           key: ${{ runner.os }}-opennext-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-opennext-${{ hashFiles('**/pnpm-lock.yaml') }}-
-          
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Compile Blog Post Search Index
         run: node scripts/build-search-index.mjs
-        
+
       - name: Deploy to Cloudflare Workers
         run: pnpm run deploy
         env:
