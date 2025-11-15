@@ -1,5 +1,8 @@
 import { Template } from "tinacms";
 import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
+import React, { useEffect } from "react";
+
+React; // Needed for TinaCMS JSX parsing
 
 export const blogHeaderTemplate: Template = {
   name: "blog_header",
@@ -8,26 +11,98 @@ export const blogHeaderTemplate: Template = {
   ui: {
     defaultItem: {
       blog_header_title: "Título del artículo de blog",
-      blog_header_subtitle: "Subtítulo o descripción breve del artículo",
+      blog_header_subtitle: {
+        type: "root",
+        children: [
+          {
+            type: "p",
+            children: [
+              {
+                type: "text",
+                text: "Subtítulo o descripción breve del artículo...",
+              },
+            ],
+          },
+        ],
+      },
       blog_header_author: {
         blog_header_author_name: "Nombre del Autor",
         blog_header_author_title: "Especialidad o cargo",
       },
-      blog_header_publish_date: new Date().toISOString(),
+      blog_header_publish_date: "today",
       blog_header_read_time: 5,
       blog_header_tags: [
-        { blog_header_tag_name: "Tag 1", blog_header_tag_color: "primary" },
+        {
+          blog_header_tag_name: "Etiqueta 1",
+          blog_header_tag_color: "primary",
+        },
       ],
       blog_header_featured_image: {
         blog_header_featured_image_src: "",
         blog_header_featured_image_alt: "Imagen destacada del artículo",
-        blog_header_featured_image_footer: "",
-        blog_header_featured_image_author: "",
+        blog_header_featured_image_footer: {
+          type: "root",
+          children: [
+            {
+              type: "p",
+              children: [
+                {
+                  type: "text",
+                  text: "Descripción adicional de la imagen...",
+                },
+              ],
+            },
+          ],
+        },
+        blog_header_featured_image_author: {
+          type: "root",
+          children: [
+            {
+              type: "p",
+              children: [
+                {
+                  type: "text",
+                  text: "Crédito del autor...",
+                },
+              ],
+            },
+          ],
+        },
       },
     },
   },
 
   fields: [
+    {
+      type: "string",
+      name: "_onOpen",
+      searchable: false,
+      ui: {
+        component: ({ tinaForm }: any) => {
+          useEffect(() => {
+            console.log("Tina Form:", tinaForm);
+
+            tinaForm?.values?.blocks?.forEach((block: any, index: number) => {
+              if (block._template !== "blog_header") return;
+
+              if (
+                block.blog_header_publish_date &&
+                block.blog_header_publish_date === "today"
+              ) {
+                const todayISO = new Date().toISOString();
+                console.log("Setting publish date to today:", todayISO);
+                tinaForm.change(
+                  `blocks.${index}.blog_header_publish_date`,
+                  todayISO
+                );
+              }
+            });
+          }, []);
+
+          return null;
+        },
+      },
+    },
     getTemplateDescriptionField(
       "Encabezado del Blog",
       "Encabezado completo del artículo de blog que incluye título, información del autor, fecha de publicación, tiempo de lectura, etiquetas e imagen destacada."
@@ -40,7 +115,7 @@ export const blogHeaderTemplate: Template = {
       required: true,
     },
     {
-      type: "string",
+      type: "rich-text",
       name: "blog_header_subtitle",
       label: "Subtítulo",
       description: "Descripción breve o subtítulo del artículo",
@@ -141,13 +216,13 @@ export const blogHeaderTemplate: Template = {
             "Texto alternativo para accesibilidad de la imagen destacada",
         },
         {
-          type: "string",
+          type: "rich-text",
           name: "blog_header_featured_image_footer",
           label: "Pie de Imagen",
           description: "Explicación o descripción adicional de la imagen",
         },
         {
-          type: "string",
+          type: "rich-text",
           name: "blog_header_featured_image_author",
           label: "Autor de la Imagen",
           description: "Crédito o referencia del autor de la imagen",

@@ -54,7 +54,7 @@ export default function BlogPostCard({
   const metadata: Array<{ label: string; value?: string; icon?: ReactNode }> =
     [];
 
-    
+
 
   if (date) {
     metadata.push({
@@ -97,7 +97,7 @@ export default function BlogPostCard({
             </figure>
           ) : (
             <div className="relative w-full h-48 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-[url('/images/law-pattern.svg')] opacity-5"></div>
+              <div className="absolute inset-0 opacity-5"></div>
               {author?.image ? (
                 <div className="relative z-10 w-20 h-20 rounded-full overflow-hidden ring-4 ring-primary/20 bg-base-200">
                   <img

@@ -90,13 +90,11 @@ const tinaMarkdownComponents: Record<string, React.ComponentType<any>> = {
   },
 };
 
-export function TinaMarkdownRenderer({
+export const TinaMarkdownRenderer = ({
   content,
   className,
-}: TinaMarkdownRendererProps) {
-  return (
-    <div className={className}>
-      <TinaMarkdown content={content} components={tinaMarkdownComponents} />
-    </div>
-  );
-}
+}: TinaMarkdownRendererProps) => (
+  <div className={className}>
+    <TinaMarkdown content={content} components={tinaMarkdownComponents} />
+  </div>
+);
