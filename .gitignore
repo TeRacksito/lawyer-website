@@ -46,5 +46,5 @@ node_modules
 .env
 
 # Avoid empty directories in TinaCMS's content folder
-content/**/.gitkeep.mdx
-content/*/.gitkeep.mdx
+# content/**/.gitkeep.mdx
+# content/*/.gitkeep.mdx
