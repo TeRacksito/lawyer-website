@@ -86,7 +86,7 @@ export default function BlogPostCard({
         className="group h-full block"
         aria-label={`Leer artículo: ${title}`}
       >
-        <article className="card card-border h-full bg-base-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col overflow-hidden">
+        <article className="card card-border h-full bg-base-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col overflow-hidden">
           {featuredImage ? (
             <figure className="relative w-full h-48 overflow-hidden">
               <img

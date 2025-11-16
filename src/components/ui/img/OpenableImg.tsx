@@ -291,7 +291,7 @@ export default function OpenableImg({
       {/* Image Container */}
       <div className="space-y-2">
         <figure
-          className="group relative w-full rounded-xl overflow-hidden bg-base-200 aspect-video cursor-pointer ring-2 ring-offset-0 ring-transparent transition-all duration-300 hover:ring-primary hover:ring-offset-2 shadow-md hover:shadow-lg"
+          className="group relative w-full rounded-xl overflow-hidden bg-base-200 aspect-video cursor-pointer transition-[box-shadow] duration-300 hover:ring-primary hover:ring-offset-2 shadow-md hover:shadow-lg"
           onClick={() => setIsOpen(true)}
           data-tina-field={dataTinaField}
           role="button"
@@ -312,8 +312,8 @@ export default function OpenableImg({
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="bg-base-900/70 p-3 rounded-full backdrop-blur-sm">
+            <div className="opacity-0 backdrop-blur-none group-hover:opacity-100 transition-opacity">
+              <div className="bg-base-900/70 p-3 rounded-full hover:backdrop-blur-sm transition-[backdrop-filter]">
                 <ZoomIn className="w-6 h-6 text-base-100" />
               </div>
             </div>

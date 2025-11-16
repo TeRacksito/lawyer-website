@@ -63,7 +63,7 @@ export default function FaqItem({
   };
 
   return (
-    <div className="bg-base-200 rounded-lg overflow-hidden" id={itemId}>
+    <div className="bg-base-200 rounded-lg" id={itemId}>
       <button
         onClick={handleToggle}
         onMouseEnter={() => setIsHovered(true)}

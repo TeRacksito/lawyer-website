@@ -13,6 +13,22 @@ html {
   --font-lora: "Lora", Georgia, serif;
 }
 
+/* *:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(from var(--fallback-p, oklch(55% 0.3 240)) r g b / 0.5);
+} */
+
+@layer base {
+  * {
+    transition-property: box-shadow, border-radius;
+    @apply ring-2 ring-offset-0 ring-transparent transition-[box-shadow] duration-300 rounded-sm;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-primary ring-offset-3;
+  }
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
