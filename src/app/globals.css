@@ -9,6 +9,10 @@ html {
   scrollbar-gutter: stable;
 }
 
+@theme {
+  --font-lora: "Lora", Georgia, serif;
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;

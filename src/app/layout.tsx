@@ -1,11 +1,19 @@
 import ExitDraftBanner from "@/components/ui/banners/ExitPreviewBanner";
 import type { Metadata } from "next";
 import "./globals.css";
+import { Lora } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "CGC Abogados",
-  description: "Consultas Gratuitas Cruz - Abogados",
+  title: "CLG Abogados",
+  description: "Consulta Legal Gratuita - Luis Cruz",
 };
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-lora",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -14,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="font-serif antialiased md:subpixel-antialiased">
+      <body className="font-lora antialiased md:subpixel-antialiased">
         <ExitDraftBanner />
         {children}
       </body>

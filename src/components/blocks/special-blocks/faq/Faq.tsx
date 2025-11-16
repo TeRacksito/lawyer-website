@@ -61,7 +61,7 @@ export default function FaqBlock({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: motionDelay, duration: 0.6 }}
-      className="max-w-4xl mx-auto px-4 py-12"
+      className="max-w-4xl mx-auto px-4 py-4"
     >
       {faq_enableSearch && faq_items.length > 0 && (
         <motion.div

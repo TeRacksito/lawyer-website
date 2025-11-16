@@ -96,12 +96,12 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
                 </div>
               )}
               {logo && (
-                <span className="text-3xl font-serif font-bold">{logo}</span>
+                <span className="text-3xl font-bold">{logo}</span>
               )}
             </Link>
             {logoSubtext && (
               <div
-                className="text-sm font-serif md:hidden lg:block"
+                className="text-sm md:hidden lg:block"
                 data-tina-field={tinaField(data, "logoSubtext")}
               >
                 {logoSubtext}

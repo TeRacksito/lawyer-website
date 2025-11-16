@@ -144,7 +144,7 @@ export default function NamePresentation({
               }}
             >
               <h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-primary mb-3"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-3"
                 data-tina-field={`${dataTinaField}.acronym`}
               >
                 {acronym}
@@ -235,7 +235,7 @@ export default function NamePresentation({
                     }}
                   >
                     <motion.span
-                      className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif font-bold text-primary block"
+                      className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-primary block"
                       style={{
                         fontSize: isSmallScreen ? "2.5rem" : undefined,
                       }}
@@ -282,7 +282,7 @@ export default function NamePresentation({
                         {item.word}
                       </div>
                       <div
-                        className="text-xs md:text-sm text-base-content/60 mt-1 max-w-28 sm:max-w-32 md:max-w-36"
+                        className="text-xs md:text-sm text-base-content/60 mt-1"
                         style={{
                           fontSize: isSmallScreen ? "0.625rem" : undefined,
                           maxWidth: isSmallScreen ? "4rem" : undefined,
@@ -311,14 +311,13 @@ export default function NamePresentation({
               }}
             >
               <div
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-serif font-light text-primary text-center leading-tight tracking-wider select-none"
+                className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-light text-primary text-center leading-tight tracking-wider select-none"
                 style={{
-                  fontFamily: "'Playfair Display', serif",
+                  fontFamily: "serif",
                   fontVariant: "small-caps",
                   letterSpacing: "0.1em",
                   textShadow: "0 0 40px rgba(168, 85, 247, 0.1)",
                   filter: "blur(0.5px)",
-                  fontSize: isSmallScreen ? "1.5rem" : undefined,
                 }}
               >
                 <div
@@ -508,7 +507,7 @@ export default function NamePresentation({
               }}
             >
               <p
-                className="text-sm sm:text-base md:text-lg text-base-content/80 font-medium tracking-wide max-w-xs sm:max-w-sm md:max-w-md px-2 sm:px-4"
+                className="md:mt-4 text-sm sm:text-base md:text-lg text-base-content/80 font-medium tracking-wide max-w-xs sm:max-w-sm md:max-w-md px-2 sm:px-4"
                 data-tina-field={`${dataTinaField}.tagline`}
               >
                 {tagline}

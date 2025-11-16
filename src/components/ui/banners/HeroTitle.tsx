@@ -20,7 +20,7 @@ export default function HeroTitle(props: IHeroTitleProps) {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-3xl md:text-5xl font-serif font-bold text-primary text-nowrap"
+        className="text-3xl md:text-5xl font-bold text-primary text-nowrap"
         data-tina-field={props.titleDataTinaField}
       >
         {props.title}

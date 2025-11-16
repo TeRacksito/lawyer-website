@@ -2,6 +2,7 @@
 
 import { TinaMarkdownRenderer } from "@/components/utils/TinaMarkdownRenderer";
 import { AnimatePresence, motion } from "framer-motion";
+import { s } from "framer-motion/client";
 import { Check, Copy, Download, Scan, X, ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -43,6 +44,7 @@ export default function OpenableImg({
   const [lastTouchDistance, setLastTouchDistance] = useState<number | null>(
     null
   );
+  const lastDragTimeRef = useRef<number>(0);
 
   const MIN_SCALE = 0.5;
   const MAX_SCALE = 5;
@@ -72,7 +74,8 @@ export default function OpenableImg({
   const handleZoomOut = () => {
     setScale((prev) => {
       const newScale = Math.max(prev - ZOOM_STEP, MIN_SCALE);
-      return snapZoomValue(newScale);
+      const snappedScale = snapZoomValue(newScale);
+      return snappedScale;
     });
   };
 
@@ -102,6 +105,7 @@ export default function OpenableImg({
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    lastDragTimeRef.current = Date.now();
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -143,6 +147,7 @@ export default function OpenableImg({
         setLastTouchDistance(distance);
       }
     } else if (e.touches.length === 1 && isDragging && scale > 1) {
+      lastDragTimeRef.current = Date.now();
       setPosition({
         x: e.touches[0].clientX - dragStart.x,
         y: e.touches[0].clientY - dragStart.y,
@@ -153,6 +158,18 @@ export default function OpenableImg({
   const handleTouchEnd = () => {
     setIsDragging(false);
     setLastTouchDistance(null);
+    lastDragTimeRef.current = Date.now();
+  };
+
+  const canCloseModal = (): boolean => {
+    const timeSinceLastDrag = Date.now() - lastDragTimeRef.current;
+    return timeSinceLastDrag > 500;
+  };
+
+  const handleOverlayClick = () => {
+    if (canCloseModal()) {
+      setIsOpen(false);
+    }
   };
 
   const handleCopyImage = async () => {
@@ -208,6 +225,12 @@ export default function OpenableImg({
     link.click();
     document.body.removeChild(link);
   };
+
+  useEffect(() => {
+    if (scale <= 1) {
+      setPosition({ x: 0, y: 0 });
+    }
+  }, [scale]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -325,7 +348,7 @@ export default function OpenableImg({
             {/* Overlay */}
             <motion.div
               className="fixed inset-0 bg-black/90 z-40 backdrop-blur-md"
-              onClick={() => setIsOpen(false)}
+              onClick={handleOverlayClick}
               role="presentation"
               aria-label="Close image viewer"
               initial={{ opacity: 0 }}
@@ -338,7 +361,7 @@ export default function OpenableImg({
             <motion.div
               data-theme="dark"
               className="fixed inset-0 z-50 flex flex-col items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto"
-              onClick={() => setIsOpen(false)}
+              onClick={handleOverlayClick}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -355,115 +378,114 @@ export default function OpenableImg({
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                {/* Toolbar */}
+                {/* Toolbar - Left Controls */}
                 <div
-                  className="absolute top-2 left-2 right-2 sm:top-4 sm:left-4 sm:right-4 z-10 flex items-start justify-between gap-2"
+                  className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 flex items-start gap-2 flex-col sm:flex-row"
                   role="toolbar"
                   aria-label="Image viewer controls"
                   id="image-viewer-title"
                 >
-                  <div className="flex gap-1.5 sm:gap-2 flex-col sm:flex-row">
-                    <div
-                      className="font-mono px-2 py-2 sm:px-3 sm:py-2.5 rounded-full bg-base-100 backdrop-blur-sm text-xs sm:text-sm font-medium flex items-center justify-center min-w-[3rem] sm:min-w-[3.5rem] shrink-0"
-                      role="status"
-                      aria-live="polite"
-                      aria-label={`Current zoom level: ${Math.round(
-                        scale * 100
-                      )} percent`}
-                    >
-                      {Math.round(scale * 100)}%
-                    </div>
-                    <button
-                      onClick={handleZoomIn}
-                      className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
-                      aria-label="Zoom in"
-                      title="Zoom in"
-                      disabled={scale >= MAX_SCALE}
-                      type="button"
-                    >
-                      <ZoomIn
-                        className="w-4 h-4 sm:w-5 sm:h-5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                    <button
-                      onClick={handleZoomOut}
-                      className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
-                      aria-label="Zoom out"
-                      title="Zoom out"
-                      disabled={scale <= MIN_SCALE}
-                      type="button"
-                    >
-                      <ZoomOut
-                        className="w-4 h-4 sm:w-5 sm:h-5"
-                        aria-hidden="true"
-                      />
-                    </button>
-                    <button
-                      onClick={handleResetView}
-                      className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
-                      aria-label="Reset view to original size and position"
-                      title="Reset view"
-                      disabled={
-                        scale === 1 && position.x === 0 && position.y === 0
-                      }
-                      type="button"
-                    >
-                      <Scan
-                        className="w-4 h-4 sm:w-5 sm:h-5"
-                        aria-hidden="true"
-                      />
-                    </button>
+                  <div
+                    className="font-mono px-2 py-2 sm:px-3 sm:py-2.5 rounded-full bg-base-100 backdrop-blur-sm text-xs sm:text-sm font-medium flex items-center justify-center min-w-[3rem] sm:min-w-[3.5rem] shrink-0"
+                    role="status"
+                    aria-live="polite"
+                    aria-label={`Current zoom level: ${Math.round(
+                      scale * 100
+                    )} percent`}
+                  >
+                    {Math.round(scale * 100)}%
                   </div>
+                  <button
+                    onClick={handleZoomIn}
+                    className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
+                    aria-label="Zoom in"
+                    title="Zoom in"
+                    disabled={scale >= MAX_SCALE}
+                    type="button"
+                  >
+                    <ZoomIn
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <button
+                    onClick={handleZoomOut}
+                    className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
+                    aria-label="Zoom out"
+                    title="Zoom out"
+                    disabled={scale <= MIN_SCALE}
+                    type="button"
+                  >
+                    <ZoomOut
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <button
+                    onClick={handleResetView}
+                    className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation flex items-center justify-center"
+                    aria-label="Reset view to original size and position"
+                    title="Reset view"
+                    disabled={
+                      scale === 1 && position.x === 0 && position.y === 0
+                    }
+                    type="button"
+                  >
+                    <Scan
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
 
-                  <div className="flex gap-1.5 sm:gap-2 flex-col sm:flex-row">
-                    {canCopy && (
-                      <button
-                        onClick={handleCopyImage}
-                        className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 touch-manipulation flex items-center justify-center"
-                        aria-label={
-                          copied
-                            ? "Image copied to clipboard"
-                            : "Copy image to clipboard"
-                        }
-                        title={copied ? "Copied!" : "Copy image"}
-                        type="button"
-                      >
-                        {copied ? (
-                          <Check
-                            className="text-success w-4 h-4 sm:w-5 sm:h-5"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <Copy
-                            className="w-4 h-4 sm:w-5 sm:h-5"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </button>
-                    )}
+                {/* Toolbar - Right Controls */}
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 flex gap-1.5 sm:gap-2 flex-col sm:flex-row">
+                  {canCopy && (
                     <button
-                      onClick={handleDownload}
+                      onClick={handleCopyImage}
                       className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 touch-manipulation flex items-center justify-center"
-                      aria-label={`Download image: ${alt}`}
-                      title="Download image"
+                      aria-label={
+                        copied
+                          ? "Image copied to clipboard"
+                          : "Copy image to clipboard"
+                      }
+                      title={copied ? "Copied!" : "Copy image"}
                       type="button"
                     >
-                      <Download
-                        className="w-4 h-4 sm:w-5 sm:h-5"
-                        aria-hidden="true"
-                      />
+                      {copied ? (
+                        <Check
+                          className="text-success w-4 h-4 sm:w-5 sm:h-5"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <Copy
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                          aria-hidden="true"
+                        />
+                      )}
                     </button>
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:text-error active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer touch-manipulation flex items-center justify-center"
-                      aria-label="Close image viewer"
-                      title="Close (Esc)"
-                      type="button"
-                    >
-                      <X className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
-                    </button>
-                  </div>
+                  )}
+                  <button
+                    onClick={handleDownload}
+                    className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:bg-base-200 active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 touch-manipulation flex items-center justify-center"
+                    aria-label={`Download image: ${alt}`}
+                    title="Download image"
+                    type="button"
+                  >
+                    <Download
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 sm:p-2.5 rounded-full bg-base-100 hover:text-error active:scale-95 transition-all duration-200 backdrop-blur-sm sm:hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer touch-manipulation flex items-center justify-center"
+                    aria-label="Close image viewer"
+                    title="Close (Esc)"
+                    type="button"
+                  >
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+                  </button>
                 </div>
 
                 {/* Image Container */}

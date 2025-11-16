@@ -73,7 +73,7 @@ export default function FooterBlock({ data }: FooterBlockProps) {
           >
             {firmInfo?.name && (
               <h3
-                className="text-2xl font-bold font-serif text-primary"
+                className="text-2xl font-bold text-primary"
                 data-tina-field={tinaField(firmInfo, "name")}
               >
                 {firmInfo.name}
