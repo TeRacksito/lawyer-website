@@ -4,6 +4,12 @@ interface SendEmailOptions {
   html?: string;
   text?: string;
   toName?: string;
+  azureConfig: {
+    tenantId: string;
+    clientId: string;
+    clientSecret: string;
+    emailSender: string;
+  };
 }
 
 interface GraphTokenResponse {
@@ -72,6 +78,7 @@ export async function sendEmail({
   html,
   text,
   toName,
+  azureConfig,
 }: SendEmailOptions): Promise<void> {
   console.log("[Email] Starting email send process", {
     to,
@@ -80,13 +87,10 @@ export async function sendEmail({
     hasText: !!text,
   });
 
-  const tenantId = process.env.AZURE_TENANT_ID;
-  const clientId = process.env.AZURE_CLIENT_ID;
-  const clientSecret = process.env.AZURE_CLIENT_SECRET;
-  const emailSender = process.env.EMAIL_SENDER;
+  const { tenantId, clientId, clientSecret, emailSender } = azureConfig;
 
   if (!tenantId || !clientId || !clientSecret || !emailSender) {
-    console.error("[Email] Missing required environment variables:", {
+    console.error("[Email] Missing required Azure configuration:", {
       hasTenantId: !!tenantId,
       hasClientId: !!clientId,
       hasClientSecret: !!clientSecret,

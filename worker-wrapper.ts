@@ -131,6 +131,12 @@ export default {
         to: env.EMAIL_ADMIN || process.env.EMAIL_ADMIN || "",
         subject: `📬 Resumen de Consultas (${validNotifications.length} nuevas)`,
         html: emailContent,
+        azureConfig: {
+          tenantId: env.AZURE_TENANT_ID || "",
+          clientId: env.AZURE_CLIENT_ID || "",
+          clientSecret: env.AZURE_CLIENT_SECRET || "",
+          emailSender: env.EMAIL_SENDER || "",
+        },
       });
       console.log("[Scheduled] Digest email sent successfully");
 

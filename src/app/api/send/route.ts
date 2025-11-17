@@ -130,6 +130,12 @@ export async function POST(request: Request) {
       toName: `${name} ${surname}`,
       subject: `Confirmación: Hemos recibido tu consulta - ${subject}`,
       html: userConfirmationContent,
+      azureConfig: {
+        tenantId: process.env.AZURE_TENANT_ID!,
+        clientId: process.env.AZURE_CLIENT_ID!,
+        clientSecret: process.env.AZURE_CLIENT_SECRET!,
+        emailSender: process.env.EMAIL_SENDER!,
+      },
     });
     console.log("[API] Confirmation email sent successfully");
 
