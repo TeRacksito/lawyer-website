@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 import { randomInt } from "crypto";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 interface ContactFormData {
   name: string;
@@ -23,8 +24,9 @@ interface NotificationPayload {
   timestamp: number;
 }
 
-export async function POST(request: Request, context: { env: CloudflareEnv }) {
+export async function POST(request: Request) {
   try {
+    const { env } = await getCloudflareContext();
     const formData: ContactFormData = await request.json();
 
     const { name, surname, email, subject, body, category, tags } = formData;
@@ -52,7 +54,7 @@ export async function POST(request: Request, context: { env: CloudflareEnv }) {
       9999
     )}`;
 
-    await context.env.ADMIN_NOTIFICATIONS.put(
+    await env.ADMIN_NOTIFICATIONS.put(
       notificationKey,
       JSON.stringify(notificationPayload)
     );
