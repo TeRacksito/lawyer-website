@@ -1,6 +1,7 @@
 import { BlockRegistry } from "../types";
 import { blogSearcherBlock } from "./blog-searcher";
 import { callToActionBlock } from "./call-to-action";
+import { contactFormBlock } from "./contact-form";
 import { counterValueBlock } from "./counter-value";
 import { emergenciesBlock } from "./emergencies";
 import { faqBlock } from "./faq";
@@ -27,6 +28,7 @@ export const specialBlocks: BlockRegistry = [
   emergenciesBlock,
   faqBlock,
   blogSearcherBlock,
+  contactFormBlock,
 ];
 
 export const specialBlocksTemplates = specialBlocks.map(

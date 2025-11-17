@@ -19,6 +19,7 @@ interface IHeaderNavLinksProps {
   layout?: "horizontal" | "vertical";
   onLinkClick?: () => void;
   data?: any;
+  isScrolled?: boolean;
 }
 
 export default function HeaderNavLinks({
@@ -27,6 +28,7 @@ export default function HeaderNavLinks({
   layout = "horizontal",
   onLinkClick,
   data,
+  isScrolled = true,
 }: IHeaderNavLinksProps) {
   const baseStyle = "text-base transition hover:opacity-75";
   const linkContainerClass =
@@ -82,7 +84,9 @@ export default function HeaderNavLinks({
       {ctaButton?.show && ctaButton.text && ctaButton.href && (
         <Link
           href={ctaButton.href}
-          className="btn btn-neutral shadow-md"
+          className={`btn btn-neutral shadow-md transition-all ${
+            isScrolled ? "btn-md" : "btn-lg"
+          }`}
           onClick={handleLinkClick}
           data-tina-field={data ? tinaField(data, "ctaButton") : undefined}
         >

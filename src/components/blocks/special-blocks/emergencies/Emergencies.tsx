@@ -47,10 +47,13 @@ export default function EmergenciesBlock({
       </p>
       <a
         href={`tel:${emergencies_phone_number.replace(/\s/g, "")}`}
-        className="btn btn-error btn-lg w-full"
+        className="btn btn-error btn-lg w-full "
         data-tina-field={tinaField(data, "emergencies_phone_number")}
       >
-        {emergencies_button_text}: {emergencies_phone_number}
+        <span>
+          {emergencies_button_text}:{" "}
+          <span className="whitespace-nowrap">{emergencies_phone_number}</span>
+        </span>
       </a>
     </motion.div>
   );

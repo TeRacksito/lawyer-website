@@ -38,7 +38,31 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
     isSticky = true,
   } = data;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const distanceFromBottom = docHeight - scrollTop;
+
+      // setIsScrolled(scrollTop > 100 && distanceFromBottom > 100);
+      if (scrollTop > 100 && distanceFromBottom > 100) {
+        setIsScrolled(true);
+      }
+
+      if (scrollTop <= 50 || distanceFromBottom <= 50) {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,41 +87,31 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
     setIsMenuOpen(false);
   };
 
-  const headerClasses = `w-full z-20 shadow-md bg-base-100 ${
-    isSticky ? "sticky top-0" : ""
-  }`;
-
   return (
     <header
       ref={headerRef}
-      className={headerClasses}
+      className={`w-full z-20 shadow-md bg-base-100/70 rounded-none backdrop-blur-lg ${
+        isSticky ? "sticky top-0" : ""
+      }`}
       data-tina-field={dataTinaField}
     >
       <div className="relative">
         <div className="container mx-auto flex items-center justify-between py-4 px-6 md:px-10">
-          <div
-            className="flex items-center gap-4"
-            data-tina-field={tinaField(data, "logo")}
-          >
+          <div className="flex items-center gap-4">
             <Link
               href="/"
               className="flex items-center gap-4"
               onClick={handleLinkClick}
             >
-              {logoImage && (
-                <div data-tina-field={tinaField(data, "logoImage")}>
-                  <Image
-                    src={logoImage}
-                    alt={logo || "Logo"}
-                    width={40}
-                    height={40}
-                    className="w-10 h-10"
-                  />
-                </div>
-              )}
-              {logo && (
-                <span className="text-3xl font-bold">{logo}</span>
-              )}
+              <Image
+                src="/clg.svg"
+                alt="Logo"
+                width={40}
+                height={40}
+                className={`transition-all duration-300 overflow-hidden max-h-14 ${
+                  isScrolled ? "w-15" : "w-20"
+                }`}
+              />
             </Link>
             {logoSubtext && (
               <div
@@ -115,6 +129,7 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
               ctaButton={ctaButton}
               layout="horizontal"
               data={data}
+              isScrolled={isScrolled}
             />
           </div>
 

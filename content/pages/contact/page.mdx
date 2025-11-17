@@ -125,6 +125,33 @@ blocks:
             textAlign: text-left
             verticalAlign: items-start
             _template: title
+          - special_blocks:
+              - special_blocks_list:
+                  - contact_form_title: Contáctanos
+                    contact_form_description: >-
+                      Completa el formulario a continuación y nos pondremos en
+                      contacto lo antes posible.
+                    contact_form_submitButtonText: Enviar Mensaje
+                    contact_form_successMessage: ¡Gracias por tu mensaje! Nos pondremos en contacto pronto.
+                    contact_form_errorMessage: >-
+                      Ocurrió un error al enviar tu mensaje. Por favor, intenta
+                      de nuevo.
+                    contact_form_showCategories: true
+                    contact_form_categories:
+                      - Consulta General
+                      - Consulta Legal
+                      - Servicios Empresariales
+                      - Soporte
+                      - Otro
+                    contact_form_showTags: true
+                    contact_form_tags:
+                      - Urgente
+                      - Seguimiento
+                      - Cliente Nuevo
+                      - Cliente Existente
+                    contact_form_recipientEmail: ''
+                    _template: contact_form
+            _template: special_block
       - content_blocks:
           - title: ¿Por qué Elegirnos?
             level: h3

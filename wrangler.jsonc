@@ -5,7 +5,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "clg",
-  "main": ".open-next/worker.js",
+  "main": "worker-wrapper.ts",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
@@ -14,7 +14,19 @@
   },
   "observability": {
     "enabled": true
+  },
+
+  "kv_namespaces": [
+    {
+      "binding": "ADMIN_NOTIFICATIONS",
+      "id": "9e543c0420694aa7a438377f47d510df"
+    }
+  ],
+
+  "triggers": {
+    "crons": ["*/15 * * * *"]
   }
+
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
