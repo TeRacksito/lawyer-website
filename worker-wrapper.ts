@@ -20,22 +20,24 @@ export default {
     env: CloudflareEnv,
     ctx: ExecutionContext
   ) {
-    console.log("Scheduled event triggered:", controller.cron);
+    console.log("[Scheduled] Event triggered:", controller.cron);
 
     try {
+      console.log("[Scheduled] Listing notifications from KV");
       const listResult = await env.ADMIN_NOTIFICATIONS.list({
         prefix: "notification:",
       });
 
       if (!listResult.keys || listResult.keys.length === 0) {
-        console.log("No pending notifications to send");
+        console.log("[Scheduled] No pending notifications to send");
         return;
       }
 
       console.log(
-        `Processing ${listResult.keys.length} pending notification(s)`
+        `[Scheduled] Processing ${listResult.keys.length} pending notification(s)`
       );
 
+      console.log("[Scheduled] Reading notifications from KV");
       const pending = await Promise.all(
         listResult.keys.map(async (key) => {
           const value = await env.ADMIN_NOTIFICATIONS.get(key.name, "json");
@@ -47,6 +49,16 @@ export default {
         (item): item is any => item !== null
       );
 
+      console.log(
+        `[Scheduled] Found ${validNotifications.length} valid notifications`
+      );
+
+      if (validNotifications.length === 0) {
+        console.log("[Scheduled] No valid notifications to process");
+        return;
+      }
+
+      console.log("[Scheduled] Building email digest");
       const notificationLines = validNotifications.map((item: any) => {
         const date = new Date(item.timestamp).toLocaleString("es-ES", {
           dateStyle: "long",
@@ -114,21 +126,31 @@ export default {
         </div>
       `;
 
+      console.log("[Scheduled] Sending digest email to admin");
       await sendEmail({
         to: env.EMAIL_ADMIN || process.env.EMAIL_ADMIN || "",
         subject: `📬 Resumen de Consultas (${validNotifications.length} nuevas)`,
         html: emailContent,
       });
+      console.log("[Scheduled] Digest email sent successfully");
 
+      console.log("[Scheduled] Deleting processed notifications from KV");
       await Promise.all(
         listResult.keys.map((key) => env.ADMIN_NOTIFICATIONS.delete(key.name))
       );
 
       console.log(
-        `Successfully sent digest email and cleared ${validNotifications.length} notification(s)`
+        `[Scheduled] Successfully sent digest email and cleared ${validNotifications.length} notification(s)`
       );
     } catch (error) {
-      console.error("Error processing scheduled notifications:", error);
+      console.error(
+        "[Scheduled] Error processing scheduled notifications:",
+        error
+      );
+      console.error("[Scheduled] Error details:", {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+      });
     }
   },
 } satisfies ExportedHandler<CloudflareEnv>;

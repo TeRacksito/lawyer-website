@@ -25,13 +25,30 @@ interface NotificationPayload {
 }
 
 export async function POST(request: Request) {
+  console.log("[API] POST /api/send - Request received");
+
   try {
+    console.log("[API] Getting Cloudflare context");
     const { env } = await getCloudflareContext();
+    console.log("[API] Cloudflare context obtained", {
+      hasKV: !!env.ADMIN_NOTIFICATIONS,
+      hasEmailAdmin: !!env.EMAIL_ADMIN,
+    });
+
+    console.log("[API] Parsing request body");
     const formData: ContactFormData = await request.json();
+    console.log("[API] Form data parsed:", {
+      hasName: !!formData.name,
+      hasSurname: !!formData.surname,
+      hasEmail: !!formData.email,
+      hasSubject: !!formData.subject,
+      hasBody: !!formData.body,
+    });
 
     const { name, surname, email, subject, body, category, tags } = formData;
 
     if (!name || !surname || !email || !subject || !body) {
+      console.log("[API] Validation failed - missing required fields");
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -54,10 +71,12 @@ export async function POST(request: Request) {
       9999
     )}`;
 
+    console.log("[API] Storing notification in KV:", notificationKey);
     await env.ADMIN_NOTIFICATIONS.put(
       notificationKey,
       JSON.stringify(notificationPayload)
     );
+    console.log("[API] Notification stored successfully");
 
     const categoryInfo = category
       ? `<p><strong>Categoría:</strong> ${category}</p>`
@@ -105,19 +124,28 @@ export async function POST(request: Request) {
       </div>
     `;
 
+    console.log("[API] Sending confirmation email to user");
     await sendEmail({
       to: email,
       toName: `${name} ${surname}`,
       subject: `Confirmación: Hemos recibido tu consulta - ${subject}`,
       html: userConfirmationContent,
     });
+    console.log("[API] Confirmation email sent successfully");
 
+    console.log("[API] Request completed successfully");
     return NextResponse.json({
       status: "sent",
       message: "Confirmation email sent and notification queued",
     });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("[API] Error in POST /api/send:", error);
+    console.error("[API] Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      type: typeof error,
+    });
+
     return NextResponse.json(
       {
         error: "Failed to send email",

@@ -108,6 +108,7 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
                 alt="Logo"
                 width={40}
                 height={40}
+                priority
                 className={`transition-all duration-300 overflow-hidden max-h-14 ${
                   isScrolled ? "w-15" : "w-20"
                 }`}

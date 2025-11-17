@@ -149,10 +149,6 @@ export const valueCardTemplate: Template = {
       ],
     },
     colorField,
-    {
-      ...iconPositionField,
-      name: "disposition",
-      label: "Disposición",
-    },
+    iconPositionField("disposition", "Disposición"),
   ],
 };
