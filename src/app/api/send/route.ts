@@ -97,7 +97,7 @@ export async function POST(request: Request) {
 
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666; font-size: 12px;">
             <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
-            <p>Si necesitas ayuda inmediata, contáctanos a través de nuestro sitio web.</p>
+            <p>Si necesitas ayuda inmediata, llámanos.</p>
           </div>
         </div>
       </div>
