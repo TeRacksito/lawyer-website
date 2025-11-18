@@ -1,6 +1,7 @@
 // @ts-ignore `.open-next/worker.ts` is generated at build time
 import { default as handler } from "./.open-next/worker.js";
 import { sendEmail } from "./src/lib/email";
+import { readNotifications, clearNotifications } from "./src/lib/kv-storage";
 
 export default {
   fetch: handler.fetch,
@@ -23,43 +24,20 @@ export default {
     console.log("[Scheduled] Event triggered:", controller.cron);
 
     try {
-      console.log("[Scheduled] Listing notifications from KV");
-      const listResult = await env.ADMIN_NOTIFICATIONS.list({
-        prefix: "notification:",
-      });
+      console.log("[Scheduled] Reading notifications from KV");
+      const notifications = await readNotifications(env.ADMIN_NOTIFICATIONS);
 
-      if (!listResult.keys || listResult.keys.length === 0) {
+      if (notifications.length === 0) {
         console.log("[Scheduled] No pending notifications to send");
         return;
       }
 
       console.log(
-        `[Scheduled] Processing ${listResult.keys.length} pending notification(s)`
+        `[Scheduled] Processing ${notifications.length} pending notification(s)`
       );
-
-      console.log("[Scheduled] Reading notifications from KV");
-      const pending = await Promise.all(
-        listResult.keys.map(async (key) => {
-          const value = await env.ADMIN_NOTIFICATIONS.get(key.name, "json");
-          return value;
-        })
-      );
-
-      const validNotifications = pending.filter(
-        (item): item is any => item !== null
-      );
-
-      console.log(
-        `[Scheduled] Found ${validNotifications.length} valid notifications`
-      );
-
-      if (validNotifications.length === 0) {
-        console.log("[Scheduled] No valid notifications to process");
-        return;
-      }
 
       console.log("[Scheduled] Building email digest");
-      const notificationLines = validNotifications.map((item: any) => {
+      const notificationLines = notifications.map((item: any) => {
         const date = new Date(item.timestamp).toLocaleString("es-ES", {
           dateStyle: "long",
           timeStyle: "short",
@@ -105,7 +83,7 @@ export default {
           <div style="background-color: #0066cc; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
             <h1 style="margin: 0; font-size: 24px;">Resumen de Consultas</h1>
             <p style="margin: 10px 0 0 0; font-size: 14px;">
-              ${validNotifications.length} nueva(s) consulta(s) recibida(s)
+              ${notifications.length} nueva(s) consulta(s) recibida(s)
             </p>
           </div>
           
@@ -129,7 +107,7 @@ export default {
       console.log("[Scheduled] Sending digest email to admin");
       await sendEmail({
         to: env.EMAIL_ADMIN || process.env.EMAIL_ADMIN || "",
-        subject: `📬 Resumen de Consultas (${validNotifications.length} nuevas)`,
+        subject: `📬 Resumen de Consultas (${notifications.length} nuevas)`,
         html: emailContent,
         azureConfig: {
           tenantId: env.AZURE_TENANT_ID || "",
@@ -140,13 +118,11 @@ export default {
       });
       console.log("[Scheduled] Digest email sent successfully");
 
-      console.log("[Scheduled] Deleting processed notifications from KV");
-      await Promise.all(
-        listResult.keys.map((key) => env.ADMIN_NOTIFICATIONS.delete(key.name))
-      );
+      console.log("[Scheduled] Clearing processed notifications from KV");
+      await clearNotifications(env.ADMIN_NOTIFICATIONS);
 
       console.log(
-        `[Scheduled] Successfully sent digest email and cleared ${validNotifications.length} notification(s)`
+        `[Scheduled] Successfully sent digest email and cleared ${notifications.length} notification(s)`
       );
     } catch (error) {
       console.error(

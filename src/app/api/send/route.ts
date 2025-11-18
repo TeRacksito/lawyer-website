@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
-import { randomInt } from "crypto";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { addNotification } from "@/lib/kv-storage";
 
 interface ContactFormData {
   name: string;
@@ -11,17 +11,6 @@ interface ContactFormData {
   body: string;
   category?: string;
   tags?: string[];
-}
-
-interface NotificationPayload {
-  name: string;
-  surname: string;
-  email: string;
-  subject: string;
-  body: string;
-  category?: string;
-  tags?: string[];
-  timestamp: number;
 }
 
 export async function POST(request: Request) {
@@ -55,7 +44,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const notificationPayload: NotificationPayload = {
+    console.log("[API] Adding notification to KV storage");
+    await addNotification(env.ADMIN_NOTIFICATIONS, {
       name,
       surname,
       email,
@@ -64,18 +54,7 @@ export async function POST(request: Request) {
       category,
       tags,
       timestamp: Date.now(),
-    };
-
-    const notificationKey = `notification:${Date.now()}:${randomInt(
-      1000,
-      9999
-    )}`;
-
-    console.log("[API] Storing notification in KV:", notificationKey);
-    await env.ADMIN_NOTIFICATIONS.put(
-      notificationKey,
-      JSON.stringify(notificationPayload)
-    );
+    });
     console.log("[API] Notification stored successfully");
 
     const categoryInfo = category
