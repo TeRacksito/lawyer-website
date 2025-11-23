@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, processNotification } from "@/lib/email";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { addNotification } from "@/lib/kv-storage";
 
@@ -57,10 +57,9 @@ export async function POST(request: Request) {
     });
     console.log("[API] Notification stored successfully");
 
-    const categoryInfo = category
-      ? `<p><strong>Categoría:</strong> ${category}</p>`
-      : "";
+    const notificationTimestamp = Date.now();
 
+    console.log("[API] Sending confirmation email to user");
     const userConfirmationContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
         <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -79,7 +78,11 @@ export async function POST(request: Request) {
           <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 25px 0;">
             <h3 style="color: #0066cc; margin-top: 0; margin-bottom: 15px;">Resumen de tu consulta:</h3>
             <p style="margin: 8px 0; color: #333;"><strong>Asunto:</strong> ${subject}</p>
-            ${categoryInfo}
+            ${
+              category
+                ? `<p style="margin: 8px 0; color: #333;"><strong>Categoría:</strong> ${category}</p>`
+                : ""
+            }
             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d0e4f7;">
               <p style="margin: 0 0 8px 0; color: #555; font-weight: 600;">Tu mensaje:</p>
               <p style="margin: 0; color: #333; white-space: pre-wrap; line-height: 1.6;">${body}</p>
@@ -103,7 +106,6 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    console.log("[API] Sending confirmation email to user");
     await sendEmail({
       to: email,
       toName: `${name} ${surname}`,
@@ -118,10 +120,33 @@ export async function POST(request: Request) {
     });
     console.log("[API] Confirmation email sent successfully");
 
+    console.log("[API] Processing notification for organization users");
+    await processNotification(
+      {
+        name,
+        surname,
+        email,
+        subject,
+        body,
+        category,
+        tags,
+        timestamp: notificationTimestamp,
+      },
+      {
+        tenantId: process.env.AZURE_TENANT_ID!,
+        clientId: process.env.AZURE_CLIENT_ID!,
+        clientSecret: process.env.AZURE_CLIENT_SECRET!,
+        emailSender: process.env.EMAIL_SENDER!,
+        notificationGroup: process.env.NOTIFICATION_GROUP_EMAIL!,
+      }
+    );
+    console.log("[API] Organization notification completed");
+
     console.log("[API] Request completed successfully");
     return NextResponse.json({
       status: "sent",
-      message: "Confirmation email sent and notification queued",
+      message:
+        "Confirmation email sent and notifications processed for organization",
     });
   } catch (error) {
     console.error("[API] Error in POST /api/send:", error);

@@ -61,7 +61,7 @@ export default {
             </div>
             
             <div style="margin: 10px 0;">
-              <h4 style="color: #333; margin-bottom: 5px;">Información de Contacto</h4>
+              <h4 style="font-weight: normal; color: #a5a5a5; margin: 0px; font-style: italic; font-size: small;">Información de Contacto</h4>
               <p style="margin: 5px 0;"><strong>Nombre:</strong> ${item.name} ${item.surname}</p>
               <p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:${item.email}" style="color: #0066cc;">${item.email}</a></p>
               ${categoryInfo}
@@ -83,7 +83,12 @@ export default {
           <div style="background-color: #0066cc; color: white; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
             <h1 style="margin: 0; font-size: 24px;">Resumen de Consultas</h1>
             <p style="margin: 10px 0 0 0; font-size: 14px;">
-              ${notifications.length} nueva(s) consulta(s) recibida(s)
+              ${notifications.length} ${[
+        "nueva",
+        "consulta",
+        "recibida",
+        "",
+      ].join(notifications.length > 1 ? "s " : " ")}
             </p>
           </div>
           
