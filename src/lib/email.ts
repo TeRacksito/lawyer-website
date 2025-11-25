@@ -442,37 +442,76 @@ export async function processNotification(
 
   console.log("[Notification] Step 1: Sending email to notification group");
   const notificationEmailContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <h2 style="color: #333; border-bottom: 3px solid #0066cc; padding-bottom: 10px;">Nueva Consulta Recibida</h2>
-      
-      <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 8px 0;"><strong>Nombre:</strong> ${
-          notificationData.name
-        } ${notificationData.surname}</p>
-        <p style="margin: 8px 0;"><strong>Email:</strong> ${
-          notificationData.email
-        }</p>
-        <p style="margin: 8px 0;"><strong>Asunto:</strong> ${
-          notificationData.subject
-        }</p>
-        ${
-          notificationData.category
-            ? `<p style="margin: 8px 0;"><strong>Categoría:</strong> ${notificationData.category}</p>`
-            : ""
-        }
-        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #d0e4f7;">
-          <p style="margin: 0 0 8px 0; font-weight: 600;">Mensaje:</p>
-          <p style="margin: 0; white-space: pre-wrap;">${
+    <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+      <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2 style="color: #0066cc; border-bottom: 3px solid #0066cc; padding-bottom: 12px; margin-top: 0;">
+          📩 Nueva Consulta Recibida
+        </h2>
+        
+        <div style="background-color: #f0f7ff; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #0066cc;">
+          <h3 style="color: #0066cc; margin-top: 0; margin-bottom: 15px; font-size: 18px;">Datos del Cliente</h3>
+          <p style="margin: 10px 0; color: #333; line-height: 1.6;">
+            <strong>Nombre Completo:</strong> ${notificationData.name} ${
+    notificationData.surname
+  }
+          </p>
+          <p style="margin: 10px 0; color: #333; line-height: 1.6;">
+            <strong>Email:</strong> <a href="mailto:${
+              notificationData.email
+            }" style="color: #0066cc; text-decoration: none;">${
+    notificationData.email
+  }</a>
+          </p>
+          <p style="margin: 10px 0; color: #333; line-height: 1.6;">
+            <strong>Asunto:</strong> ${notificationData.subject}
+          </p>
+          ${
+            notificationData.category
+              ? `<p style="margin: 10px 0; color: #333; line-height: 1.6;">
+                  <strong>Categoría:</strong> <span style="background-color: #e3f2fd; padding: 4px 12px; border-radius: 4px; color: #0066cc;">${notificationData.category}</span>
+                </p>`
+              : ""
+          }
+        </div>
+
+        <div style="background-color: #fff9e6; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #ffc107;">
+          <h3 style="color: #f57c00; margin-top: 0; margin-bottom: 12px; font-size: 16px;">📝 Mensaje del Cliente</h3>
+          <div style="background-color: white; padding: 15px; border-radius: 6px; color: #333; white-space: pre-wrap; line-height: 1.8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">${
             notificationData.body
-          }</p>
+          }</div>
+        </div>
+
+        <div style="background-color: #fafafa; padding: 20px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #666; margin-top: 0; margin-bottom: 12px; font-size: 14px;">ℹ️ Información Técnica</h3>
+          <p style="margin: 8px 0; color: #666; font-size: 13px; line-height: 1.6;">
+            <strong>ID de Correlación:</strong> <code style="background-color: #fff; padding: 3px 8px; border-radius: 3px; font-family: monospace;">${correlationId}</code>
+          </p>
+          <p style="margin: 8px 0; color: #666; font-size: 13px; line-height: 1.6;">
+            <strong>Fecha de Recepción:</strong> ${eventDateTime.toLocaleString(
+              "es-ES",
+              {
+                timeZone: "Europe/Madrid",
+                dateStyle: "full",
+                timeStyle: "short",
+              }
+            )}
+          </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+          <a href="mailto:${
+            notificationData.email
+          }?subject=Re: ${encodeURIComponent(notificationData.subject)}" 
+             style="display: inline-block; background-color: #0066cc; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            📧 Responder al Cliente
+          </a>
         </div>
       </div>
-      
-      <p style="color: #666; font-size: 12px;">ID de correlación: ${correlationId}</p>
-      <p style="color: #666; font-size: 12px;">Fecha: ${eventDateTime.toLocaleString(
-        "es-ES",
-        { timeZone: "Europe/Madrid" }
-      )}</p>
+
+      <div style="text-align: center; margin-top: 20px; color: #999; font-size: 12px; line-height: 1.6;">
+        <p>Este es un correo automático del sistema de notificaciones</p>
+        <p>Consulta Legal Gratuita © ${new Date().getFullYear()}</p>
+      </div>
     </div>
   `;
 
@@ -488,10 +527,12 @@ export async function processNotification(
     },
   });
 
-  console.log("[Notification] Step 2: Getting active users");
-  const users = await listActiveUsers(accessToken, emailSender);
-  console.log(`[Notification] Processing ${users.length} users`);
+  // console.log("[Notification] Step 2: Getting active users");
+  // const users = await listActiveUsers(accessToken, emailSender);
+  // console.log(`[Notification] Processing ${users.length} users`);
 
+  // TODO: Uncomment when ready to enable To-Do tasks and Calendar events
+  /*
   console.log(
     "[Notification] Step 3: Creating To-Do tasks and calendar events in batches"
   );
@@ -584,6 +625,7 @@ export async function processNotification(
       }
     }
   }
+  */
 
   console.log("[Notification] Notification process completed");
 }
