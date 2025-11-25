@@ -172,10 +172,9 @@ export async function listActiveUsers(
 
     const data = await response.json();
     const users = ((data as { value: GraphUser[] }).value || []).filter(
-      (user) =>
-        user.accountEnabled &&
-        user.userPrincipalName.toLowerCase() !== excludeEmail.toLowerCase() &&
-        user.mail?.toLowerCase() !== excludeEmail.toLowerCase()
+      (user) => user.accountEnabled // &&
+      // user.userPrincipalName.toLowerCase() !== excludeEmail.toLowerCase() &&
+      // user.mail?.toLowerCase() !== excludeEmail.toLowerCase()
     );
 
     console.log(
