@@ -62,7 +62,7 @@ export default function FooterBlock({ data }: FooterBlockProps) {
 
   return (
     <footer
-      className="bg-base-200 border-t border-base-300"
+      className="bg-base-200 border-t rounded-none border-base-300"
       {...(dataTheme ? { "data-theme": dataTheme } : {})}
     >
       <div className="container mx-auto px-6 py-12">
