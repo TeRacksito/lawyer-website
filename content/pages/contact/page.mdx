@@ -127,11 +127,7 @@ blocks:
             _template: title
           - special_blocks:
               - special_blocks_list:
-                  - contact_form_title: Contáctanos
-                    contact_form_description: >-
-                      Completa el formulario a continuación y nos pondremos en
-                      contacto lo antes posible.
-                    contact_form_submitButtonText: Enviar Mensaje
+                  - contact_form_submitButtonText: Enviar Mensaje
                     contact_form_successMessage: ¡Gracias por tu mensaje! Nos pondremos en contacto pronto.
                     contact_form_errorMessage: >-
                       Ocurrió un error al enviar tu mensaje. Por favor, intenta
@@ -149,7 +145,6 @@ blocks:
                       - Seguimiento
                       - Cliente Nuevo
                       - Cliente Existente
-                    contact_form_recipientEmail: ''
                     _template: contact_form
             _template: special_block
       - content_blocks:
@@ -248,6 +243,20 @@ blocks:
                     _template: emergencies
             _template: special_block
     _template: column
+  - theme: parent
+    basic_section_content_blocks:
+      - basic_section_content_blocks_list:
+          - title: Un Título Atractivo
+            level: h2
+            textAlign: text-center
+            verticalAlign: items-center
+            _template: title
+          - text: |
+              Texto del nuevo párrafo...
+            textAlign: text-left
+            proseSize: prose-lg
+            _template: paragraph
+    _template: basic_section
   - theme: dark
     basic_section_rounded_card: true
     basic_section_content_blocks:
