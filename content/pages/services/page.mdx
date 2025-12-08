@@ -19,7 +19,7 @@ seo:
     ogType: website
     twitterCard: summary
   advanced:
-    robots: "index, follow"
+    robots: 'index, follow'
 blocks:
   - variant: heroTitle
     backgroundImage: /images/bookshelf.webp
@@ -47,8 +47,8 @@ blocks:
                       text: Solicitar Consulta Gratuita
                       href: /contact
                     secondaryButton:
-                      text: ""
-                      href: ""
+                      text: ''
+                      href: ''
                     _template: call_to_action
             _template: special_block
     _template: basic_section
@@ -63,8 +63,12 @@ blocks:
                   - searchEnabled: true
                     searchPlaceholder: Buscar servicios...
                     noResultsMessage: No se encontraron servicios que coincidan con tu búsqueda.
-                    services: []
+                    services:
+                      - title: Esto es un servicio de prueba
+                        description: Descripción
+                        image: /images/cross.webp
                     _template: services_list
             _template: special_block
     _template: basic_section
 ---
+
