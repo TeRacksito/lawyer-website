@@ -54,7 +54,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Compile Blog Post Search Index
-        run: node scripts/build-search-index.mjs
+        run: pnpm run build-search-index
+
+      - name: Clean up content folder
+        run: pnpm run clean-content
 
       - name: Deploy to Cloudflare Workers
         run: pnpm run deploy
