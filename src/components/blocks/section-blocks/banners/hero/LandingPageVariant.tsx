@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { tinaField } from "tinacms/dist/react";
-import { formatTitle } from "./FormatTitle";
+import { formatLandingTitle } from "./formatLandingTitle";
 import { formatSubtitle } from "./formatSubtitle";
 
 interface LandingPageVariantProps {
@@ -31,10 +31,10 @@ export default function LandingPageVariant({ data }: LandingPageVariantProps) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight mb-6 md:mb-8 drop-shadow-2xl"
           data-tina-field={tinaField(data, "title")}
         >
-          {formatTitle(title)}
+          {formatLandingTitle(title)}
         </motion.h1>
       )}
 
@@ -43,7 +43,7 @@ export default function LandingPageVariant({ data }: LandingPageVariantProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="text-base md:text-xl max-w-2xl mx-auto text-muted"
+          className="text-base md:text-lg lg:text-xl max-w-3xl mx-auto text-gray-100 leading-relaxed px-4"
           data-tina-field={tinaField(data, "subtitle")}
         >
           {formatSubtitle(subtitle, authorName, tinaField(data, "subtitle"))}
