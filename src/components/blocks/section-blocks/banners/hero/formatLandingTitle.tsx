@@ -26,7 +26,7 @@ export function formatLandingTitle(title: string): ReactNode {
       parts.push(
         <strong
           key={`bold-${lineIndex}-${match.index}`}
-          className="font-extrabold bg-gradient-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent animate-gradient"
+          className="font-extrabold bg-linear-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent animate-gradient"
         >
           {match[1]}
         </strong>
