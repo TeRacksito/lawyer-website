@@ -41,6 +41,10 @@ html {
     @apply ring-2 ring-offset-0 ring-transparent transition-[box-shadow] duration-300 rounded-sm;
   }
 
+  section {
+    @apply rounded-none;
+  }
+
   *:focus-visible {
     @apply outline-none ring-primary ring-offset-3;
   }
