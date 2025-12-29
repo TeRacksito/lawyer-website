@@ -3,11 +3,13 @@ import { contentBlock } from "./basic";
 import { paragraphBlock } from "./paragraph";
 import { specialBlock } from "./special-block";
 import { titleBlock } from "./title";
+import { imageBlock } from "./image";
 
 export const contentBlocks: BlockRegistry = [
   contentBlock,
   titleBlock,
   paragraphBlock,
+  imageBlock,
   specialBlock,
 ];
 

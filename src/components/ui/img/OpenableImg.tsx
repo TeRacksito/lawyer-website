@@ -328,12 +328,12 @@ export default function OpenableImg({
                 <TinaMarkdownRenderer content={footer} />
               </div>
             )}
-            {author && (
+            {author && author.children && author.children.length > 0 && (
               <div
                 className="text-xs font-semibold uppercase tracking-wide text-base-content/50"
                 data-tina-field={dataTinaFieldAuthor}
               >
-                <span className="float-left mr-1">©</span>{" "}
+                <span className="float-left mr-1">©</span>
                 <TinaMarkdownRenderer content={author} className="float-left" />
               </div>
             )}
@@ -553,18 +553,20 @@ export default function OpenableImg({
                         <TinaMarkdownRenderer content={footer} />
                       </div>
                     )}
-                    {author && (
-                      <div
-                        className="text-xs md:text-sm font-semibold uppercase tracking-wider text-base-content/60"
-                        data-tina-field={dataTinaFieldAuthor}
-                      >
-                        <span className="float-left mr-1">©</span>
-                        <TinaMarkdownRenderer
-                          content={author}
-                          className="float-left"
-                        />
-                      </div>
-                    )}
+                    {author &&
+                      author.children &&
+                      author.children.length > 0 && (
+                        <div
+                          className="text-xs md:text-sm font-semibold uppercase tracking-wider text-base-content/60"
+                          data-tina-field={dataTinaFieldAuthor}
+                        >
+                          <span className="float-left mr-1">©</span>
+                          <TinaMarkdownRenderer
+                            content={author}
+                            className="float-left"
+                          />
+                        </div>
+                      )}
                   </div>
                 )}
               </motion.div>
