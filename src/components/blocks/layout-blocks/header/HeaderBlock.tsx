@@ -119,7 +119,7 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
             {logoSubtext && (
               <div className="hidden md:hidden lg:flex flex-col leading-tight">
                 <span
-                  className="text-base font-bold text-primary bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                  className="text-base font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent"
                   data-tina-field={tinaField(data, "logoSubtext")}
                 >
                   {logoSubtext}

@@ -243,18 +243,16 @@ function ServiceGroupSection({
       }`}
       data-tina-field={tinaFieldData}
     >
-      {/* Header - Always visible, clickable */}
       <motion.div
-        className={`flex gap-4 sm:gap-6 p-4 sm:p-6 ${
+        className={`flex flex-col md:flex-row gap-4 sm:gap-6 p-4 sm:p-6 ${
           hasServices ? "cursor-pointer" : ""
         }`}
         onClick={() => hasServices && setServicesExpanded(!servicesExpanded)}
       >
-        {/* Image - Icon size when collapsed, grows when active */}
         {group.groupImage && (
           <motion.div
             layout
-            className={`relative flex-shrink-0 ${
+            className={`relative flex-shrink-0 mx-auto md:mx-0 ${
               servicesExpanded
                 ? "w-20 h-20 md:w-[280px] md:h-[280px]"
                 : "w-20 h-20"
