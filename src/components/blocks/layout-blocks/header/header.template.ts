@@ -17,6 +17,13 @@ export const headerBlockTemplate: Template = {
       description: "Subtexto mostrado junto al logo (ej. Luis Cruz)",
     },
     {
+      name: "logoTagline",
+      label: "Lema del Logo",
+      type: "string",
+      description:
+        "Lema o eslogan mostrado debajo del subtexto (ej. Abogados especialistas)",
+    },
+    {
       name: "logoImage",
       label: "Imagen del Logo",
       type: "image",

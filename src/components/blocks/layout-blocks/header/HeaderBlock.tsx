@@ -12,6 +12,7 @@ interface HeaderBlockProps {
   data: {
     logo?: string | null;
     logoSubtext?: string | null;
+    logoTagline?: string | null;
     logoImage?: string | null;
     navigation?: Array<{
       label?: string | null;
@@ -32,6 +33,7 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
   const {
     logo,
     logoSubtext,
+    logoTagline,
     logoImage,
     navigation,
     ctaButton,
@@ -115,11 +117,21 @@ export default function HeaderBlock({ data, dataTinaField }: HeaderBlockProps) {
               />
             </Link>
             {logoSubtext && (
-              <div
-                className="text-sm md:hidden lg:block"
-                data-tina-field={tinaField(data, "logoSubtext")}
-              >
-                {logoSubtext}
+              <div className="hidden md:hidden lg:flex flex-col leading-tight">
+                <span
+                  className="text-base font-bold text-primary bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                  data-tina-field={tinaField(data, "logoSubtext")}
+                >
+                  {logoSubtext}
+                </span>
+                {logoTagline && (
+                  <span
+                    className="text-xs text-primary font-medium"
+                    data-tina-field={tinaField(data, "logoTagline")}
+                  >
+                    {logoTagline}
+                  </span>
+                )}
               </div>
             )}
           </div>
