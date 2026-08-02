@@ -15,6 +15,46 @@ const branch =
   process.env.HEAD ||
   "main";
 
+/**
+ * Ensures every blog_header block has a valid ISO publish date before save.
+ */
+const normalizeBlogHeaderPublishDates = <T,>(values: T): T => {
+  const nowISO = new Date().toISOString();
+
+  const normalizeNode = (node: unknown): unknown => {
+    if (Array.isArray(node)) {
+      return node.map(normalizeNode);
+    }
+
+    if (node && typeof node === "object") {
+      const record = node as Record<string, unknown>;
+      const normalizedRecord: Record<string, unknown> = {};
+
+      Object.entries(record).forEach(([key, value]) => {
+        normalizedRecord[key] = normalizeNode(value);
+      });
+
+      if (normalizedRecord._template === "blog_header") {
+        const publishDate = normalizedRecord.blog_header_publish_date;
+        const isValidDate =
+          typeof publishDate === "string" &&
+          publishDate.trim().length > 0 &&
+          !Number.isNaN(new Date(publishDate).getTime());
+
+        if (!isValidDate) {
+          normalizedRecord.blog_header_publish_date = nowISO;
+        }
+      }
+
+      return normalizedRecord;
+    }
+
+    return node;
+  };
+
+  return normalizeNode(values) as T;
+};
+
 const createConditionalFields = () => {
   const baseFields: Template["fields"] = [
     {
@@ -330,6 +370,9 @@ export default defineConfig({
         ],
 
         ui: {
+          beforeSubmit: async ({ values }: any) => {
+            return normalizeBlogHeaderPublishDates(values);
+          },
           router: ({ document }) => {
             const breadcrumbs = document._sys.breadcrumbs;
 
@@ -387,6 +430,9 @@ export default defineConfig({
           ...createConditionalFields().layoutFields,
         ],
         ui: {
+          beforeSubmit: async ({ values }: any) => {
+            return normalizeBlogHeaderPublishDates(values);
+          },
           router: ({ document }) => {
             const breadcrumbs = document._sys.breadcrumbs;
             const routeParts = breadcrumbs.slice(0, -1);

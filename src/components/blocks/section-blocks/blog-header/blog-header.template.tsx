@@ -29,7 +29,7 @@ export const blogHeaderTemplate: Template = {
         blog_header_author_name: "Nombre del Autor",
         blog_header_author_title: "Especialidad o cargo",
       },
-      blog_header_publish_date: "today",
+      blog_header_publish_date: "",
       blog_header_read_time: 5,
       blog_header_tags: [
         {
@@ -80,24 +80,23 @@ export const blogHeaderTemplate: Template = {
       ui: {
         component: ({ tinaForm }: any) => {
           useEffect(() => {
-            console.log("Tina Form:", tinaForm);
-
             tinaForm?.values?.blocks?.forEach((block: any, index: number) => {
               if (block._template !== "blog_header") return;
 
-              if (
-                block.blog_header_publish_date &&
-                block.blog_header_publish_date === "today"
-              ) {
-                const todayISO = new Date().toISOString();
-                console.log("Setting publish date to today:", todayISO);
+              const publishDate = block.blog_header_publish_date;
+              const hasValidPublishDate =
+                typeof publishDate === "string" &&
+                publishDate.trim().length > 0 &&
+                !Number.isNaN(new Date(publishDate).getTime());
+
+              if (!hasValidPublishDate) {
                 tinaForm.change(
                   `blocks.${index}.blog_header_publish_date`,
-                  todayISO
+                  new Date().toISOString()
                 );
               }
             });
-          }, []);
+          }, [tinaForm]);
 
           return null;
         },
