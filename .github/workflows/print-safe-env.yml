@@ -1,0 +1,27 @@
+name: Print Safe Env Vars
+
+on:
+  workflow_dispatch:
+
+jobs:
+  print-safe-env:
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Print safe variables
+        env:
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_PUBLIC_IS_LOCAL: ${{ vars.TINA_PUBLIC_IS_LOCAL }}
+          GITHUB_BRANCH: ${{ vars.GITHUB_BRANCH }}
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_ADMIN: ${{ secrets.EMAIL_ADMIN }}
+          NOTIFICATION_GROUP_EMAIL: ${{ secrets.NOTIFICATION_GROUP_EMAIL }}
+        run: |
+          echo "NEXT_PUBLIC_TINA_CLIENT_ID=$NEXT_PUBLIC_TINA_CLIENT_ID"
+          echo "TINA_PUBLIC_IS_LOCAL=$TINA_PUBLIC_IS_LOCAL"
+          echo "GITHUB_BRANCH=$GITHUB_BRANCH"
+          echo "EMAIL_SENDER=$EMAIL_SENDER"
+          echo "EMAIL_ADMIN=$EMAIL_ADMIN"
+          echo "NOTIFICATION_GROUP_EMAIL=$NOTIFICATION_GROUP_EMAIL"
+          echo "Excluded on purpose: CLOUDFLARE_API_TOKEN, TINA_TOKEN, TINA_SEARCH_TOKEN, OPENAI_API_KEY, AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET"
