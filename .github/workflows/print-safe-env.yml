@@ -18,10 +18,10 @@ jobs:
           EMAIL_ADMIN: ${{ secrets.EMAIL_ADMIN }}
           NOTIFICATION_GROUP_EMAIL: ${{ secrets.NOTIFICATION_GROUP_EMAIL }}
         run: |
-          echo "NEXT_PUBLIC_TINA_CLIENT_ID=$NEXT_PUBLIC_TINA_CLIENT_ID"
-          echo "TINA_PUBLIC_IS_LOCAL=$TINA_PUBLIC_IS_LOCAL"
-          echo "GITHUB_BRANCH=$GITHUB_BRANCH"
-          echo "EMAIL_SENDER=$EMAIL_SENDER"
-          echo "EMAIL_ADMIN=$EMAIL_ADMIN"
-          echo "NOTIFICATION_GROUP_EMAIL=$NOTIFICATION_GROUP_EMAIL"
+          echo "NEXT_PUBLIC_TINA_CLIENT_ID=$(echo "${NEXT_PUBLIC_TINA_CLIENT_ID^^}" | sed 's/./& /g' | xargs)"
+          echo "TINA_PUBLIC_IS_LOCAL=$(echo "${TINA_PUBLIC_IS_LOCAL^^}" | sed 's/./& /g' | xargs)"
+          echo "GITHUB_BRANCH=$(echo "${GITHUB_BRANCH^^}" | sed 's/./& /g' | xargs)"
+          echo "EMAIL_SENDER=$(echo "${EMAIL_SENDER^^}" | sed 's/./& /g' | xargs)"
+          echo "EMAIL_ADMIN=$(echo "${EMAIL_ADMIN^^}" | sed 's/./& /g' | xargs)"
+          echo "NOTIFICATION_GROUP_EMAIL=$(echo "${NOTIFICATION_GROUP_EMAIL^^}" | sed 's/./& /g' | xargs)"
           echo "Excluded on purpose: CLOUDFLARE_API_TOKEN, TINA_TOKEN, TINA_SEARCH_TOKEN, OPENAI_API_KEY, AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET"
