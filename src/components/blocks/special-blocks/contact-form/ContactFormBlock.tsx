@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, CircleHelp } from "lucide-react";
 import { tinaField } from "tinacms/dist/react";
 
 interface ContactFormData {
@@ -49,13 +50,81 @@ const STORAGE_KEY = "contact_form_data";
 const DEFAULT_PHONE_COUNTRY_CODE = "+34";
 
 const PHONE_COUNTRY_CODES = [
-  { code: "+34", label: "España", flag: "🇪🇸" },
-  { code: "+351", label: "Portugal", flag: "🇵🇹" },
-  { code: "+33", label: "Francia", flag: "🇫🇷" },
-  { code: "+39", label: "Italia", flag: "🇮🇹" },
-  { code: "+44", label: "Reino Unido", flag: "🇬🇧" },
-  { code: "+49", label: "Alemania", flag: "🇩🇪" },
-  { code: "+1", label: "Estados Unidos", flag: "🇺🇸" },
+  // --- Península Ibérica y Fronteras ---
+  { code: "+34", label: "España", flagClass: "fi-es" },
+  { code: "+351", label: "Portugal", flagClass: "fi-pt" },
+  { code: "+376", label: "Andorra", flagClass: "fi-ad" },
+  { code: "+33", label: "Francia", flagClass: "fi-fr" },
+  { code: "+212", label: "Marruecos", flagClass: "fi-ma" },
+
+  // --- Principales Socios Europeos y Demografía ---
+  { code: "+39", label: "Italia", flagClass: "fi-it" },
+  { code: "+44", label: "Reino Unido", flagClass: "fi-gb" },
+  { code: "+49", label: "Alemania", flagClass: "fi-de" },
+  { code: "+40", label: "Rumanía", flagClass: "fi-ro" },
+  { code: "+31", label: "Países Bajos", flagClass: "fi-nl" },
+  { code: "+32", label: "Bélgica", flagClass: "fi-be" },
+  { code: "+41", label: "Suiza", flagClass: "fi-ch" },
+
+  // --- Norteamérica ---
+  { code: "+1", label: "Estados Unidos", flagClass: "fi-us" },
+  { code: "+1", label: "Canadá", flagClass: "fi-ca" },
+
+  // --- Hispanoamérica y Brasil ---
+  { code: "+57", label: "Colombia", flagClass: "fi-co" },
+  { code: "+593", label: "Ecuador", flagClass: "fi-ec" },
+  { code: "+54", label: "Argentina", flagClass: "fi-ar" },
+  { code: "+58", label: "Venezuela", flagClass: "fi-ve" },
+  { code: "+51", label: "Perú", flagClass: "fi-pe" },
+  { code: "+52", label: "México", flagClass: "fi-mx" },
+  { code: "+56", label: "Chile", flagClass: "fi-cl" },
+  { code: "+1", label: "República Dominicana", flagClass: "fi-do" },
+  { code: "+591", label: "Bolivia", flagClass: "fi-bo" },
+  { code: "+53", label: "Cuba", flagClass: "fi-cu" },
+  { code: "+598", label: "Uruguay", flagClass: "fi-uy" },
+  { code: "+595", label: "Paraguay", flagClass: "fi-py" },
+  { code: "+55", label: "Brasil", flagClass: "fi-br" },
+  { code: "+507", label: "Panamá", flagClass: "fi-pa" },
+  { code: "+506", label: "Costa Rica", flagClass: "fi-cr" },
+  { code: "+504", label: "Honduras", flagClass: "fi-hn" },
+  { code: "+503", label: "El Salvador", flagClass: "fi-sv" },
+  { code: "+502", label: "Guatemala", flagClass: "fi-gt" },
+  { code: "+505", label: "Nicaragua", flagClass: "fi-ni" },
+
+  // --- Otros Vínculos Históricos ---
+  { code: "+240", label: "Guinea Ecuatorial", flagClass: "fi-gq" },
+  { code: "+63", label: "Filipinas", flagClass: "fi-ph" },
+
+  // --- Resto de Europa (Norte, Este y Balcanes) ---
+  { code: "+43", label: "Austria", flagClass: "fi-at" },
+  { code: "+353", label: "Irlanda", flagClass: "fi-ie" },
+  { code: "+48", label: "Polonia", flagClass: "fi-pl" },
+  { code: "+380", label: "Ucrania", flagClass: "fi-ua" },
+  { code: "+359", label: "Bulgaria", flagClass: "fi-bg" },
+  { code: "+30", label: "Grecia", flagClass: "fi-gr" },
+  { code: "+46", label: "Suecia", flagClass: "fi-se" },
+  { code: "+47", label: "Noruega", flagClass: "fi-no" },
+  { code: "+45", label: "Dinamarca", flagClass: "fi-dk" },
+  { code: "+358", label: "Finlandia", flagClass: "fi-fi" },
+
+  // --- Potencias de Asia y Oceanía ---
+  { code: "+86", label: "China", flagClass: "fi-cn" },
+  { code: "+81", label: "Japón", flagClass: "fi-jp" },
+  { code: "+82", label: "Corea del Sur", flagClass: "fi-kr" },
+  { code: "+91", label: "India", flagClass: "fi-in" },
+  { code: "+61", label: "Australia", flagClass: "fi-au" },
+  { code: "+64", label: "Nueva Zelanda", flagClass: "fi-nz" },
+
+  // --- Oriente Medio, África y Eurasia ---
+  { code: "+90", label: "Turquía", flagClass: "fi-tr" },
+  { code: "+971", label: "Emiratos Árabes Unidos", flagClass: "fi-ae" },
+  { code: "+966", label: "Arabia Saudita", flagClass: "fi-sa" },
+  { code: "+972", label: "Israel", flagClass: "fi-il" },
+  { code: "+213", label: "Argelia", flagClass: "fi-dz" },
+  { code: "+221", label: "Senegal", flagClass: "fi-sn" },
+  { code: "+27", label: "Sudáfrica", flagClass: "fi-za" },
+  { code: "+20", label: "Egipto", flagClass: "fi-eg" },
+  { code: "+234", label: "Nigeria", flagClass: "fi-ng" }
 ] as const;
 
 const emailRegex =
@@ -202,6 +271,18 @@ export default function ContactFormBlock({
             }
           }
           break;
+                  case "subject":
+          if (!value || (typeof value === "string" && value.trim() === ""))
+            return "El asunto es obligatorio";
+          if (typeof value === "string" && value.length < 10)
+            return "El asunto debe tener al menos 10 caracteres";
+          break;
+        case "body":
+          if (!value || (typeof value === "string" && value.trim() === ""))
+            return "El mensaje es obligatorio";
+          if (typeof value === "string" && value.length < 50)
+            return "El mensaje debe tener al menos 50 caracteres";
+          break;
       }
       return undefined;
     },
@@ -225,6 +306,13 @@ export default function ContactFormBlock({
     setErrors(newErrors);
     return isValid;
   }, [formData, validateField]);
+
+  const phonePrefixTriggerStateClass =
+    errors.phone && touched.has("phone")
+      ? "border-error text-error"
+      : touched.has("phone")
+        ? "border-success text-success"
+        : "border-base-300 text-base-content";
 
   const handleChange = (field: keyof FormData, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -532,29 +620,58 @@ export default function ContactFormBlock({
 
             {data.contact_form_showPhoneField ? (
               <div>
-                <label
-                  htmlFor="phone"
-                  className="mb-1 block text-sm font-semibold"
-                >
-                  Teléfono
-                </label>
-                <div className="join w-full">
-                  <select
-                    id="phoneCountryCode"
-                    value={formData.phoneCountryCode}
-                    onChange={(e) =>
-                      handleChange("phoneCountryCode", e.target.value)
-                    }
-                    className="select select-md join-item w-36 shrink-0"
-                    disabled={submitStatus === "submitting"}
-                    aria-label="Prefijo telefónico"
+                <div className="mb-0.5 flex items-center gap-2">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-semibold"
                   >
-                    {PHONE_COUNTRY_CODES.map(({ code, label, flag }) => (
-                      <option key={code} value={code}>
-                        {flag} {code} {label}
-                      </option>
-                    ))}
-                  </select>
+                    Teléfono
+                  </label>
+                  <div className="tooltip tooltip-bottom" data-tip="Opcional. Si el correo falla, te llamaremos a este número.">
+                    <span className="inline-flex items-center text-base-content/60">
+                      <CircleHelp size={16} aria-hidden="true" />
+                    </span>
+                  </div>
+                </div>
+                <div className="join w-full">
+                  <details className="dropdown join-item w-24 shrink-0">
+                    <summary
+                      className={`btn btn-md btn-outline join-item w-full justify-between gap-2 px-3 ${phonePrefixTriggerStateClass}`}
+                      aria-label="Seleccionar prefijo telefónico"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span
+                          className={`fi ${
+                            PHONE_COUNTRY_CODES.find(
+                              ({ code }) => code === formData.phoneCountryCode,
+                            )?.flagClass ?? "fi-es"
+                          }`} 
+                          aria-hidden="true"
+                        />
+                        <span>{formData.phoneCountryCode}</span>
+                      </span>
+                      <ChevronDown size={14} aria-hidden="true" />
+                    </summary>
+                    <ul className="menu dropdown-content z-20 mt-2 w-65 rounded-box bg-base-100 p-2 shadow overflow-y-auto max-h-60 flex-row">
+                      {PHONE_COUNTRY_CODES.map(({ code, label, flagClass }, index) => (
+                        <li key={`${code}-${index}`}>
+                          <button
+                            type="button"
+                            className="flex items-center gap-3"
+                            onClick={(event) => {
+                              handleChange("phoneCountryCode", code);
+                              (event.currentTarget.closest("details") as HTMLDetailsElement | null)?.removeAttribute("open");
+                            }}
+                            disabled={submitStatus === "submitting"}
+                          >
+                            <span className={`fi ${flagClass}`} aria-hidden="true" />
+                            <span className="font-medium">{code}</span>
+                            <span className="ml-auto text-xs opacity-70">{label}</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
                   <input
                     id="phone"
                     type="tel"

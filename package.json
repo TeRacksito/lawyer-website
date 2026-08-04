@@ -21,6 +21,7 @@
     "@tinacms/auth": "^1.1.0",
     "@types/react-simple-maps": "^3.0.6",
     "emoji-picker-react": "^4.16.1",
+    "flag-icons": "^7.5.0",
     "framer-motion": "^12.23.26",
     "fs-extra": "^11.3.2",
     "fuse.js": "^7.1.0",
