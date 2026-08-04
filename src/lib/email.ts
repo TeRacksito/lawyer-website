@@ -463,11 +463,6 @@ export async function processNotification(
     notificationData.email
   }</a>
           </p>
-          ${
-            notificationData.phone
-              ? `<p style="margin: 10px 0; color: #333; line-height: 1.6;"><strong>Teléfono:</strong> ${notificationData.phone}</p>`
-              : ""
-          }
           <p style="margin: 10px 0; color: #333; line-height: 1.6;">
             <strong>Asunto:</strong> ${notificationData.subject}
           </p>
@@ -486,6 +481,18 @@ export async function processNotification(
             notificationData.body
           }</div>
         </div>
+
+        ${
+          notificationData.phone
+            ? `<div style="background-color: #e8f5e9; padding: 20px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #4caf50;">
+                <h3 style="color: #2e7d32; margin-top: 0; margin-bottom: 12px; font-size: 16px;">📞 Vía de Contacto Alternativa</h3>
+                <p style="margin: 0; color: #333; line-height: 1.6;">
+                  El cliente ha proporcionado su número de teléfono: <strong>${notificationData.phone}</strong>. 
+                  Por favor, utilícelo para contactarle mediante llamada telefónica en caso de que la comunicación por correo electrónico presente dificultades o requiera mayor agilidad.
+                </p>
+              </div>`
+            : ""
+        }
 
         <div style="background-color: #fafafa; padding: 20px; border-radius: 8px; margin: 25px 0;">
           <h3 style="color: #666; margin-top: 0; margin-bottom: 12px; font-size: 14px;">ℹ️ Información Técnica</h3>

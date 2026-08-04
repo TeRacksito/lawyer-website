@@ -73,12 +73,6 @@ export async function POST(request: Request) {
           <p style="color: #333; line-height: 1.6; margin: 20px 0;">
             Hola ${name},
           </p>
-
-          ${
-            phone
-              ? `<p style="color: #333; line-height: 1.6; margin: 20px 0;"><strong>Teléfono:</strong> ${phone}</p>`
-              : ""
-          }
           
           <p style="color: #333; line-height: 1.6; margin: 20px 0;">
             Gracias por ponerte en contacto con nosotros. Hemos recibido tu mensaje y te responderemos lo antes posible.
@@ -97,6 +91,17 @@ export async function POST(request: Request) {
               <p style="margin: 0; color: #333; white-space: pre-wrap; line-height: 1.6;">${body}</p>
             </div>
           </div>
+
+          ${
+            phone
+              ? `<div style="background-color: #f8fcf8; padding: 15px 20px; border-radius: 6px; margin: 25px 0; border-left: 4px solid #4caf50;">
+                  <p style="margin: 0; color: #333; line-height: 1.6; font-size: 14px;">
+                    📞 <strong>Aviso sobre tu teléfono:</strong> Nos has proporcionado el número <strong>${phone}</strong>. 
+                    Nuestro equipo lo utilizará para contactarte mediante llamada telefónica únicamente en caso de que tengamos dificultades para comunicarnos contigo por correo electrónico o si tu consulta requiere mayor agilidad.
+                  </p>
+                </div>`
+              : ""
+          }
 
           <p style="color: #333; line-height: 1.6; margin: 20px 0;">
             Nuestro equipo revisará tu consulta y te contactaremos pronto. Si tu asunto es urgente, no dudes en llamarnos directamente.
