@@ -85,6 +85,7 @@ interface NotificationData {
   name: string;
   surname: string;
   email: string;
+  phone?: string;
   subject: string;
   body: string;
   category?: string;
@@ -462,6 +463,11 @@ export async function processNotification(
     notificationData.email
   }</a>
           </p>
+          ${
+            notificationData.phone
+              ? `<p style="margin: 10px 0; color: #333; line-height: 1.6;"><strong>Teléfono:</strong> ${notificationData.phone}</p>`
+              : ""
+          }
           <p style="margin: 10px 0; color: #333; line-height: 1.6;">
             <strong>Asunto:</strong> ${notificationData.subject}
           </p>

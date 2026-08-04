@@ -11,6 +11,7 @@ interface NotificationPayload {
   name: string;
   surname: string;
   email: string;
+  phone?: string;
   subject: string;
   body: string;
   category?: string;

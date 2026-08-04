@@ -11,6 +11,7 @@ export const contactFormTemplate: Template = {
         "¡Gracias por tu mensaje! Nos pondremos en contacto pronto.",
       contact_form_errorMessage:
         "Ocurrió un error al enviar tu mensaje. Por favor, intenta de nuevo.",
+      contact_form_showPhoneField: true,
       contact_form_showCategories: true,
       contact_form_categories: [
         "Consulta General",
@@ -31,8 +32,8 @@ export const contactFormTemplate: Template = {
   fields: [
     getTemplateDescriptionField(
       "Formulario de Contacto",
-      "Formulario de contacto profesional con persistencia de datos, validación y excelente retroalimentación del usuario. El formulario guarda automáticamente los datos del usuario en localStorage para evitar pérdida de datos.",
-      "**Características:**\n- Validación en tiempo real con mensajes de error\n- Persistencia de datos del formulario (auto-guardado)\n- Retroalimentación de éxito/error\n- Estados de carga\n- Opción para limpiar formulario\n- Categorías y etiquetas opcionales\n- Diseño responsive\n- Soporte de accesibilidad"
+      "Formulario de contacto profesional con teléfono opcional, selector de prefijo internacional, persistencia de datos, validación y excelente retroalimentación del usuario. El formulario guarda automáticamente los datos del usuario en localStorage para evitar pérdida de datos.",
+      "**Características:**\n- Validación en tiempo real con mensajes de error\n- Persistencia de datos del formulario (auto-guardado)\n- Teléfono opcional con prefijo internacional y banderas\n- Retroalimentación de éxito/error\n- Estados de carga\n- Opción para limpiar formulario\n- Categorías y etiquetas opcionales\n- Diseño responsive\n- Soporte de accesibilidad"
     ),
     {
       type: "string",
@@ -58,6 +59,12 @@ export const contactFormTemplate: Template = {
       ui: {
         component: "textarea",
       },
+    },
+    {
+      type: "boolean",
+      name: "contact_form_showPhoneField",
+      label: "Mostrar Teléfono",
+      description: "Habilitar campo de teléfono en el formulario",
     },
     {
       type: "boolean",
@@ -90,6 +97,6 @@ export const contactFormTemplate: Template = {
       ui: {
         component: "list",
       },
-    }
+    },
   ],
 };

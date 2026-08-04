@@ -7,6 +7,7 @@ interface ContactFormData {
   name: string;
   surname: string;
   email: string;
+  phone?: string;
   subject: string;
   body: string;
   category?: string;
@@ -30,11 +31,12 @@ export async function POST(request: Request) {
       hasName: !!formData.name,
       hasSurname: !!formData.surname,
       hasEmail: !!formData.email,
+      hasPhone: !!formData.phone,
       hasSubject: !!formData.subject,
       hasBody: !!formData.body,
     });
 
-    const { name, surname, email, subject, body, category, tags } = formData;
+    const { name, surname, email, phone, subject, body, category, tags } = formData;
 
     if (!name || !surname || !email || !subject || !body) {
       console.log("[API] Validation failed - missing required fields");
@@ -49,6 +51,7 @@ export async function POST(request: Request) {
       name,
       surname,
       email,
+      phone,
       subject,
       body,
       category,
@@ -70,6 +73,12 @@ export async function POST(request: Request) {
           <p style="color: #333; line-height: 1.6; margin: 20px 0;">
             Hola ${name},
           </p>
+
+          ${
+            phone
+              ? `<p style="color: #333; line-height: 1.6; margin: 20px 0;"><strong>Teléfono:</strong> ${phone}</p>`
+              : ""
+          }
           
           <p style="color: #333; line-height: 1.6; margin: 20px 0;">
             Gracias por ponerte en contacto con nosotros. Hemos recibido tu mensaje y te responderemos lo antes posible.
@@ -126,6 +135,7 @@ export async function POST(request: Request) {
         name,
         surname,
         email,
+          phone,
         subject,
         body,
         category,

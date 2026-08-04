@@ -10,6 +10,7 @@ interface ContactFormData {
   contact_form_errorMessage?: string;
   contact_form_categories?: string[];
   contact_form_tags?: string[];
+  contact_form_showPhoneField?: boolean;
   contact_form_showCategories?: boolean;
   contact_form_showTags?: boolean;
   [key: string]: unknown;
@@ -25,6 +26,8 @@ interface FormData {
   name: string;
   surname: string;
   email: string;
+  phone: string;
+  phoneCountryCode: string;
   subject: string;
   body: string;
   category: string;
@@ -35,6 +38,7 @@ interface FormErrors {
   name?: string;
   surname?: string;
   email?: string;
+  phone?: string;
   subject?: string;
   body?: string;
 }
@@ -42,24 +46,101 @@ interface FormErrors {
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 const STORAGE_KEY = "contact_form_data";
+const DEFAULT_PHONE_COUNTRY_CODE = "+34";
+
+const PHONE_COUNTRY_CODES = [
+  { code: "+34", label: "España", flag: "🇪🇸" },
+  { code: "+351", label: "Portugal", flag: "🇵🇹" },
+  { code: "+33", label: "Francia", flag: "🇫🇷" },
+  { code: "+39", label: "Italia", flag: "🇮🇹" },
+  { code: "+44", label: "Reino Unido", flag: "🇬🇧" },
+  { code: "+49", label: "Alemania", flag: "🇩🇪" },
+  { code: "+1", label: "Estados Unidos", flag: "🇺🇸" },
+] as const;
 
 const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const phoneRegex = /^\d{6,15}$/;
+
+function createInitialFormData(): FormData {
+  return {
+    name: "",
+    surname: "",
+    email: "",
+    phone: "",
+    phoneCountryCode: DEFAULT_PHONE_COUNTRY_CODE,
+    subject: "",
+    body: "",
+    category: "",
+    tags: [],
+  };
+}
+
+function normalizePhoneNumber(value: string) {
+  return value.replace(/[\s()-]/g, "").trim();
+}
+
+function formatPhoneForSubmission(countryCode: string, phone: string) {
+  const normalizedPhone = normalizePhoneNumber(phone);
+
+  if (!normalizedPhone) {
+    return "";
+  }
+
+  if (normalizedPhone.startsWith("+")) {
+    return normalizedPhone;
+  }
+
+  return `${countryCode}${normalizedPhone}`;
+}
+
+function parseSavedFormData(saved: unknown): FormData {
+  const fallback = createInitialFormData();
+
+  if (!saved || typeof saved !== "object") {
+    return fallback;
+  }
+
+  const candidate = saved as Partial<FormData>;
+  const candidatePhone = typeof candidate.phone === "string" ? candidate.phone : "";
+  const normalizedPhone = normalizePhoneNumber(candidatePhone);
+  const savedCountryCode =
+    typeof candidate.phoneCountryCode === "string" &&
+    PHONE_COUNTRY_CODES.some(({ code }) => code === candidate.phoneCountryCode)
+      ? candidate.phoneCountryCode
+      : fallback.phoneCountryCode;
+
+  if (normalizedPhone.startsWith("+")) {
+    const matchedPrefix = PHONE_COUNTRY_CODES
+      .map(({ code }) => code)
+      .sort((left, right) => right.length - left.length)
+      .find((code) => normalizedPhone.startsWith(code));
+
+    return {
+      ...fallback,
+      ...candidate,
+      phone: matchedPrefix ? normalizedPhone.slice(matchedPrefix.length) : normalizedPhone,
+      phoneCountryCode: matchedPrefix || savedCountryCode,
+      tags: Array.isArray(candidate.tags) ? candidate.tags : [],
+    };
+  }
+
+  return {
+    ...fallback,
+    ...candidate,
+    phone: normalizedPhone,
+    phoneCountryCode: savedCountryCode,
+    tags: Array.isArray(candidate.tags) ? candidate.tags : [],
+  };
+}
 
 export default function ContactFormBlock({
   data,
   dataTinaField,
   motionDelay = 0,
 }: ContactFormBlockProps) {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    surname: "",
-    email: "",
-    subject: "",
-    body: "",
-    category: "",
-    tags: [],
-  });
+  const [formData, setFormData] = useState<FormData>(createInitialFormData());
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Set<keyof FormData>>(new Set());
@@ -71,7 +152,7 @@ export default function ContactFormBlock({
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        setFormData(parsed);
+        setFormData(parseSavedFormData(parsed));
       } catch (e) {
         console.error("Failed to parse saved form data:", e);
       }
@@ -110,36 +191,35 @@ export default function ContactFormBlock({
           if (typeof value === "string" && !emailRegex.test(value))
             return "Por favor ingresa una dirección de correo válida";
           break;
-        case "subject":
-          if (!value || (typeof value === "string" && value.trim() === ""))
-            return "El asunto es obligatorio";
-          if (typeof value === "string" && value.length < 5)
-            return "El asunto debe tener al menos 5 caracteres";
-          break;
-        case "body":
-          if (!value || (typeof value === "string" && value.trim() === ""))
-            return "El mensaje es obligatorio";
-          if (typeof value === "string" && value.length < 10)
-            return "El mensaje debe tener al menos 10 caracteres";
+        case "phone":
+          if (data.contact_form_showPhoneField) {
+            if (value && typeof value === "string") {
+              const normalizedValue = normalizePhoneNumber(value);
+
+              if (!phoneRegex.test(normalizedValue)) {
+                return "Por favor ingresa un número de teléfono válido";
+              }
+            }
+          }
           break;
       }
       return undefined;
     },
-    []
+    [data.contact_form_showPhoneField],
   );
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {};
     let isValid = true;
 
-    (["name", "surname", "email", "subject", "body"] as const).forEach(
+    (["name", "surname", "email", "phone", "subject", "body"] as const).forEach(
       (field) => {
-        const error = validateField(field, formData[field]);
+        const error = validateField(field, formData[field] || "");
         if (error) {
           newErrors[field] = error;
           isValid = false;
         }
-      }
+      },
     );
 
     setErrors(newErrors);
@@ -160,7 +240,7 @@ export default function ContactFormBlock({
 
   const handleBlur = (field: keyof FormData) => {
     setTouched((prev) => new Set(prev).add(field));
-    const error = validateField(field, formData[field]);
+    const error = validateField(field, formData[field] || "");
     setErrors((prev) => ({
       ...prev,
       [field]: error,
@@ -183,6 +263,7 @@ export default function ContactFormBlock({
       "name",
       "surname",
       "email",
+      "phone",
       "subject",
       "body",
     ]);
@@ -198,6 +279,11 @@ export default function ContactFormBlock({
     setStatusMessage("");
 
     try {
+      const responsePhone = formatPhoneForSubmission(
+        formData.phoneCountryCode,
+        formData.phone,
+      );
+
       const response = await fetch("/api/send", {
         method: "POST",
         headers: {
@@ -207,6 +293,7 @@ export default function ContactFormBlock({
           name: formData.name,
           surname: formData.surname,
           email: formData.email,
+          phone: responsePhone || undefined,
           subject: formData.subject,
           body: formData.body,
           category: formData.category,
@@ -221,21 +308,13 @@ export default function ContactFormBlock({
       setSubmitStatus("success");
       setStatusMessage(
         data.contact_form_successMessage ||
-          "Thank you for your message! We'll get back to you soon."
+          "Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.",
       );
 
       localStorage.removeItem(STORAGE_KEY);
 
       setTimeout(() => {
-        setFormData({
-          name: "",
-          surname: "",
-          email: "",
-          subject: "",
-          body: "",
-          category: "",
-          tags: [],
-        });
+        setFormData(createInitialFormData());
         setTouched(new Set());
         setErrors({});
         setSubmitStatus("idle");
@@ -246,7 +325,7 @@ export default function ContactFormBlock({
       setSubmitStatus("error");
       setStatusMessage(
         data.contact_form_errorMessage ||
-          "An error occurred while sending your message. Please try again."
+          "Ha ocurrido un error al enviar tu mensaje. Intenta de nuevo.",
       );
     }
   };
@@ -254,18 +333,10 @@ export default function ContactFormBlock({
   const handleClearForm = () => {
     if (
       confirm(
-        "¿Estás seguro de que quieres limpiar el formulario? Se perderán todos tus datos."
+        "¿Estás seguro de que quieres limpiar el formulario? Se perderán todos tus datos.",
       )
     ) {
-      setFormData({
-        name: "",
-        surname: "",
-        email: "",
-        subject: "",
-        body: "",
-        category: "",
-        tags: [],
-      });
+      setFormData(createInitialFormData());
       setTouched(new Set());
       setErrors({});
       localStorage.removeItem(STORAGE_KEY);
@@ -310,8 +381,8 @@ export default function ContactFormBlock({
                   errors.name && touched.has("name")
                     ? "input-error"
                     : touched.has("name") && !errors.name
-                    ? "input-success"
-                    : ""
+                      ? "input-success"
+                      : ""
                 }`}
                 placeholder="Ingresa tu nombre"
                 disabled={submitStatus === "submitting"}
@@ -365,8 +436,8 @@ export default function ContactFormBlock({
                   errors.surname && touched.has("surname")
                     ? "input-error"
                     : touched.has("surname") && !errors.surname
-                    ? "input-success"
-                    : ""
+                      ? "input-success"
+                      : ""
                 }`}
                 placeholder="Ingresa tu apellido"
                 disabled={submitStatus === "submitting"}
@@ -401,58 +472,137 @@ export default function ContactFormBlock({
             </div>
           </fieldset>
 
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-semibold">
-              Correo Electrónico{" "}
-              <span className="text-error" aria-label="obligatorio">
-                *
+          <fieldset className={`grid gap-6 ${data.contact_form_showPhoneField ? "md:grid-cols-2" : ""}`}>
+            <legend className="sr-only">Información de contacto</legend>
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-1 block text-sm font-semibold"
+              >
+                Correo Electrónico{" "}
+                <span className="text-error" aria-label="obligatorio">
+                  *
+                </span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                onBlur={() => handleBlur("email")}
+                className={`input input-md w-full ${
+                  errors.email && touched.has("email")
+                    ? "input-error"
+                    : touched.has("email") && !errors.email
+                      ? "input-success"
+                      : ""
+                }`}
+                placeholder="tu.correo@email.com"
+                disabled={submitStatus === "submitting"}
+                aria-required="true"
+                aria-invalid={
+                  errors.email && touched.has("email") ? "true" : "false"
+                }
+                aria-describedby={
+                  errors.email && touched.has("email")
+                    ? "email-error email-hint"
+                    : "email-hint"
+                }
+                autoComplete="email"
+              />
+              <span id="email-hint" className="sr-only">
+                Campo obligatorio. Ingresa una dirección de correo electrónico
+                válida.
               </span>
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              onBlur={() => handleBlur("email")}
-              className={`input input-md w-full ${
-                errors.email && touched.has("email")
-                  ? "input-error"
-                  : touched.has("email") && !errors.email
-                  ? "input-success"
-                  : ""
-              }`}
-              placeholder="tu.correo@email.com"
-              disabled={submitStatus === "submitting"}
-              aria-required="true"
-              aria-invalid={
-                errors.email && touched.has("email") ? "true" : "false"
-              }
-              aria-describedby={
-                errors.email && touched.has("email")
-                  ? "email-error email-hint"
-                  : "email-hint"
-              }
-              autoComplete="email"
-            />
-            <span id="email-hint" className="sr-only">
-              Campo obligatorio. Ingresa una dirección de correo electrónico
-              válida.
-            </span>
-            <AnimatePresence mode="wait">
-              {errors.email && touched.has("email") && (
-                <motion.p
-                  id="email-error"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-2 text-sm text-error"
-                  role="alert"
+              <AnimatePresence mode="wait">
+                {errors.email && touched.has("email") && (
+                  <motion.p
+                    id="email-error"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-2 text-sm text-error"
+                    role="alert"
+                  >
+                    {errors.email}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {data.contact_form_showPhoneField ? (
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="mb-1 block text-sm font-semibold"
                 >
-                  {errors.email}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
+                  Teléfono
+                </label>
+                <div className="join w-full">
+                  <select
+                    id="phoneCountryCode"
+                    value={formData.phoneCountryCode}
+                    onChange={(e) =>
+                      handleChange("phoneCountryCode", e.target.value)
+                    }
+                    className="select select-md join-item w-36 shrink-0"
+                    disabled={submitStatus === "submitting"}
+                    aria-label="Prefijo telefónico"
+                  >
+                    {PHONE_COUNTRY_CODES.map(({ code, label, flag }) => (
+                      <option key={code} value={code}>
+                        {flag} {code} {label}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => handleChange("phone", e.target.value)}
+                    onBlur={() => handleBlur("phone")}
+                    className={`input input-md join-item w-full min-w-0 flex-1 ${
+                      errors.phone && touched.has("phone")
+                        ? "input-error"
+                        : touched.has("phone") && !errors.phone
+                          ? "input-success"
+                          : ""
+                    }`}
+                    placeholder="612 345 678"
+                    disabled={submitStatus === "submitting"}
+                    inputMode="tel"
+                    autoComplete="tel-national"
+                    aria-invalid={
+                      errors.phone && touched.has("phone") ? "true" : "false"
+                    }
+                    aria-describedby={
+                      errors.phone && touched.has("phone")
+                        ? "phone-error phone-hint"
+                        : "phone-hint"
+                    }
+                  />
+                </div>
+                <span id="phone-hint" className="sr-only">
+                  Campo opcional. Selecciona el prefijo e introduce el número sin
+                  el prefijo internacional.
+                </span>
+                <AnimatePresence mode="wait">
+                  {errors.phone && touched.has("phone") && (
+                    <motion.p
+                      id="phone-error"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-2 text-sm text-error"
+                      role="alert"
+                    >
+                      {errors.phone}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : null}
+          </fieldset>
 
           {data.contact_form_showCategories &&
             data.contact_form_categories &&
@@ -505,8 +655,8 @@ export default function ContactFormBlock({
                 errors.subject && touched.has("subject")
                   ? "input-error"
                   : touched.has("subject") && !errors.subject
-                  ? "input-success"
-                  : ""
+                    ? "input-success"
+                    : ""
               }`}
               placeholder="Consulta sobre servicios legales"
               disabled={submitStatus === "submitting"}
@@ -596,8 +746,8 @@ export default function ContactFormBlock({
                 errors.body && touched.has("body")
                   ? "textarea-error"
                   : touched.has("body") && !errors.body
-                  ? "textarea-success"
-                  : ""
+                    ? "textarea-success"
+                    : ""
               }`}
               placeholder="Describe tu consulta con el mayor detalle posible. Incluye cualquier información relevante que nos ayude a comprender mejor tu situación."
               disabled={submitStatus === "submitting"}
@@ -641,8 +791,8 @@ export default function ContactFormBlock({
                   submitStatus === "success"
                     ? "alert-success"
                     : submitStatus === "error"
-                    ? "alert-error"
-                    : "alert-info"
+                      ? "alert-error"
+                      : "alert-info"
                 }`}
                 role="alert"
                 aria-live="polite"
