@@ -1,4 +1,5 @@
 import { mainBlockTemplate } from "@/components/blocks/layout-blocks/main/main.template";
+import { blogHeaderTemplate } from "@/components/blocks/section-blocks/blog-header/blog-header.template";
 import { sectionBlockTemplates } from "@/components/blocks/section-blocks";
 import { getSEOGeneratorField } from "@/components/utils/template-fields/seo-generator.field";
 import { getTemplateDescriptionField } from "@/components/utils/template-fields/template-description";
@@ -335,13 +336,9 @@ export default defineConfig({
           draft: false,
           blocks: [
             {
-              _template: "hero",
-              variant: "heroTitle",
-              fullScreen: false,
-              yShift: 50,
-              title: "Título Principal",
-              subtitle:
-                "Subtítulo descriptivo que acompaña al título principal",
+              _template: blogHeaderTemplate.name,
+              ...(blogHeaderTemplate.ui?.defaultItem ?? {}),
+              blog_header_publish_date: "",
             },
           ],
         },
